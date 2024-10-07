@@ -1,0 +1,273 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background: url("imagenes/fondo1.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.form-box {
+    position: relative;
+    width: 800px;
+    height: 450px;
+    background: transparent;
+    backdrop-filter: blur(15px) brightness(80%);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.container {
+    position: relative;
+    padding: 10px;
+    width: 100%; /* Asegura que el contenedor se expanda correctamente */
+}
+
+.input-container {
+    position: relative;
+    margin: 30px 0;
+    width: 100%; /* Ajusta el ancho del contenedor de entrada */
+}
+
+input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    font-size: 1em;
+    color: #fff;
+}
+
+.input-label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 1em;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.input-icon {
+    position: absolute;
+    right: 8px;
+    color: #fff;
+    font-size: 1.2em;
+    top: 20px;
+}
+
+.forget {
+    margin: -10px 0 17px;
+    font-size: 0.9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.forget a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.forget a:hover {
+    text-decoration: underline;
+}
+
+
+h2 {
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px; /* Espacio adicional abajo del título */
+}
+
+.usuario {
+    position: absolute;
+    font-size: 1em;
+    font-weight: 600;
+    color:#fff; 
+    top: 9%;
+    left: 21.5%;
+}
+.inputbox {
+    position: relative;
+    margin: 30px 0;
+    width: 310px;
+}
+
+.inputbox input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #fff; /* Cambiar color del borde aquí */
+    outline: none;
+    font-size: 1em;
+    color: #fff;
+}
+
+.inputbox label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 1em;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.inputbox input:focus~label,
+.inputbox input:valid~label {
+    top: -5px;
+}
+
+.inputbox ion-icon {
+    position: absolute;
+    right: 8px;
+    color: #fff;
+    font-size: 1.2em;
+    top: 20px;
+}
+
+.forget {
+    margin: -10px 0 17px;
+    font-size: 0.9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.forget label input {
+    margin-right: 3px;
+}
+
+.forget a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.forget a:hover {
+    text-decoration: underline;
+}
+
+button {
+    width: 310px; /* Ancho igual al de los campos de entrada */
+    height: 40px;
+    border-radius: 40px;
+    background-color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 10px; /* Espacio adicional abajo del botón */
+}
+
+.back-button {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 10px; /* Espacio adicional arriba del enlace */
+    display: inline-block; /* Para que la propiedad text-decoration funcione correctamente */
+    text-align: center; /* Para centrar horizontalmente */
+    line-height: 1.5; /* Ajusta la altura de la línea para centrar verticalmente */
+}
+
+.back-button:hover {
+    text-decoration: underline; /* Añade una línea al pasar el mouse sobre el enlace */
+}
+
+.busqueda-button {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 10px; /* Espacio adicional arriba del enlace */
+    display: inline-block; /* Para que la propiedad text-decoration funcione correctamente */
+    text-align: center; /* Para centrar horizontalmente */
+    line-height: 1.5; /* Ajusta la altura de la línea para centrar verticalmente */
+}
+
+.busqueda-button:hover {
+    text-decoration: underline; /* Añade una línea al pasar el mouse sobre el enlace */
+}
+/* Estilos para los enlaces de actualizar y eliminar */
+table a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+table a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para la tabla */
+table {
+    width: 60%;
+    border-collapse: separate; /* Cambiado a 'separate' */
+    margin-bottom: 20px;
+    color: #000000; /* Cambia el color del texto de la tabla */
+    margin-top: 50px;
+    caption-side: bottom;
+    margin-left: auto;
+    margin-right: auto;
+    border-spacing: 0; /* Espacio entre las celdas */
+    background-image: linear-gradient(to left,#283e58,rgb(131, 160, 238));
+    box-shadow: 5px 5px 5px rgb(48, 85, 136);
+}
+
+table th, table td {
+    border: 1px solid rgb(16, 20, 41); /* Grosor y color del borde */
+    padding: 10px; /* Ajusta el relleno de las celdas */
+    width: calc(100% / 6); /* Divide el ancho igualmente entre las 6 columnas */
+    text-align: center; /* Alinea el texto al centro */
+}
+
+table th {
+    
+    color: #c7d3fa; /* Cambia el color del texto del título de la tabla a blanco */
+    background-color: #131636;
+    backdrop-filter: blur(15px) brightness(80%);
+}
+
+
+
+/* Estilos específicos para la primera columna (ID) */
+table td:first-child {
+    width: 10%; /* Ancho fijo para la columna de ID */
+    text-align: center; /* Centra el texto en la columna de ID */
+}
+
+/* Estilos para las celdas de nombre, apellido y correo */
+table td:nth-child(2),
+table td:nth-child(3),
+table td:nth-child(4),
+table td:nth-child(5) {
+    width: 20%; /* Ancho fijo para estas columnas */
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.cerrar-sesion {
+    color: #fff; /* Cambia el color del texto del enlace a blanco */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+}
+
+.cerrar-sesion:hover {
+    text-decoration: underline; /* Agrega subrayado al pasar el mouse sobre el enlace */
+}
