@@ -1,6 +1,6 @@
 <?php
-$db_username = 'PROYECTO_BD';
-$db_password = 'root';
+$db_username = 'ADMINDB';
+$db_password = 'root123';
 $db_connection_string = 'localhost/XE'; // Cambia según tu configuración
 
 // Crear la conexión
@@ -14,4 +14,3 @@ if (!$conn) {
 } else {
     echo '<script> console.log("Conexión exitosa a Oracle!"); </script>';
 }
-
