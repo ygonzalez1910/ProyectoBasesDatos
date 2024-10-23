@@ -1,13 +1,6 @@
 <?php
 // get_user.php
 include('../../procesos/connect.php');
-session_start();
-
-// Verificar si el usuario tiene permisos de administrador
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    http_response_code(403);
-    exit('Acceso denegado');
-}
 
 if (isset($_GET['id'])) {
     $user_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);

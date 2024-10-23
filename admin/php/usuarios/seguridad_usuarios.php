@@ -1,82 +1,123 @@
 <?php
 // Conexión a la base de datos
-include('../../procesos/connect.php');
-
-// Iniciar sesión si no está iniciada
-session_start();
-
-// Verificar si el usuario tiene permisos de administrador
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    header('Location: login.php');
-    exit();
-}
+include('../../../procesos/connect.php');
 
 // Procesar formularios
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'create':
-                $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+                $username = strtoupper(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
+                $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
                 $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
                 
-                $query = "INSERT INTO users (username, password, email, role, created_at) 
-                         VALUES (:username, :password, :email, :role, CURRENT_TIMESTAMP)";
-                $stmt = oci_parse($conn, $query);
-                
-                oci_bind_by_name($stmt, ":username", $username);
-                oci_bind_by_name($stmt, ":password", $password);
-                oci_bind_by_name($stmt, ":email", $email);
-                oci_bind_by_name($stmt, ":role", $role);
+                // Crear usuario
+                $create_user_sql = "CREATE USER $username IDENTIFIED BY $password";
+                $stmt = oci_parse($conn, $create_user_sql);
                 
                 if (oci_execute($stmt)) {
+                    // Otorgar permisos básicos
+                    $grant_connect = "GRANT CONNECT TO $username";
+                    $stmt_connect = oci_parse($conn, $grant_connect);
+                    oci_execute($stmt_connect);
+                    
+                    // Otorgar rol según el tipo seleccionado
+                    switch ($role) {
+                        case 'admin':
+                            $grant_role = "GRANT DBA TO $username";
+                            break;
+                        case 'read_only':
+                            $grant_role = "GRANT SELECT_CATALOG_ROLE TO $username";
+                            break;
+                        case 'user':
+                            $grant_role = "GRANT RESOURCE TO $username";
+                            break;
+                    }
+                    
+                    $stmt_role = oci_parse($conn, $grant_role);
+                    oci_execute($stmt_role);
+                    
                     echo "<script>swal('Éxito', 'Usuario creado correctamente', 'success');</script>";
                 } else {
-                    echo "<script>swal('Error', 'Error al crear el usuario', 'error');</script>";
+                    $error = oci_error($stmt);
+                    echo "<script>swal('Error', 'Error al crear el usuario: " . $error['message'] . "', 'error');</script>";
                 }
                 break;
 
             case 'update':
-                $user_id = filter_input(INPUT_POST, 'user_id', FILTER_SANITIZE_NUMBER_INT);
-                $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+                $username = strtoupper(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
+                $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
                 $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
                 
-                $query = "UPDATE users SET email = :email, role = :role WHERE id = :user_id";
-                $stmt = oci_parse($conn, $query);
+                // Actualizar contraseña si se proporcionó una nueva
+                if (!empty($password)) {
+                    $alter_user_sql = "ALTER USER $username IDENTIFIED BY $password";
+                    $stmt = oci_parse($conn, $alter_user_sql);
+                    oci_execute($stmt);
+                }
                 
-                oci_bind_by_name($stmt, ":email", $email);
-                oci_bind_by_name($stmt, ":role", $role);
-                oci_bind_by_name($stmt, ":user_id", $user_id);
+                // Revocar roles existentes
+                $revoke_roles = [
+                    "REVOKE DBA FROM $username",
+                    "REVOKE SELECT_CATALOG_ROLE FROM $username",
+                    "REVOKE RESOURCE FROM $username"
+                ];
                 
-                if (oci_execute($stmt)) {
+                foreach ($revoke_roles as $revoke_sql) {
+                    $stmt = oci_parse($conn, $revoke_sql);
+                    @oci_execute($stmt); // Usamos @ para ignorar errores si el rol no estaba asignado
+                }
+                
+                // Asignar nuevo rol
+                switch ($role) {
+                    case 'admin':
+                        $grant_role = "GRANT DBA TO $username";
+                        break;
+                    case 'read_only':
+                        $grant_role = "GRANT SELECT_CATALOG_ROLE TO $username";
+                        break;
+                    case 'user':
+                        $grant_role = "GRANT RESOURCE TO $username";
+                        break;
+                }
+                
+                $stmt_role = oci_parse($conn, $grant_role);
+                if (oci_execute($stmt_role)) {
                     echo "<script>swal('Éxito', 'Usuario actualizado correctamente', 'success');</script>";
                 } else {
-                    echo "<script>swal('Error', 'Error al actualizar el usuario', 'error');</script>";
+                    $error = oci_error($stmt_role);
+                    echo "<script>swal('Error', 'Error al actualizar el usuario: " . $error['message'] . "', 'error');</script>";
                 }
                 break;
 
             case 'delete':
-                $user_id = filter_input(INPUT_POST, 'user_id', FILTER_SANITIZE_NUMBER_INT);
+                $username = strtoupper(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
                 
-                $query = "DELETE FROM users WHERE id = :user_id";
-                $stmt = oci_parse($conn, $query);
-                
-                oci_bind_by_name($stmt, ":user_id", $user_id);
+                $drop_user_sql = "DROP USER $username CASCADE";
+                $stmt = oci_parse($conn, $drop_user_sql);
                 
                 if (oci_execute($stmt)) {
                     echo "<script>swal('Éxito', 'Usuario eliminado correctamente', 'success');</script>";
                 } else {
-                    echo "<script>swal('Error', 'Error al eliminar el usuario', 'error');</script>";
+                    $error = oci_error($stmt);
+                    echo "<script>swal('Error', 'Error al eliminar el usuario: " . $error['message'] . "', 'error');</script>";
                 }
                 break;
         }
     }
 }
 
-// Obtener lista de usuarios
+// Obtener lista de usuarios del sistema
 $users = [];
-$query = "SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC";
+$query = "SELECT username, 
+                 created, 
+                 LISTAGG(granted_role, ', ') WITHIN GROUP (ORDER BY granted_role) as roles
+          FROM dba_users 
+          LEFT JOIN dba_role_privs ON dba_users.username = dba_role_privs.grantee
+          WHERE account_status = 'OPEN'
+          AND username NOT IN ('SYS','SYSTEM')
+          GROUP BY username, created
+          ORDER BY created DESC";
 $result = oci_parse($conn, $query);
 oci_execute($result);
 
@@ -91,7 +132,7 @@ while ($row = oci_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Usuarios</title>
+    <title>Gestión de Usuarios Oracle</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     
@@ -102,6 +143,12 @@ while ($row = oci_fetch_assoc($result)) {
         }
         .card-custom {
             height: 100%;
+        }
+        .table th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
         }
         @media (max-width: 767.98px) {
             .fixed-size {
@@ -118,32 +165,28 @@ while ($row = oci_fetch_assoc($result)) {
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h2 class="card-title text-center mb-4">Crear Usuario</h2>
+                        <h2 class="card-title text-center mb-4">Gestión de Usuario Oracle</h2>
                         <form method="post" id="userForm">
                             <input type="hidden" name="action" value="create">
-                            <input type="hidden" name="user_id" id="user_id">
                             
                             <div class="mb-3">
-                                <label for="username" class="form-label">Usuario:</label>
+                                <label for="username" class="form-label">Nombre de Usuario:</label>
                                 <input type="text" class="form-control" id="username" name="username" required>
+                                <small class="text-muted">El nombre se convertirá a mayúsculas automáticamente</small>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="password" class="form-control" id="password" name="password">
+                                <small class="text-muted">Dejar en blanco para mantener la contraseña actual al editar</small>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="role" class="form-label">Rol:</label>
                                 <select class="form-select" id="role" name="role" required>
-                                    <option value="user">Usuario</option>
-                                    <option value="admin">Administrador</option>
-                                    <option value="read_only">Solo lectura</option>
+                                    <option value="user">Usuario Normal (RESOURCE)</option>
+                                    <option value="admin">Administrador (DBA)</option>
+                                    <option value="read_only">Solo Lectura (SELECT_CATALOG_ROLE)</option>
                                 </select>
                             </div>
                             
@@ -166,8 +209,7 @@ while ($row = oci_fetch_assoc($result)) {
                                 <thead>
                                     <tr>
                                         <th>Usuario</th>
-                                        <th>Email</th>
-                                        <th>Rol</th>
+                                        <th>Roles Asignados</th>
                                         <th>Fecha Creación</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -176,16 +218,15 @@ while ($row = oci_fetch_assoc($result)) {
                                     <?php foreach ($users as $user): ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($user['USERNAME']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['EMAIL']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['ROLE']); ?></td>
-                                        <td><?php echo htmlspecialchars($user['CREATED_AT']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['ROLES'] ?? 'Sin roles'); ?></td>
+                                        <td><?php echo htmlspecialchars($user['CREATED']); ?></td>
                                         <td>
                                             <button class="btn btn-sm btn-primary" 
-                                                    onclick="editUser(<?php echo $user['ID']; ?>)">
+                                                    onclick="editUser('<?php echo $user['USERNAME']; ?>')">
                                                 Editar
                                             </button>
                                             <button class="btn btn-sm btn-danger" 
-                                                    onclick="deleteUser(<?php echo $user['ID']; ?>)">
+                                                    onclick="deleteUser('<?php echo $user['USERNAME']; ?>')">
                                                 Eliminar
                                             </button>
                                         </td>
@@ -201,7 +242,7 @@ while ($row = oci_fetch_assoc($result)) {
         
         <!-- Botón de volver -->
         <div class="text-start mt-3">
-            <a href="index.php" class="btn btn-secondary">Volver</a>
+            <a href="../../index.php" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 
@@ -210,25 +251,32 @@ while ($row = oci_fetch_assoc($result)) {
     
     <!-- JavaScript para la funcionalidad -->
     <script>
-        function editUser(userId) {
-            // Obtener datos del usuario mediante AJAX
-            fetch(`get_user.php?id=${userId}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('user_id').value = data.id;
-                    document.getElementById('username').value = data.username;
-                    document.getElementById('username').readOnly = true;
-                    document.getElementById('email').value = data.email;
-                    document.getElementById('role').value = data.role;
-                    document.getElementById('password').required = false;
-                    document.querySelector('form').action.value = 'update';
-                });
+        function editUser(username) {
+            document.getElementById('username').value = username;
+            document.getElementById('username').readOnly = true;
+            document.getElementById('password').required = false;
+            document.querySelector('[name="action"]').value = 'update';
+            document.querySelector('.card-title').textContent = 'Editar Usuario Oracle';
+            
+            // Determinar el rol actual basado en los roles mostrados en la tabla
+            const roleCell = Array.from(document.querySelectorAll('td')).find(td => 
+                td.textContent === username
+            ).nextElementSibling;
+            const roles = roleCell.textContent;
+            
+            if (roles.includes('DBA')) {
+                document.getElementById('role').value = 'admin';
+            } else if (roles.includes('SELECT_CATALOG_ROLE')) {
+                document.getElementById('role').value = 'read_only';
+            } else {
+                document.getElementById('role').value = 'user';
+            }
         }
 
-        function deleteUser(userId) {
+        function deleteUser(username) {
             swal({
                 title: "¿Estás seguro?",
-                text: "Esta acción no se puede deshacer",
+                text: "Esta acción eliminará el usuario y todos sus objetos de la base de datos",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
@@ -237,9 +285,9 @@ while ($row = oci_fetch_assoc($result)) {
                 if (willDelete) {
                     const form = new FormData();
                     form.append('action', 'delete');
-                    form.append('user_id', userId);
+                    form.append('username', username);
                     
-                    fetch('users.php', {
+                    fetch(window.location.href, {
                         method: 'POST',
                         body: form
                     })
@@ -252,7 +300,8 @@ while ($row = oci_fetch_assoc($result)) {
             document.getElementById('userForm').reset();
             document.getElementById('username').readOnly = false;
             document.getElementById('password').required = true;
-            document.querySelector('form').action.value = 'create';
+            document.querySelector('[name="action"]').value = 'create';
+            document.querySelector('.card-title').textContent = 'Crear Usuario Oracle';
         }
     </script>
 </body>
