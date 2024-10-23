@@ -135,7 +135,7 @@ include '../procesos/connect.php';
                     </div>
                 </article>
             </a>
-            <a href="php/performance_bases.php">
+            <a href="php/performance_bases_datos.php">
                 <article class="competicion">
                     <div class="competicion-titulo">
                         <img src="imagenes/performance.png" alt="Icono 1">

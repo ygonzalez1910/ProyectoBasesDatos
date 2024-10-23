@@ -1,99 +1,82 @@
 <?php
-// Incluir conexión a la base de datos
-include('db_connection.php');
+include('../../procesos/connect.php');
 
-// Obtener estadísticas de MySQL
-$estadisticas = $conn->query("SHOW STATUS LIKE 'Handler%'");
+// Inicializar el arreglo de estadísticas
+$stats = [
+    'database_size_mb' => 'No disponible',
+    'num_files' => 'No disponible',
+    'temp_space_mb' => 'No disponible',
+];
+
+// Consulta para obtener estadísticas de la base de datos
+$query = "
+    SELECT 
+        (SELECT ROUND(SUM(bytes) / 1024 / 1024) FROM dba_data_files) AS database_size_mb,
+        (SELECT COUNT(*) FROM dba_data_files) AS num_files,
+        (SELECT ROUND(SUM(bytes) / 1024 / 1024) FROM user_temp_tablespaces) AS temp_space_mb
+    FROM dual";
+
+$result = oci_parse($conn, $query);
+if (oci_execute($result)) {
+    $stats = oci_fetch_assoc($result);
+} else {
+    // Manejar error de ejecución de consulta
+    echo "<script>console.error('Error en la ejecución de la consulta: " . oci_error($result)['message'] . "');</script>";
+}
+
+// Cerrar la conexión al final
+oci_close($conn);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas - Tunning de Consultas</title>
+    <title>Estadísticas de Base de Datos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
     <style>
-        body {
-            background: linear-gradient(135deg, #001f3f, #0056b3);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-        }
-        .card {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: none;
-            border-radius: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        .card-body {
-            padding: 2rem;
-        }
-        .card-title {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-        .table {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        footer {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            text-align: center;
-            padding: 1rem 0;
-            margin-top: auto;
+        .card-custom {
+            height: 100%; /* Ajusta el tamaño de la card para que ocupe toda la altura disponible */
         }
     </style>
 </head>
-
-<body>
-    <div class="container py-5">
-        <div class="row g-4">
-            <div class="col-md-12">
-                <div class="card h-100">
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Estadísticas de Base de Datos</h1>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="card shadow-sm card-custom">
                     <div class="card-body">
-                        <h5 class="card-title">Estadísticas de Consultas</h5>
-
-                        <h6 class="card-title">Estadísticas Generales:</h6>
-                        <table class="table table-dark table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Variable</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while($row = $estadisticas->fetch_assoc()): ?>
-                                    <tr>
-                                        <td><?php echo $row['Variable_name']; ?></td>
-                                        <td><?php echo $row['Value']; ?></td>
-                                    </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
+                        <h5 class="card-title">Datos de Estadísticas</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <strong>Tamaño de la Base de Datos (MB):</strong> 
+                                <?php echo htmlspecialchars($stats['database_size_mb'] ?? 'No disponible'); ?>
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Número de Archivos de Datos:</strong> 
+                                <?php echo htmlspecialchars($stats['num_files'] ?? 'No disponible'); ?>
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Espacio Temporal (MB):</strong> 
+                                <?php echo htmlspecialchars($stats['temp_space_mb'] ?? 'No disponible'); ?>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Botón de volver -->
+        <div class="text-start mt-3">
+            <a href="tunning_consultas.php" class="btn btn-secondary">Volver</a>
+        </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Sistema de Administración de Bases de Datos</p>
-    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

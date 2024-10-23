@@ -1,167 +1,127 @@
 <?php
-session_start();
-if (!$_SESSION['verificar']) {
-    header("Location: ../index.php");
-    exit();
+include('../../procesos/connect.php');
+
+// Arreglo para almacenar los datos de rendimiento
+$performance_data = [];
+
+// Consulta para obtener el número de sesiones activas
+$query_active_sessions = "SELECT COUNT(*) AS active_sessions FROM v\$session WHERE status = 'ACTIVE'";
+$result_active_sessions = oci_parse($conn, $query_active_sessions);
+if (oci_execute($result_active_sessions)) {
+    $row = oci_fetch_assoc($result_active_sessions);
+    $performance_data['Active Sessions'] = $row ? $row['active_sessions'] : 0;
+} else {
+    $performance_data['Active Sessions'] = 'Error: No se pudo obtener datos - ' . oci_error($result_active_sessions)['message'];
 }
+
+// Consulta para obtener el tamaño de la base de datos (suma de todos los datafiles)
+$query_db_size = "SELECT SUM(bytes) / (1024 * 1024) AS database_size_mb FROM dba_data_files";
+$result_db_size = oci_parse($conn, $query_db_size);
+if (oci_execute($result_db_size)) {
+    $row = oci_fetch_assoc($result_db_size);
+    $performance_data['Database Size (MB)'] = $row ? round($row['database_size_mb'], 2) : 0;
+} else {
+    $performance_data['Database Size (MB)'] = 'Error: No se pudo obtener datos - ' . oci_error($result_db_size)['message'];
+}
+
+// Consulta para obtener el uso de CPU
+$query_cpu_usage = "SELECT SUM(value) AS cpu_usage FROM v\$osstat WHERE stat_name = 'NUMCPUS'";
+$result_cpu_usage = oci_parse($conn, $query_cpu_usage);
+if (oci_execute($result_cpu_usage)) {
+    $row = oci_fetch_assoc($result_cpu_usage);
+    $performance_data['CPU Usage'] = $row ? $row['cpu_usage'] : 0;
+} else {
+    $performance_data['CPU Usage'] = 'Error: No se pudo obtener datos - ' . oci_error($result_cpu_usage)['message'];
+}
+
+// Consulta para obtener el número total de sesiones
+$query_total_sessions = "SELECT COUNT(*) AS total_sessions FROM v\$session";
+$result_total_sessions = oci_parse($conn, $query_total_sessions);
+if (oci_execute($result_total_sessions)) {
+    $row = oci_fetch_assoc($result_total_sessions);
+    $performance_data['Total Sessions'] = $row ? $row['total_sessions'] : 0;
+} else {
+    $performance_data['Total Sessions'] = 'Error: No se pudo obtener datos - ' . oci_error($result_total_sessions)['message'];
+}
+
+// Consulta para obtener el espacio libre en la base de datos
+$query_free_space = "SELECT ROUND(SUM(bytes) / (1024 * 1024), 2) AS free_space_mb FROM dba_free_space";
+$result_free_space = oci_parse($conn, $query_free_space);
+if (oci_execute($result_free_space)) {
+    $row = oci_fetch_assoc($result_free_space);
+    $performance_data['Free Space (MB)'] = $row ? $row['free_space_mb'] : 0;
+} else {
+    $performance_data['Free Space (MB)'] = 'Error: No se pudo obtener datos - ' . oci_error($result_free_space)['message'];
+}
+
+oci_close($conn); // Cerrar la conexión al final
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <title>Sistema de Administración de Bases de Datos - Performance</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e9ecef; /* Color de fondo */
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background: linear-gradient(to right, #001b44, #0056b3);
-            padding: 1rem;
-            text-align: left;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .table-container {
-            width: 50%; /* Ajustar el ancho de la tabla */
-            margin: 2rem auto;
-            background-color: #ffffff; /* Color de fondo blanco */
-            border-radius: 8px;
-            overflow: hidden;
-            padding: 1rem; /* Añadir padding para que la tabla no esté pegada a los bordes */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Efecto de sombra más pronunciado */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0; /* Añadir margen superior e inferior para separar del contenedor */
-        }
-
-        th, td {
-            padding: 0.75rem; /* Reducir el padding para hacer la tabla más compacta */
-            text-align: left;
-        }
-
-        th {
-            background-color: #0056b3;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #e0e0e0; /* Color de fondo al pasar el cursor */
-            transition: background-color 0.3s ease; /* Transición suave */
-        }
-
-        button {
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #003d80;
-        }
-
-        footer {
-            background: linear-gradient(to right, #001b44, #0056b3);
-            padding: 1rem;
-            text-align: center;
-            color: white;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-
-        /* Estilo para enlaces */
-        a {
-            color: #000; /* Color del enlace */
-            text-decoration: none; /* Sin subrayado */
-        }
-
-        /* Mantener el mismo color para los enlaces visitados */
-        a:visited {
-            color: #000;
-        }
-
-        /* Mantener el mismo color cuando el ratón pasa sobre el enlace */
-        a:hover {
-            color: #000;
-            text-decoration: underline; /* Subrayado opcional al pasar el ratón */
-        }
-
-        /* Mantener el mismo color cuando el enlace está activo (clicado) */
-        a:active {
-            color: #000;
-        }
-
-        .blur-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Color de fondo semitransparente */
-            backdrop-filter: blur(5px); /* Desenfoque */
-            z-index: 1; /* Asegurar que esté por encima de otros elementos */
-            display: none; /* Ocultar inicialmente */
-        }
-
-        /* Estilo para el modal */
-        #modal {
-            border: 2px solid white; /* Borde blanco */
-        }
-
-        .table-container {
-            margin-bottom: 10vh;
-        }
-
-        .center-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px; /* Margen superior para separar del contenido */
-        }
-
-        /* Estilo para el enlace de volver */
-        a.back-button {
-            color: #2789f1; /* Color del texto */
-            text-decoration: none; /* Quitar subrayado */
-            font-size: 1rem; /* Tamaño de fuente */
-            transition: color 0.3s ease, text-decoration 0.3s ease; /* Transición suave al pasar el ratón */
-        } 
-    </style>
+    <title>Rendimiento de la Base de Datos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Rendimiento de la Base de Datos</h1>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Sesiones Activas</h5>
+                        <p class="card-text"><?php echo $performance_data['Active Sessions']; ?></p>
+                    </div>
+                </div>
+            </div>
 
-<body>
-    
-    <header>Sistema de Administración de Bases de Datos - Performance</header>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Tamaño de la Base de Datos (MB)</h5>
+                        <p class="card-text"><?php echo $performance_data['Database Size (MB)']; ?></p>
+                    </div>
+                </div>
+            </div>
 
-    <div class="table-container">
-        
-        <div class="center-button">
-            <a href="../menu_principal.php" class="back-button">Volver</a>
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Uso de CPU</h5>
+                        <p class="card-text"><?php echo $performance_data['CPU Usage']; ?></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total de Sesiones</h5>
+                        <p class="card-text"><?php echo $performance_data['Total Sessions']; ?></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Espacio Libre (MB)</h5>
+                        <p class="card-text"><?php echo $performance_data['Free Space (MB)']; ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de regreso -->
+        <div class="text-center mt-4">
+            <a href="../index.php" class="btn btn-primary">Regresar</a>
         </div>
     </div>
 
-    <footer class="footer">
-        <p>&copy;2024 KYC Living. Todos los derechos reservados.</p>
-    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

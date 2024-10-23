@@ -151,7 +151,7 @@
             
         </section>
         <!-- Enlace para volver -->
-        <a href="../menu_principal.php" class="back-button">Volver</a>
+        <a href="../index.php" class="back-button">Volver</a>
     </main>
 </body>
 
