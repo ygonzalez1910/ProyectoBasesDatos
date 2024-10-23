@@ -151,7 +151,7 @@ include '../procesos/connect.php';
                     </div>
                 </article>
             </a>
-            <a href="php/seguridad_usuarios.php">
+            <a href="php/usuarios/seguridad_usuarios.php">
                 <article class="competicion">
                     <div class="competicion-titulo">
                         <img src="imagenes/segurdiad.png" alt="Icono 1">
