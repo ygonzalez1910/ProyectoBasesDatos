@@ -111,7 +111,7 @@ include '../procesos/connect.php';
     <main class="contenedor main" style="margin-top: 65px; margin-bottom: 65px">
         <h1 id="torneos" class="titulo">Configuracion</h1>
         <section class="competiciones">
-            <a href="php/respaldos.php">
+            <a href="php/respaldos/respaldos.php">
                 <article class="competicion">
                     <div class="competicion-titulo">
                         <img src="imagenes/respado.png" alt="Icono 1">
@@ -143,7 +143,7 @@ include '../procesos/connect.php';
                     </div>
                 </article>
             </a>
-            <a href="php/auditoria.php">
+            <a href="php/auditoria/auditoriaGeneral.php">
                 <article class="competicion">
                     <div class="competicion-titulo">
                         <img src="imagenes/auditoria.png" alt="Icono 1">
