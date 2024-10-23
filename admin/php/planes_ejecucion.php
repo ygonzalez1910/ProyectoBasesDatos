@@ -1,121 +1,83 @@
+<?php
+include('../../procesos/connect.php');
+
+// Consulta para obtener los planes de ejecución
+$execution_plans = [];
+$query = "SELECT * FROM table(dbms_xplan.display_cursor(null, null, 'ALL'))"; // Esta consulta puede cambiar según tus necesidades
+$result = oci_parse($conn, $query);
+oci_execute($result);
+
+while ($row = oci_fetch_assoc($result)) {
+    $execution_plans[] = $row;
+}
+
+oci_close($conn); // Cerrar la conexión al final
+?>
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Administración de Bases de Datos - Planes de Ejecución</title>
+    <title>Planes de Ejecución</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
     <style>
-        body {
-            background: linear-gradient(135deg, #001f3f, #0056b3);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        .fixed-size {
+            max-height: 400px; /* Altura máxima del contenedor con scroll */
+            overflow-y: scroll;
         }
-        .container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-        }
-        .card {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: none;
-            border-radius: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        .card-body {
-            padding: 2rem;
-        }
-        .card-title {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-        .card-text {
-            color: #e0e0e0;
-            margin-bottom: 1.5rem;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            text-align: center;
-            padding: 1rem 0;
-            margin-top: auto;
+
+        .card-custom {
+            height: 100%; /* Ajusta el tamaño de la card para que ocupe toda la altura disponible */
         }
     </style>
 </head>
-
-<body>
-    <div class="container py-5">
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Planes de Ejecución</h1>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="card shadow-sm card-custom">
                     <div class="card-body">
-                        <h5 class="card-title">Plan de Ejecución Simple</h5>
-                        <p class="card-text">Analiza el plan de ejecución básico de una consulta para mejorar su rendimiento.</p>
-                        <a href="plan_simple.php" class="btn btn-primary">Ver Plan</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Plan de Ejecución Detallado</h5>
-                        <p class="card-text">Obtén un análisis detallado del plan de ejecución de una consulta SQL compleja.</p>
-                        <a href="plan_detallado.php" class="btn btn-primary">Ver Plan</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Comparación de Planes</h5>
-                        <p class="card-text">Compara dos o más planes de ejecución para determinar el mejor rendimiento.</p>
-                        <a href="comparacion_planes.php" class="btn btn-primary">Comparar Planes</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Historial de Planes de Ejecución</h5>
-                        <p class="card-text">Accede al historial de planes de ejecución generados para consultas anteriores.</p>
-                        <a href="historial_planes.php" class="btn btn-primary">Ver Historial</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Optimización de Consultas</h5>
-                        <p class="card-text">Mejora el rendimiento de tus consultas a través de la optimización de planes de ejecución.</p>
-                        <a href="optimizar_consultas.php" class="btn btn-primary">Optimizar</a>
+                        <h5 class="card-title">Planes de Ejecución de Consultas</h5>
+                        <div class="fixed-size"> <!-- Contenedor con scroll -->
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Operación</th>
+                                        <th>Nombre</th>
+                                        <th>Coste</th>
+                                        <th>Filas</th>
+                                        <th>Bytes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($execution_plans as $plan): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($plan['OPERATION']); ?></td>
+                                            <td><?php echo htmlspecialchars($plan['NAME']); ?></td>
+                                            <td><?php echo htmlspecialchars($plan['COST']); ?></td>
+                                            <td><?php echo htmlspecialchars($plan['ROWS']); ?></td>
+                                            <td><?php echo htmlspecialchars($plan['BYTES']); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Botón de volver -->
+        <div class="text-start mt-3">
+            <a href="tunning_consultas.php" class="btn btn-secondary">Volver</a>
+        </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Sistema de Administración de Bases de Datos</p>
-    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
