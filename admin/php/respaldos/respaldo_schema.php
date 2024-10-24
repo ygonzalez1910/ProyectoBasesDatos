@@ -1,6 +1,6 @@
 <?php
 // Conexión a la base de datos
-include('../../procesos/connect.php');
+include('../../../procesos/connect.php');
 
 // Obtener los esquemas (usuarios) de la base de datos
 $schemas = [];
@@ -19,6 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dumpfile = $_POST['dumpfile'];
     $logfile = $_POST['logfile'];
     $backup_type = $_POST['backup_type'];
+    $size_max = $_POST['size_max'];
+    $size_min = $_POST['size_min'];
+    $autoextend = isset($_POST['autoextend']) ? 'autoextend on' : 'autoextend off';
+    $max_limit = isset($_POST['max_limit']) ? $_POST['max_limit'] : '';
 
     if ($backup_type == 'mysqldump') {
         // Comando para generar un respaldo usando mysqldump
@@ -33,8 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script>swal('Error', 'Hubo un problema al crear el respaldo con mysqldump.', 'error');</script>";
         }
     } else if ($backup_type == 'expdp') {
-        // Comando para generar un respaldo usando expdp
-        $command = "expdp $schema/$db_password schemas=$schema directory=$directory dumpfile=$dumpfile logfile=$logfile";
+        // Comando para generar un respaldo usando expdp con tamaño máximo, mínimo, autoextend y límite máximo
+        $command = "expdp $schema/$db_password schemas=$schema directory=$directory dumpfile=$dumpfile logfile=$logfile filesize=$size_max minsize=$size_min $autoextend";
+        if ($autoextend == 'autoextend on' && !empty($max_limit)) {
+            $command .= " maxsize=$max_limit";
+        }
         $output = shell_exec($command);
 
         if ($output) {
@@ -54,26 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Respaldo por Esquema</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> <!-- SweetAlert para los mensajes -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Estilos personalizados -->
     <style>
         .fixed-size {
             max-height: 400px;
-            /* Altura máxima del contenedor con scroll */
             overflow-y: scroll;
         }
 
         .card-custom {
             height: 100%;
-            /* Ajusta el tamaño de la card para que ocupe toda la altura disponible */
         }
 
-        /* Ajustar para pantallas pequeñas */
         @media (max-width: 767.98px) {
             .fixed-size {
                 max-height: 300px;
-                /* Menor altura en pantallas pequeñas */
             }
         }
     </style>
@@ -95,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="mb-3">
                                 <label for="directory" class="form-label">Directorio:</label>
-                                <!-- Cambiado a un select para elegir entre tres opciones -->
                                 <select id="directory" name="directory" class="form-select" required>
                                     <option value="C:\ORACLE_FILES\HD1">C:\ORACLE_FILES\HD1</option>
                                     <option value="C:\ORACLE_FILES\HD2">C:\ORACLE_FILES\HD2</option>
@@ -104,13 +106,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="mb-3">
-                                <label for="dumpfile" class="form-label">Nombre del archivo de volcado:</label>
-                                <input type="text" id="dumpfile" name="dumpfile" class="form-control" required>
+                                <label for="size_max" class="form-label">Tamaño máximo (en MB):</label>
+                                <input type="number" id="size_max" name="size_max" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="logfile" class="form-label">Nombre del archivo de log:</label>
-                                <input type="text" id="logfile" name="logfile" class="form-control" required>
+                                <label for="size_min" class="form-label">Tamaño mínimo (en MB):</label>
+                                <input type="number" id="size_min" name="size_min" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="autoextend" name="autoextend" onclick="toggleMaxLimit()">
+                                    <label class="form-check-label" for="autoextend">Autoextend</label>
+                                </div>
+                            </div>
+
+                            <!-- Campo adicional que se mostrará solo si se selecciona Autoextend -->
+                            <div class="mb-3" id="maxLimitContainer" style="display: none;">
+                                <label for="max_limit" class="form-label">Límite máximo (en MB):</label>
+                                <input type="number" id="max_limit" name="max_limit" class="form-control">
                             </div>
 
                             <div class="mb-3">
@@ -134,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="card shadow-sm card-custom">
                     <div class="card-body">
                         <h1 class="card-title text-center mb-4">Esquemas Disponibles</h1>
-                        <div class="fixed-size"> <!-- Contenedor con scroll -->
+                        <div class="fixed-size">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -162,6 +177,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para mostrar/ocultar el campo Límite máximo cuando se selecciona Autoextend -->
+    <script>
+        function toggleMaxLimit() {
+            var autoextendCheckbox = document.getElementById('autoextend');
+            var maxLimitContainer = document.getElementById('maxLimitContainer');
+
+            if (autoextendCheckbox.checked) {
+                maxLimitContainer.style.display = 'block';
+            } else {
+                maxLimitContainer.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 
 </html>

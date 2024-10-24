@@ -1,5 +1,5 @@
 <?php
-include('../../procesos/connect.php');
+include('../../../procesos/connect.php');
 
 // Consulta para obtener las tablas disponibles
 $tables = [];

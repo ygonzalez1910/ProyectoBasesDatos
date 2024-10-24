@@ -1,5 +1,5 @@
 <?php
-include('../../procesos/connect.php');
+include('../../../procesos/connect.php');
 
 $files = []; // Inicializa un array para almacenar los archivos
 
