@@ -1,5 +1,4 @@
 <?php
-// Conexión a la base de datos
 include('../../../procesos/connect.php');
 
 // Obtener los esquemas y las tablas de la base de datos en formato esquema.tabla

@@ -1,5 +1,5 @@
 <?php
-include('../../procesos/connect.php'); // Asegúrate de que este archivo tenga la conexión a la base de datos
+include('../../../procesos/connect.php'); // Asegúrate de que este archivo tenga la conexión a la base de datos
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $directory = $_POST['directory'];

@@ -170,13 +170,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="mb-3">
-                                <label for="schema" class="form-label">Esquema:</label>
-                                <select id="schema" name="schema" class="form-select" required>
-                                    <?php foreach ($schemas as $schema): ?>
-                                        <option value="<?php echo htmlspecialchars($schema); ?>">
-                                            <?php echo htmlspecialchars($schema); ?>
-                                        </option>
-                                    <?php endforeach; ?>
+                                <label for="dumpfile" class="form-label">Nombre del archivo de volcado:</label>
+                                <input type="text" id="dumpfile" name="dumpfile" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="logfile" class="form-label">Nombre del archivo de log:</label>
+                                <input type="text" id="logfile" name="logfile" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="backup_type" class="form-label">Tipo de respaldo:</label>
+                                <select id="backup_type" name="backup_type" class="form-select" required>
+                                    <option value="mysqldump">mysqldump</option>
+                                    <option value="expdp">expdp</option>
                                 </select>
                             </div>
 
@@ -197,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-md-6 mb-3">
                 <div class="card shadow-sm card-custom">
                     <div class="card-body">
-                        <h1 class="card-title text-center mb-4">Directorios Disponibles</h1>
+                        <h1 class="card-title text-center mb-4">Esquemas Disponibles</h1>
                         <div class="fixed-size"> <!-- Contenedor con scroll -->
                             <table class="table table-striped">
                                 <thead>
