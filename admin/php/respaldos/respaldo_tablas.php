@@ -1,96 +1,148 @@
 <?php
 include('../../../procesos/connect.php');
 
-// Consulta para obtener las tablas disponibles
-$tables = [];
-$query = "SELECT owner, table_name FROM all_tables ORDER BY owner, table_name";
-$result = oci_parse($conn, $query);
-oci_execute($result);
+// Obtener los esquemas (usuarios) de la base de datos
+$schemas = [];
+$query_schemas = "SELECT username FROM all_users";
+$result_schemas = oci_parse($conn, $query_schemas);
+oci_execute($result_schemas);
 
-while ($row = oci_fetch_assoc($result)) {
-    $tables[] = $row;
+while ($row = oci_fetch_assoc($result_schemas)) {
+    $schemas[] = $row['USERNAME'];
 }
 
-// Procesamiento del formulario para crear un respaldo de tabla
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $table = $_POST['table'];
-    $directory = $_POST['directory'];
-    $dumpfile = $_POST['dumpfile'];
-    $logfile = $_POST['logfile'];
+// Obtener los directorios
+$directories = [];
+$query_directories = "SELECT directory_name, directory_path FROM all_directories";
+$result_directories = oci_parse($conn, $query_directories);
+oci_execute($result_directories);
 
-    // Comando para crear el respaldo
-    $command = "expdp $db_username/$db_password tables=$table directory=$directory dumpfile=$dumpfile logfile=$logfile";
-    $output = shell_exec($command);
+while ($row = oci_fetch_assoc($result_directories)) {
+    $directories[] = $row;
+}
 
-    // Comprobar si el comando se ejecutó correctamente
-    if ($output === null) {
-        echo "<script>swal('Error', 'Hubo un problema al crear el respaldo.', 'error');</script>";
+// Variable para mensajes
+$message = '';
+$message_type = '';
+
+// Procesamiento del formulario para crear un respaldo
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $schema = $_POST['schema'];  // Esquema seleccionado
+    $table = $_POST['backup_tabla']; // Tabla seleccionada
+    $directory = $_POST['directory'];  // Directorio seleccionado
+    $backup_name = $_POST['backup_name'];  // Nombre del respaldo
+
+    // Comando para crear el respaldo de la tabla
+    $backup_sql = "CREATE TABLE $backup_name AS SELECT * FROM $schema.$table";
+
+    // Ejecutar el comando para crear el respaldo
+    $backup_stmt = oci_parse($conn, $backup_sql);
+
+    if (oci_execute($backup_stmt)) {
+        $message = "Respaldo de la tabla '$table' creado con éxito.";
+        $message_type = "success";
     } else {
-        echo "<script>swal('Éxito', 'Respaldo de tabla completado.', 'success');</script>";
+        $message = "Hubo un problema al crear el respaldo.";
+        $message_type = "error";
     }
 }
+
+// Cargar tablas de un esquema específico
+if (isset($_GET['schema'])) {
+    $selected_schema = $_GET['schema'];
+    $tables = [];
+    $query_tables = "SELECT table_name FROM all_tables WHERE owner = :schema";
+    $stmt = oci_parse($conn, $query_tables);
+    oci_bind_by_name($stmt, ':schema', $selected_schema);
+    oci_execute($stmt);
+
+    while ($row = oci_fetch_assoc($stmt)) {
+        $tables[] = $row['TABLE_NAME'];
+    }
+
+    // Verificar que hay tablas antes de enviar la respuesta
+    header('Content-Type: application/json');
+    echo json_encode($tables);
+    exit; // Esto asegura que no haya más salida
+}
+
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Respaldo de Tabla</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> <!-- SweetAlert para los mensajes -->
+    <title>Respaldo por Esquema</title>
 
-    <!-- Estilos personalizados -->
+    <!-- Incluye SweetAlert2 antes de que lo uses -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .fixed-size {
-            max-height: 400px; /* Altura máxima del contenedor con scroll */
+            max-height: 400px;
             overflow-y: scroll;
         }
 
         .card-custom {
-            height: 100%; /* Ajusta el tamaño de la card para que ocupe toda la altura disponible */
+            height: 100%;
         }
 
-        .spinner-container {
-            display: none; /* Oculta el spinner por defecto */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
-        }
-
-        /* Ajustar para pantallas pequeñas */
         @media (max-width: 767.98px) {
             .fixed-size {
-                max-height: 300px; /* Menor altura en pantallas pequeñas */
+                max-height: 300px;
             }
         }
     </style>
-</head>
-<body class="bg-light">
-    <div class="spinner-container" id="spinner">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-    </div>
+    <script>
+        function cargarTablas() {
+            const schemaSelect = document.getElementById('schema');
+            const selectedSchema = schemaSelect.value;
+            const tablesSelect = document.getElementById('backup_tabla');
 
+            // Limpiar las tablas anteriores
+            tablesSelect.innerHTML = '<option value="" disabled selected>Cargando...</option>';
+
+            // Construir la URL correctamente
+            fetch(`${window.location.pathname}?schema=${selectedSchema}`)
+                .then(response => response.json())  // Cambiar a response.json() directamente
+                .then(data => {
+                    // Limpiar opciones y agregar las nuevas
+                    tablesSelect.innerHTML = '<option value="" disabled selected>Selecciona una tabla</option>';
+                    data.forEach(table => {
+                        const option = document.createElement('option');
+                        option.value = table;
+                        option.textContent = table;
+                        tablesSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    tablesSelect.innerHTML = '<option value="" disabled>Error al cargar tablas</option>';
+                });
+        }
+    </script>
+</head>
+
+<body class="bg-light">
     <div class="container mt-5">
         <div class="row">
             <!-- Columna del formulario -->
             <div class="col-md-6 mb-3">
                 <div class="card shadow-sm card-custom">
                     <div class="card-body">
-                        <h1 class="card-title text-center mb-4">Respaldo de Tabla</h1>
-                        <form method="post" action="" onsubmit="showSpinner()">
+                        <h1 class="card-title text-center mb-4">Respaldo por Esquema</h1>
+                        <form method="post" action="">
                             <div class="mb-3">
-                                <label for="table" class="form-label">Tabla:</label>
-                                <input type="text" id="table" name="table" class="form-control" placeholder="Ejemplo: Schema.Table" required>
+                                <label for="backup_name" class="form-label">Nombre del respaldo:</label>
+                                <input type="text" id="backup_name" name="backup_name" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="directory" class="form-label">Directorio:</label>
-                                <!-- Cambiado a un select para elegir entre tres opciones -->
                                 <select id="directory" name="directory" class="form-select" required>
                                     <option value="C:\ORACLE_FILES\HD1">C:\ORACLE_FILES\HD1</option>
                                     <option value="C:\ORACLE_FILES\HD2">C:\ORACLE_FILES\HD2</option>
@@ -99,13 +151,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="mb-3">
-                                <label for="dumpfile" class="form-label">Nombre del archivo de volcado:</label>
-                                <input type="text" id="dumpfile" name="dumpfile" class="form-control" placeholder="Ejemplo: table_YYYYMMDD.dmp" required>
+                                <label for="schema" class="form-label">Esquema:</label>
+                                <select id="schema" name="schema" class="form-select" required
+                                    onchange="cargarTablas()">
+                                    <?php foreach ($schemas as $schema): ?>
+                                        <option value="<?php echo htmlspecialchars($schema); ?>">
+                                            <?php echo htmlspecialchars($schema); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             <div class="mb-3">
-                                <label for="logfile" class="form-label">Nombre del archivo de log:</label>
-                                <input type="text" id="logfile" name="logfile" class="form-control" placeholder="Ejemplo: table_YYYYMMDD.log" required>
+                                <label for="backup_tabla" class="form-label">Tabla:</label>
+                                <select id="backup_tabla" name="backup_tabla" class="form-select" required>
+                                    <option value="" disabled selected>Selecciona una tabla</option>
+                                </select>
                             </div>
 
                             <div class="d-grid">
@@ -116,24 +177,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
 
-            <!-- Columna de la tabla con las tablas disponibles -->
+            <!-- Columna de la tabla con los directorios -->
             <div class="col-md-6 mb-3">
                 <div class="card shadow-sm card-custom">
                     <div class="card-body">
-                        <h1 class="card-title text-center mb-4">Tablas Disponibles</h1>
+                        <h1 class="card-title text-center mb-4">Directorios Disponibles</h1>
                         <div class="fixed-size"> <!-- Contenedor con scroll -->
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Propietario</th>
-                                        <th>Tabla</th>
+                                        <th>Nombre del Directorio</th>
+                                        <th>Ruta del Directorio</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($tables as $table): ?>
+                                    <?php foreach ($directories as $dir): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($table['OWNER']); ?></td>
-                                            <td><?php echo htmlspecialchars($table['TABLE_NAME']); ?></td>
+                                            <td><?php echo htmlspecialchars($dir['DIRECTORY_NAME']); ?></td>
+                                            <td><?php echo htmlspecialchars($dir['DIRECTORY_PATH']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -144,19 +205,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
 
-        <!-- Botón de volver -->
+        <!-- Mensaje de éxito o error -->
+        <?php if ($message): ?>
+            <script>
+                Swal.fire({
+                    title: '<?php echo $message_type === "success" ? "Éxito" : "Error"; ?>',
+                    text: '<?php echo $message; ?>',
+                    icon: '<?php echo $message_type; ?>',
+                    confirmButtonText: 'Ok'
+                });
+            </script>
+        <?php endif; ?>
+
         <div class="text-start mt-3">
             <a href="respaldos.php" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        function showSpinner() {
-            document.getElementById('spinner').style.display = 'block'; // Muestra el spinner
-        }
-    </script>
 </body>
+
 </html>

@@ -4,13 +4,28 @@ include('../../../procesos/connect.php');
 
 // Obtener los esquemas (usuarios) de la base de datos
 $schemas = [];
-$query = "SELECT username FROM all_users";
-$result = oci_parse($conn, $query);
-oci_execute($result);
+$query_schemas = "SELECT username FROM all_users";
+$result_schemas = oci_parse($conn, $query_schemas);
+oci_execute($result_schemas);
 
-while ($row = oci_fetch_assoc($result)) {
+while ($row = oci_fetch_assoc($result_schemas)) {
     $schemas[] = $row['USERNAME'];
 }
+
+// Obtener los directorios
+$directories = [];
+$query_directories = "SELECT directory_name, directory_path FROM all_directories";
+$result_directories = oci_parse($conn, $query_directories);
+oci_execute($result_directories);
+
+while ($row = oci_fetch_assoc($result_directories)) {
+    $directories[] = $row;
+}
+
+// Variable para mensajes
+$message = '';
+$message_type = '';
+
 
 // Procesamiento del formulario para crear un respaldo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,10 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dumpfile = $_POST['dumpfile'];
     $logfile = $_POST['logfile'];
     $backup_type = $_POST['backup_type'];
-    $size_max = $_POST['size_max'];
-    $size_min = $_POST['size_min'];
-    $autoextend = isset($_POST['autoextend']) ? 'autoextend on' : 'autoextend off';
-    $max_limit = isset($_POST['max_limit']) ? $_POST['max_limit'] : '';
 
     if ($backup_type == 'mysqldump') {
         // Comando para generar un respaldo usando mysqldump
@@ -37,11 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script>swal('Error', 'Hubo un problema al crear el respaldo con mysqldump.', 'error');</script>";
         }
     } else if ($backup_type == 'expdp') {
-        // Comando para generar un respaldo usando expdp con tamaño máximo, mínimo, autoextend y límite máximo
-        $command = "expdp $schema/$db_password schemas=$schema directory=$directory dumpfile=$dumpfile logfile=$logfile filesize=$size_max minsize=$size_min $autoextend";
-        if ($autoextend == 'autoextend on' && !empty($max_limit)) {
-            $command .= " maxsize=$max_limit";
-        }
+        // Comando para generar un respaldo usando expdp
+        $command = "expdp $schema/$db_password schemas=$schema directory=$directory dumpfile=$dumpfile logfile=$logfile";
         $output = shell_exec($command);
 
         if ($output) {
@@ -60,8 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Respaldo por Esquema</title>
+
+    <!-- Incluye SweetAlert2 antes de que lo uses -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> <!-- SweetAlert para los mensajes -->
 
     <!-- Estilos personalizados -->
     <style>
@@ -92,8 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <h1 class="card-title text-center mb-4">Respaldo por Esquema</h1>
                         <form method="post" action="">
                             <div class="mb-3">
-                                <label for="schema" class="form-label">Esquema:</label>
-                                <input type="text" id="schema" name="schema" class="form-control" required>
+                                <label for="backup_name" class="form-label">Nombre del respaldo:</label>
+                                <input type="text" id="backup_name" name="backup_name" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
@@ -106,26 +119,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="mb-3">
-                                <label for="size_max" class="form-label">Tamaño máximo (en MB):</label>
-                                <input type="number" id="size_max" name="size_max" class="form-control" required>
+                                <label for="dumpfile" class="form-label">Nombre del archivo de volcado:</label>
+                                <input type="text" id="dumpfile" name="dumpfile" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="size_min" class="form-label">Tamaño mínimo (en MB):</label>
-                                <input type="number" id="size_min" name="size_min" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="autoextend" name="autoextend" onclick="toggleMaxLimit()">
-                                    <label class="form-check-label" for="autoextend">Autoextend</label>
-                                </div>
-                            </div>
-
-                            <!-- Campo adicional que se mostrará solo si se selecciona Autoextend -->
-                            <div class="mb-3" id="maxLimitContainer" style="display: none;">
-                                <label for="max_limit" class="form-label">Límite máximo (en MB):</label>
-                                <input type="number" id="max_limit" name="max_limit" class="form-control">
+                                <label for="logfile" class="form-label">Nombre del archivo de log:</label>
+                                <input type="text" id="logfile" name="logfile" class="form-control" required>
                             </div>
 
                             <div class="mb-3">
@@ -144,22 +144,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Columna de la tabla con los esquemas -->
+            <!-- Columna de la tabla con los directorios -->
             <div class="col-md-6 mb-3">
                 <div class="card shadow-sm card-custom">
                     <div class="card-body">
                         <h1 class="card-title text-center mb-4">Esquemas Disponibles</h1>
-                        <div class="fixed-size">
+                        <div class="fixed-size"> <!-- Contenedor con scroll -->
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Esquema</th>
+                                        <th>Nombre del Directorio</th>
+                                        <th>Ruta del Directorio</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($schemas as $schema): ?>
+                                    <?php foreach ($directories as $dir): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($schema); ?></td>
+                                            <td><?php echo htmlspecialchars($dir['DIRECTORY_NAME']); ?></td>
+                                            <td><?php echo htmlspecialchars($dir['DIRECTORY_PATH']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -169,13 +171,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
-        <!-- Botón de volver -->
+
+        <!-- Mensaje de éxito o error -->
+        <?php if ($message): ?>
+            <script>
+                Swal.fire({
+                    title: '<?php echo $message_type === "success" ? "Éxito" : "Error"; ?>',
+                    text: '<?php echo $message; ?>',
+                    icon: '<?php echo $message_type; ?>',
+                    confirmButtonText: 'Ok'
+                });
+            </script>
+        <?php endif; ?>
+
         <div class="text-start mt-3">
             <a href="respaldos.php" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Script para mostrar/ocultar el campo Límite máximo cuando se selecciona Autoextend -->
