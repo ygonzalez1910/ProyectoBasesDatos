@@ -3,7 +3,7 @@
   width: 250px; /* Cambia el valor según el ancho que desees */
   position: fixed; /* Cambia a fixed para que ocupe todo el lado izquierdo */
   transition: all 0.3s ease;
-  background-color: #bdbdbd;
+  background-color: #d6d4d4;
   border-right: 1px solid #dee2e6;
   z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
 }
@@ -31,13 +31,14 @@
 
 .nav-link {
   cursor: pointer;
-  color: #333;
+  color: #ffffff; /* Cambia el color de las letras aquí */
   padding: 0.5rem 1rem;
   border-radius: 4px;
 }
 
 .nav-link:hover {
   background-color: #c2c2c2;
+  color: #000000; /* Cambia el color al pasar el mouse aquí */
 }
 
 .sub-items {
@@ -47,4 +48,5 @@
 .sub-item {
   padding-left: 1.5rem;
   font-size: 0.9rem;
+  color: #ffffff; /* Cambia el color de las letras de sub-items aquí si es necesario */
 }
