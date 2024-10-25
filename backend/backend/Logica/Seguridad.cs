@@ -5,8 +5,6 @@ using Oracle.ManagedDataAccess.Client;
 using Request;
 using Response;
 using Models;
-using Response;
-using Request;
 
 namespace Logica
 {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Users, Key, UserPlus, UserMinus, Lock, Settings, AlertCircle } from 'lucide-react';
+import { Shield, Users, Key, Lock, Database, Code, Server, Cog } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -20,255 +20,330 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
-const SecurityModule = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: 'admin', roles: ['DBA', 'ADMIN'], status: 'active' },
-    { id: 2, name: 'user1', roles: ['READ'], status: 'active' },
-  ]);
-
-  const [selectedUser, setSelectedUser] = useState('');
-  const [newUserData, setNewUserData] = useState({
-    username: '',
+const Seguridad = () => {
+  const [createRoleData, setCreateRoleData] = useState({
+    roleName: '',
+    roleType: 'basic', // basic, password, application, external, global
     password: '',
-    roles: []
+    schema: '',
+    package: ''
   });
 
-  const availableRoles = ['DBA', 'ADMIN', 'READ', 'WRITE'];
+  const [selectedSchema, setSelectedSchema] = useState('');
+  const [showSchemaPrivileges, setShowSchemaPrivileges] = useState(false);
 
-  const handleCreateUser = () => {
-    // Implementar lógica de creación
-    console.log('Crear usuario:', newUserData);
+  // Simulated data - replace with actual API calls
+  const schemas = ['HR', 'SYSTEM', 'SYS'];
+  const objectTypes = ['TABLE', 'VIEW', 'SEQUENCE', 'PROCEDURE', 'PACKAGE', 'FUNCTION'];
+
+  const handleCreateRole = () => {
+    // Implementar lógica según el tipo de rol
+    console.log('Crear rol:', createRoleData);
   };
 
-  const handleDeleteUser = (userId) => {
-    // Implementar lógica de eliminación
-    console.log('Eliminar usuario:', userId);
-  };
-
-  const handleChangePassword = () => {
-    // Implementar lógica de cambio de contraseña
-    console.log('Cambiar contraseña para:', selectedUser);
-  };
-
-  return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      <div className="flex items-center gap-3 mb-6">
-        <Shield className="h-8 w-8 text-blue-600" />
-        <div>
-          <h1 className="text-2xl font-bold">Gestión de Seguridad</h1>
-          <p className="text-gray-500">Administración de usuarios y privilegios del sistema</p>
-        </div>
+  const RoleCreationForm = () => (
+    <div className="space-y-4">
+      <div>
+        <Label>Nombre del Rol</Label>
+        <Input 
+          value={createRoleData.roleName}
+          onChange={(e) => setCreateRoleData({...createRoleData, roleName: e.target.value})}
+          placeholder="Nombre del rol"
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Sección de Crear Usuario */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <UserPlus className="h-5 w-5" />
-              Crear Usuario
-            </CardTitle>
-            <CardDescription>
-              Crea un nuevo usuario con roles específicos
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <Input 
-                  placeholder="Nombre de usuario" 
-                  value={newUserData.username}
-                  onChange={(e) => setNewUserData({...newUserData, username: e.target.value})}
-                />
-              </div>
-              <div>
-                <Input 
-                  type="password" 
-                  placeholder="Contraseña" 
-                  value={newUserData.password}
-                  onChange={(e) => setNewUserData({...newUserData, password: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-2 block">Seleccionar Roles</label>
-                <div className="flex flex-wrap gap-2">
-                  {availableRoles.map(role => (
-                    <Button
-                      key={role}
-                      variant={newUserData.roles.includes(role) ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => {
-                        const newRoles = newUserData.roles.includes(role)
-                          ? newUserData.roles.filter(r => r !== role)
-                          : [...newUserData.roles, role];
-                        setNewUserData({...newUserData, roles: newRoles});
-                      }}
-                    >
-                      {role}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <Button 
-                className="w-full"
-                onClick={handleCreateUser}
-              >
-                Crear Usuario
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <div>
+        <Label>Tipo de Rol</Label>
+        <Select 
+          value={createRoleData.roleType}
+          onValueChange={(value) => setCreateRoleData({...createRoleData, roleType: value})}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Seleccionar tipo de rol" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="basic">Rol Básico (NOT IDENTIFIED)</SelectItem>
+            <SelectItem value="password">Rol con Contraseña</SelectItem>
+            <SelectItem value="application">Rol de Aplicación</SelectItem>
+            <SelectItem value="external">Rol Externo (SO)</SelectItem>
+            <SelectItem value="global">Rol Global (Directorio)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-        {/* Sección de Gestión de Usuarios Existentes */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Gestión de Usuarios
-            </CardTitle>
-            <CardDescription>
-              Administra usuarios existentes
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <Select 
-                value={selectedUser} 
-                onValueChange={setSelectedUser}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleccionar usuario" />
-                </SelectTrigger>
-                <SelectContent>
-                  {users.map(user => (
-                    <SelectItem key={user.id} value={user.name}>
-                      {user.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              
-              {selectedUser && (
-                <div className="space-y-4">
-                  <div className="flex gap-2">
-                    <Button 
-                      className="flex-1"
-                      variant="outline"
-                      onClick={handleChangePassword}
-                    >
-                      <Key className="h-4 w-4 mr-2" />
-                      Cambiar Contraseña
-                    </Button>
-                    <Button 
-                      className="flex-1"
-                      variant="destructive"
-                      onClick={() => handleDeleteUser(selectedUser)}
-                    >
-                      <UserMinus className="h-4 w-4 mr-2" />
-                      Eliminar Usuario
-                    </Button>
+      {createRoleData.roleType === 'password' && (
+        <div>
+          <Label>Contraseña</Label>
+          <Input 
+            type="password"
+            value={createRoleData.password}
+            onChange={(e) => setCreateRoleData({...createRoleData, password: e.target.value})}
+            placeholder="Contraseña del rol"
+          />
+        </div>
+      )}
+
+      {createRoleData.roleType === 'application' && (
+        <>
+          <div>
+            <Label>Schema</Label>
+            <Input 
+              value={createRoleData.schema}
+              onChange={(e) => setCreateRoleData({...createRoleData, schema: e.target.value})}
+              placeholder="Nombre del schema"
+            />
+          </div>
+          <div>
+            <Label>Package</Label>
+            <Input 
+              value={createRoleData.package}
+              onChange={(e) => setCreateRoleData({...createRoleData, package: e.target.value})}
+              placeholder="Nombre del package"
+            />
+          </div>
+        </>
+      )}
+
+      <Button className="w-full" onClick={handleCreateRole}>
+        Crear Rol
+      </Button>
+    </div>
+  );
+
+  const SchemaPrivilegesSection = () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="w-full">
+          <Database className="h-4 w-4 mr-2" />
+          Asignar Privilegios de Schema
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Privilegios de Schema</DialogTitle>
+          <DialogDescription>
+            Asignar privilegios de schema al rol
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <Select value={selectedSchema} onValueChange={setSelectedSchema}>
+            <SelectTrigger>
+              <SelectValue placeholder="Seleccionar Schema" />
+            </SelectTrigger>
+            <SelectContent>
+              {schemas.map(schema => (
+                <SelectItem key={schema} value={schema}>
+                  {schema}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {selectedSchema && (
+            <div className="border rounded-lg p-4">
+              <div className="space-y-3">
+                {objectTypes.map(type => (
+                  <div key={type} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Label>{type}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      {type === 'TABLE' && (
+                        <>
+                          <Label className="text-sm">SELECT</Label>
+                          <Switch />
+                          <Label className="text-sm">INSERT</Label>
+                          <Switch />
+                          <Label className="text-sm">UPDATE</Label>
+                          <Switch />
+                          <Label className="text-sm">DELETE</Label>
+                          <Switch />
+                        </>
+                      )}
+                      {(type === 'VIEW' || type === 'SEQUENCE') && (
+                        <>
+                          <Label className="text-sm">SELECT</Label>
+                          <Switch />
+                        </>
+                      )}
+                      {(type === 'PROCEDURE' || type === 'PACKAGE' || type === 'FUNCTION') && (
+                        <>
+                          <Label className="text-sm">EXECUTE</Label>
+                          <Switch />
+                        </>
+                      )}
+                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Lock className="h-5 w-5" />
+          Gestión de Roles
+        </CardTitle>
+        <CardDescription>
+          Administración de roles y privilegios del sistema
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="create">
+          <TabsList className="mb-4">
+            <TabsTrigger value="create">Crear Rol</TabsTrigger>
+            <TabsTrigger value="assign">Asignar Privilegios</TabsTrigger>
+            <TabsTrigger value="sysdba">Roles SYSDBA</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="create">
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Crear Nuevo Rol</CardTitle>
+                    <CardDescription>
+                      Define las características del nuevo rol
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <RoleCreationForm />
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Privilegios del Rol</CardTitle>
+                    <CardDescription>
+                      Asigna privilegios al rol
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <SchemaPrivilegesSection />
+                    
+                    <Button variant="outline" className="w-full">
+                      <Key className="h-4 w-4 mr-2" />
+                      Asignar Privilegios del Sistema
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="assign">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Asignar Roles a Usuarios
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar Usuario" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="user1">Usuario 1</SelectItem>
+                      <SelectItem value="user2">Usuario 2</SelectItem>
+                    </SelectContent>
+                  </Select>
                   
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Roles Asignados</label>
-                    <div className="flex flex-wrap gap-2">
-                      {users.find(u => u.name === selectedUser)?.roles.map(role => (
-                        <span
-                          key={role}
-                          className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                        >
-                          {role}
-                        </span>
+                  <div className="border rounded-lg p-4">
+                    <Label className="mb-2 block">Roles Disponibles</Label>
+                    <div className="space-y-2">
+                      {['CONNECT', 'RESOURCE', 'DBA', 'SYSDBA'].map(role => (
+                        <div key={role} className="flex items-center justify-between">
+                          <Label>{role}</Label>
+                          <Switch />
+                        </div>
                       ))}
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Sección de Roles y Privilegios */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5" />
-              Roles y Privilegios
-            </CardTitle>
-            <CardDescription>
-              Gestiona roles y privilegios del sistema
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="roles">
-              <TabsList className="mb-4">
-                <TabsTrigger value="roles">Roles del Sistema</TabsTrigger>
-                <TabsTrigger value="privileges">Privilegios</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="roles">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {availableRoles.map(role => (
-                    <Card key={role}>
-                      <CardContent className="p-4">
-                        <div className="flex justify-between items-center">
-                          <div className="font-medium">{role}</div>
-                          <Button variant="outline" size="sm">
-                            <Settings className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="privileges">
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    Los privilegios se muestran basados en los roles seleccionados.
-                  </AlertDescription>
-                </Alert>
-                <div className="mt-4">
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="sysdba">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Gestión de Roles SYSDBA
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
                   <table className="w-full">
                     <thead>
                       <tr className="text-left border-b">
-                        <th className="pb-2">Privilegio</th>
-                        <th className="pb-2">Descripción</th>
-                        <th className="pb-2">Roles Asociados</th>
+                        <th className="pb-2">Usuario</th>
+                        <th className="pb-2">SYSDBA</th>
+                        <th className="pb-2">SYSOPER</th>
+                        <th className="pb-2">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="border-b">
-                        <td className="py-2">CREATE SESSION</td>
-                        <td>Permite iniciar sesión en la base de datos</td>
-                        <td>DBA, ADMIN, READ</td>
+                        <td className="py-2">SYS</td>
+                        <td>TRUE</td>
+                        <td>TRUE</td>
+                        <td>
+                          <Button variant="ghost" size="sm">
+                            <Cog className="h-4 w-4" />
+                          </Button>
+                        </td>
                       </tr>
                       <tr className="border-b">
-                        <td className="py-2">CREATE TABLE</td>
-                        <td>Permite crear tablas</td>
-                        <td>DBA, ADMIN</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="py-2">SELECT ANY TABLE</td>
-                        <td>Permite consultar cualquier tabla</td>
-                        <td>DBA</td>
+                        <td className="py-2">DBA_USER</td>
+                        <td>TRUE</td>
+                        <td>FALSE</td>
+                        <td>
+                          <Button variant="ghost" size="sm">
+                            <Cog className="h-4 w-4" />
+                          </Button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
+                  
+                  <div className="flex justify-end">
+                    <Button>
+                      Asignar SYSDBA a Usuario
+                    </Button>
+                  </div>
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
 
-export default SecurityModule;
+export default Seguridad;
