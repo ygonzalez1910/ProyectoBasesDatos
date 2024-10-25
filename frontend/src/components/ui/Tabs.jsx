@@ -1,30 +1,37 @@
-// src/components/ui/Tabs.jsx
-import React, { useState } from 'react';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { clsx } from 'clsx';
 
-export const Tabs = ({ children, defaultValue }) => {
-  const [activeTab, setActiveTab] = useState(defaultValue);
-  return React.Children.map(children, child => 
-    React.cloneElement(child, { activeTab, setActiveTab })
+export function Tabs({ children, className, ...props }) {
+  return (
+    <TabsPrimitive.Root className={clsx("flex flex-col", className)} {...props}>
+      {children}
+    </TabsPrimitive.Root>
   );
-};
+}
 
-export const TabsList = ({ children }) => (
-  <div className="flex border-b mb-4">
-    {children}
-  </div>
-);
+export function TabsList({ children, className, ...props }) {
+  return (
+    <TabsPrimitive.List className={clsx("flex border-b", className)} {...props}>
+      {children}
+    </TabsPrimitive.List>
+  );
+}
 
-export const TabsTrigger = ({ children, value, activeTab, setActiveTab }) => (
-  <button
-    onClick={() => setActiveTab(value)}
-    className={`px-4 py-2 ${
-      activeTab === value ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-700'
-    }`}
-  >
-    {children}
-  </button>
-);
+export function TabsTrigger({ className, ...props }) {
+  return (
+    <TabsPrimitive.Trigger
+      className={clsx(
+        "px-4 py-2 text-sm font-medium text-center text-gray-700 border-b-2 border-transparent",
+        "focus-visible:ring focus-visible:ring-opacity-75",
+        className
+      )}
+      {...props}
+    />
+  );
+}
 
-export const TabsContent = ({ children, value, activeTab }) => (
-  activeTab === value ? <div>{children}</div> : null
-);
+export function TabsContent({ className, ...props }) {
+  return (
+    <TabsPrimitive.Content className={clsx("mt-2", className)} {...props} />
+  );
+}

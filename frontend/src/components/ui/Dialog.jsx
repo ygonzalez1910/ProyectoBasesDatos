@@ -1,33 +1,57 @@
-// src/components/ui/Dialog.jsx
-import React, { useState } from 'react';
+// Importar Radix y Tailwind
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-export const Dialog = ({ children }) => <>{children}</>;
+// Componente principal Dialog
+export function Dialog({ children, ...props }) {
+  return <DialogPrimitive.Root {...props}>{children}</DialogPrimitive.Root>;
+}
 
-export const DialogTrigger = ({ children, onClick }) => (
-  <div onClick={onClick} className="cursor-pointer">
-    {children}
-  </div>
-);
+// Trigger del Dialog
+export function DialogTrigger({ children, ...props }) {
+  return <DialogPrimitive.Trigger asChild {...props}>{children}</DialogPrimitive.Trigger>;
+}
 
-export const DialogContent = ({ children, isOpen, onClose }) => (
-  isOpen ? (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
-        <button className="absolute top-2 right-2 text-gray-500" onClick={onClose}>X</button>
-        {children}
-      </div>
+// Contenido del Dialog
+export function DialogContent({ children, ...props }) {
+  return (
+    <DialogPrimitive.Content
+      {...props}
+      className="bg-white p-6 rounded-md shadow-lg max-w-md mx-auto"
+    >
+      {children}
+    </DialogPrimitive.Content>
+  );
+}
+
+// Header del Dialog
+export function DialogHeader({ children, ...props }) {
+  return (
+    <div className="border-b border-gray-200 pb-4 mb-4">
+      {children}
     </div>
-  ) : null
-);
+  );
+}
 
-export const DialogHeader = ({ children }) => (
-  <div className="border-b pb-2 mb-4">{children}</div>
-);
+// Título del Dialog
+export function DialogTitle({ children, ...props }) {
+  return (
+    <DialogPrimitive.Title
+      {...props}
+      className="text-lg font-semibold text-gray-800"
+    >
+      {children}
+    </DialogPrimitive.Title>
+  );
+}
 
-export const DialogTitle = ({ children }) => (
-  <h2 className="text-lg font-semibold">{children}</h2>
-);
-
-export const DialogDescription = ({ children }) => (
-  <p className="text-sm text-gray-500">{children}</p>
-);
+// Descripción del Dialog
+export function DialogDescription({ children, ...props }) {
+  return (
+    <DialogPrimitive.Description
+      {...props}
+      className="text-sm text-gray-600 mt-2"
+    >
+      {children}
+    </DialogPrimitive.Description>
+  );
+}
