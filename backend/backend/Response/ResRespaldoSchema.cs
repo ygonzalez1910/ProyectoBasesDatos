@@ -9,6 +9,6 @@ namespace Response
     public class ResRespaldoSchema
     {
         public bool resultado { get; set; }
-        public List<string> errores { get; set; }
+        public List<string> errores { get; set; } = new List<string>();
     }
 }

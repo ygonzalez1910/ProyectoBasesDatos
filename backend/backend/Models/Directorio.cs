@@ -2,7 +2,7 @@
 {
     public class Directorio
     {
-        public string DirectorioNombre { get; set; }
-        public string Pseudonimo { get; set; }
+        public string NombreDirectorio { get; set; }
+        public string DireccionDirectorio { get; set; }
     }
 }

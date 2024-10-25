@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
 using backend.Request;
@@ -17,10 +18,12 @@ namespace Logica
 
     {
         private readonly string _connectionString;
+        private readonly ILogger<Respaldo> _logger;
 
-        public Respaldo(string connectionString)
+        public Respaldo(string connectionString, ILogger<Respaldo> logger)
         {
             _connectionString = connectionString;
+            _logger = logger;
         }
 
         public ResCrearDirectorio CrearDirectorio(ReqCrearDirectorio req)
@@ -81,16 +84,34 @@ namespace Logica
 
             try
             {
+                _logger.LogInformation("Iniciando respaldo para el esquema: {NombreEsquema}", req.nombreSchema);
+
                 // Generar el nombre del directorio automáticamente
                 string nombreDirectorio = $"{req.nombreSchema}_BACKUP";
 
-                // Crear directorio si no existe
-                CrearDirectorio(new ReqCrearDirectorio
+                // Verificar si el directorio ya existe
+                if (!DirectorioExiste(nombreDirectorio))
                 {
-                    directorio = req.directorio, // Usar el directorio base proporcionado
-                    nombreDirectorio = nombreDirectorio,
-                    nombreSchema = req.nombreSchema
-                });
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", nombreDirectorio);
+                    // Crear directorio
+                    var crearDirectorioRes = CrearDirectorio(new ReqCrearDirectorio
+                    {
+                        directorio = req.directorio, // Usar el directorio base proporcionado
+                        nombreDirectorio = nombreDirectorio,
+                        nombreSchema = req.nombreSchema
+                    });
+
+                    // Verificar si hubo errores al crear el directorio
+                    if (!crearDirectorioRes.resultado)
+                    {
+                        res.errores.AddRange(crearDirectorioRes.errores);
+                        return res;
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation("El directorio {NombreDirectorio} ya existe.", nombreDirectorio);
+                }
 
                 // Preparar el comando para el respaldo usando Data Pump
                 string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
@@ -98,6 +119,8 @@ namespace Logica
                                       $"DIRECTORY={nombreDirectorio} " +
                                       $"DUMPFILE={nombreDirectorio}.DMP " +
                                       $"LOGFILE={nombreDirectorio}.LOG";
+
+                _logger.LogInformation("Ejecutando el comando de respaldo: {Comando}", expdpCommand);
 
                 // Ejecutar el comando en el shell
                 ProcessStartInfo startInfo = new ProcessStartInfo
@@ -116,6 +139,9 @@ namespace Logica
                     string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
 
+                    _logger.LogInformation("Salida del comando: {Salida}", output);
+                    _logger.LogError("Error del comando: {Error}", error);
+
                     if (process.ExitCode != 0)
                     {
                         res.errores.Add($"Error al ejecutar el respaldo: {error}");
@@ -129,6 +155,7 @@ namespace Logica
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error al respaldar el esquema {NombreEsquema}", req.nombreSchema);
                 res.errores.Add($"Error al respaldar el esquema: {ex.Message}");
                 res.resultado = false;
             }
@@ -271,8 +298,8 @@ namespace Logica
                             {
                                 var directorio = new Directorio
                                 {
-                                    DirectorioNombre = reader["DIRECTORY_NAME"].ToString(),
-                                    Pseudonimo = reader["DIRECTORY_PATH"].ToString(),
+                                    NombreDirectorio = reader["DIRECTORY_NAME"].ToString(),
+                                    DireccionDirectorio = reader["DIRECTORY_PATH"].ToString(),
                                 };
                                 respuesta.Directorios.Add(directorio);
                             }

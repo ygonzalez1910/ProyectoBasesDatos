@@ -2,6 +2,7 @@
 
 using backend.Services;
 using Logica;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,8 @@ builder.Services.AddScoped<Respaldo>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetConnectionString("OracleConnection");
-    return new Respaldo(connectionString);
+    var logger = provider.GetRequiredService<ILogger<Respaldo>>();
+    return new Respaldo(connectionString, logger);
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
