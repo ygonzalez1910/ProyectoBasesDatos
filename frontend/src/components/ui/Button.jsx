@@ -1,17 +1,32 @@
-// src/components/ui/Button.jsx
-import React from 'react';
+import { cva } from 'class-variance-authority';
+import { clsx } from 'clsx';
 
-export const Button = ({ children, className, variant = 'primary', ...props }) => {
-  const baseStyles = "px-4 py-2 rounded focus:outline-none focus:ring";
-  const variants = {
-    primary: `${baseStyles} bg-blue-500 text-white hover:bg-blue-600`,
-    outline: `${baseStyles} border border-gray-300 text-gray-700 hover:bg-gray-100`,
-    ghost: `${baseStyles} text-gray-700 hover:bg-gray-100`,
-  };
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        outline: "border border-input hover:bg-accent hover:text-accent-foreground",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 px-3",
+        lg: "h-11 px-8",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
 
+export function Button({ className, variant, size, ...props }) {
   return (
-    <button className={`${variants[variant]} ${className}`} {...props}>
-      {children}
-    </button>
+    <button
+      className={clsx(buttonVariants({ variant, size }), className)}
+      {...props}
+    />
   );
-};
+}

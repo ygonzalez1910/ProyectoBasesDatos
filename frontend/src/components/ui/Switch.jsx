@@ -1,22 +1,25 @@
-// src/components/ui/Switch.jsx
-import React, { useState } from 'react';
+// components/ui/Switch.jsx
+import React from 'react';
+import { cn } from '../../lib/utils';
 
-export const Switch = ({ checked = false, onChange, className }) => {
-  const [isOn, setIsOn] = useState(checked);
-
-  const toggleSwitch = () => {
-    setIsOn(!isOn);
-    if (onChange) onChange(!isOn);
-  };
-
+export const Switch = ({ checked, onChange, className, ...props }) => {
   return (
-    <div
-      onClick={toggleSwitch}
-      className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer ${isOn ? 'bg-blue-500' : 'bg-gray-300'} ${className}`}
-    >
-      <div
-        className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${isOn ? 'translate-x-6' : 'translate-x-0'}`}
+    <label className="relative inline-flex items-center cursor-pointer">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className={cn('sr-only peer', className)}
+        {...props}
       />
-    </div>
+      <div
+        className={cn(
+          'w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:bg-white after:content-[""] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all',
+          className
+        )}
+      ></div>
+    </label>
   );
 };
+
+export default Switch;
