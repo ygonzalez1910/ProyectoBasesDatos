@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Request
+{
+    public class ReqCrearUsuarios
+    {
+        public string nombreUsuario { get; set; }
+        public string password { get; set; }
+        public List<string> roles { get; set; }
+    }
+
+
+}
