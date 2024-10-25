@@ -2,125 +2,290 @@
 // Conexión a la base de datos
 include('../../../procesos/connect.php');
 
+// Configuración de caracteres para Oracle
+$sql = "ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MM-YYYY HH24:MI:SS'";
+$stmt = oci_parse($conn, $sql);
+oci_execute($stmt);
+
+// Función para manejar errores de Oracle
+function handleOracleError($stmt, $conn) {
+    $error = oci_error($stmt);
+    if ($error) {
+        oci_rollback($conn);
+        return 'Error Oracle: ' . htmlspecialchars($error['message']);
+    }
+    return null;
+}
+
+// Función para validar el nombre de usuario
+function validateUsername($username) {
+    // Reglas específicas para Oracle XE:
+    // - Debe comenzar con una letra
+    // - Puede contener letras, números y _
+    // - Longitud máxima de 30 caracteres
+    return preg_match('/^[A-Za-z][A-Za-z0-9_]{0,29}$/', $username);
+}
+
+// Función para validar la contraseña
+function validatePassword($password) {
+    // Reglas de contraseña para Oracle:
+    // - Mínimo 8 caracteres
+    // - Al menos una letra y un número
+    return strlen($password) >= 8 && 
+           preg_match('/[A-Za-z]/', $password) && 
+           preg_match('/[0-9]/', $password);
+}
+
+// Función para verificar si un usuario existe
+function userExists($conn, $username) {
+    $sql = "SELECT COUNT(*) AS count FROM dba_users WHERE username = :username";
+    $stmt = oci_parse($conn, $sql);
+    oci_bind_by_name($stmt, ":username", $username);
+    oci_execute($stmt);
+    $row = oci_fetch_assoc($stmt);
+    return $row['COUNT'] > 0;
+}
+
+// Función para validar el espacio disponible en tablespace
+function checkTablespaceSpace($conn) {
+    $sql = "SELECT tablespace_name, 
+            ROUND((MAX_BYTES - BYTES_USED)/1024/1024,2) AS FREE_MB 
+            FROM (SELECT tablespace_name, 
+                         SUM(BYTES) BYTES_USED,
+                         SUM(MAXBYTES) MAX_BYTES
+                  FROM dba_data_files 
+                  GROUP BY tablespace_name)
+            WHERE tablespace_name = 'USERS'";
+    
+    $stmt = oci_parse($conn, $sql);
+    oci_execute($stmt);
+    $row = oci_fetch_assoc($stmt);
+    return $row['FREE_MB'] > 50; // Asegura que haya al menos 50MB libres
+}
+
 // Procesar formularios
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'create':
-                $username = strtoupper(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
-                $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-                $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
-                
-                // Crear usuario
-                $create_user_sql = "CREATE USER $username IDENTIFIED BY $password";
-                $stmt = oci_parse($conn, $create_user_sql);
-                
-                if (oci_execute($stmt)) {
+        $username = strtoupper(trim($_POST['username'] ?? ''));
+        $password = $_POST['password'] ?? '';
+        $role = $_POST['role'] ?? '';
+        
+        // Validación básica
+        if (!validateUsername($username)) {
+            echo "<script>swal('Error', 'Nombre de usuario inválido. Debe comenzar con una letra y contener solo letras, números y guiones bajos.', 'error');</script>";
+            exit;
+        }
+
+        try {
+            switch ($_POST['action']) {
+                case 'create':
+                    if (!validatePassword($password)) {
+                        echo "<script>swal('Error', 'La contraseña debe tener al menos 8 caracteres, incluir letras y números.', 'error');</script>";
+                        exit;
+                    }
+
+                    if (userExists($conn, $username)) {
+                        echo "<script>swal('Error', 'El usuario ya existe.', 'error');</script>";
+                        exit;
+                    }
+
+                    if (!checkTablespaceSpace($conn)) {
+                        echo "<script>swal('Error', 'No hay suficiente espacio en el tablespace USERS.', 'error');</script>";
+                        exit;
+                    }
+
+                    // Iniciar transacción
+                    $success = true;
+                    
+                    // Crear usuario con tablespace específico y cuota
+                    $create_user_sql = "CREATE USER :username IDENTIFIED BY :password 
+                                      DEFAULT TABLESPACE USERS 
+                                      TEMPORARY TABLESPACE TEMP
+                                      QUOTA 50M ON USERS";
+                    $stmt = oci_parse($conn, $create_user_sql);
+                    oci_bind_by_name($stmt, ":username", $username);
+                    oci_bind_by_name($stmt, ":password", $password);
+                    
+                    $success = $success && @oci_execute($stmt, OCI_DEFAULT);
+                    if ($error = handleOracleError($stmt, $conn)) {
+                        echo "<script>swal('Error', '$error', 'error');</script>";
+                        exit;
+                    }
+                    
                     // Otorgar permisos básicos
-                    $grant_connect = "GRANT CONNECT TO $username";
-                    $stmt_connect = oci_parse($conn, $grant_connect);
-                    oci_execute($stmt_connect);
+                    $basic_grants = [
+                        "GRANT CREATE SESSION TO :username",
+                        "GRANT CREATE TABLE TO :username",
+                        "GRANT CREATE VIEW TO :username"
+                    ];
+                    
+                    foreach ($basic_grants as $grant_sql) {
+                        $stmt = oci_parse($conn, $grant_sql);
+                        oci_bind_by_name($stmt, ":username", $username);
+                        $success = $success && @oci_execute($stmt, OCI_DEFAULT);
+                        if ($error = handleOracleError($stmt, $conn)) {
+                            echo "<script>swal('Error', '$error', 'error');</script>";
+                            exit;
+                        }
+                    }
                     
                     // Otorgar rol según el tipo seleccionado
+                    $role_sql = "";
                     switch ($role) {
                         case 'admin':
-                            $grant_role = "GRANT DBA TO $username";
+                            $role_sql = "GRANT DBA TO :username";
                             break;
                         case 'read_only':
-                            $grant_role = "GRANT SELECT_CATALOG_ROLE TO $username";
+                            $role_sql = "GRANT SELECT_CATALOG_ROLE, SELECT ANY TABLE TO :username";
                             break;
                         case 'user':
-                            $grant_role = "GRANT RESOURCE TO $username";
+                            $role_sql = "GRANT RESOURCE, CONNECT TO :username";
                             break;
                     }
                     
-                    $stmt_role = oci_parse($conn, $grant_role);
-                    oci_execute($stmt_role);
+                    if ($role_sql) {
+                        $stmt = oci_parse($conn, $role_sql);
+                        oci_bind_by_name($stmt, ":username", $username);
+                        $success = $success && @oci_execute($stmt, OCI_DEFAULT);
+                        if ($error = handleOracleError($stmt, $conn)) {
+                            echo "<script>swal('Error', '$error', 'error');</script>";
+                            exit;
+                        }
+                    }
+
+                    if ($success) {
+                        oci_commit($conn);
+                        echo "<script>swal('Éxito', 'Usuario creado correctamente', 'success').then(() => location.reload());</script>";
+                    }
+                    break;
+
+                case 'update':
+                    if (!userExists($conn, $username)) {
+                        echo "<script>swal('Error', 'El usuario no existe.', 'error');</script>";
+                        exit;
+                    }
+
+                    $success = true;
                     
-                    echo "<script>swal('Éxito', 'Usuario creado correctamente', 'success');</script>";
-                } else {
-                    $error = oci_error($stmt);
-                    echo "<script>swal('Error', 'Error al crear el usuario: " . $error['message'] . "', 'error');</script>";
-                }
-                break;
+                    // Actualizar contraseña si se proporcionó una nueva
+                    if (!empty($password)) {
+                        if (!validatePassword($password)) {
+                            echo "<script>swal('Error', 'La contraseña debe tener al menos 8 caracteres, incluir letras y números.', 'error');</script>";
+                            exit;
+                        }
+                        
+                        $alter_user_sql = "ALTER USER :username IDENTIFIED BY :password";
+                        $stmt = oci_parse($conn, $alter_user_sql);
+                        oci_bind_by_name($stmt, ":username", $username);
+                        oci_bind_by_name($stmt, ":password", $password);
+                        $success = $success && @oci_execute($stmt, OCI_DEFAULT);
+                        if ($error = handleOracleError($stmt, $conn)) {
+                            echo "<script>swal('Error', '$error', 'error');</script>";
+                            exit;
+                        }
+                    }
+                    
+                    // Revocar roles existentes
+                    $revoke_roles = [
+                        "REVOKE DBA FROM :username",
+                        "REVOKE SELECT_CATALOG_ROLE FROM :username",
+                        "REVOKE RESOURCE FROM :username",
+                        "REVOKE CONNECT FROM :username"
+                    ];
+                    
+                    foreach ($revoke_roles as $revoke_sql) {
+                        $stmt = oci_parse($conn, $revoke_sql);
+                        oci_bind_by_name($stmt, ":username", $username);
+                        @oci_execute($stmt, OCI_DEFAULT); // Ignoramos errores aquí
+                    }
+                    
+                    // Asignar nuevo rol
+                    $role_sql = "";
+                    switch ($role) {
+                        case 'admin':
+                            $role_sql = "GRANT DBA TO :username";
+                            break;
+                        case 'read_only':
+                            $role_sql = "GRANT SELECT_CATALOG_ROLE, SELECT ANY TABLE TO :username";
+                            break;
+                        case 'user':
+                            $role_sql = "GRANT RESOURCE, CONNECT TO :username";
+                            break;
+                    }
+                    
+                    if ($role_sql) {
+                        $stmt = oci_parse($conn, $role_sql);
+                        oci_bind_by_name($stmt, ":username", $username);
+                        $success = $success && @oci_execute($stmt, OCI_DEFAULT);
+                        if ($error = handleOracleError($stmt, $conn)) {
+                            echo "<script>swal('Error', '$error', 'error');</script>";
+                            exit;
+                        }
+                    }
 
-            case 'update':
-                $username = strtoupper(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
-                $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-                $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
-                
-                // Actualizar contraseña si se proporcionó una nueva
-                if (!empty($password)) {
-                    $alter_user_sql = "ALTER USER $username IDENTIFIED BY $password";
-                    $stmt = oci_parse($conn, $alter_user_sql);
+                    if ($success) {
+                        oci_commit($conn);
+                        echo "<script>swal('Éxito', 'Usuario actualizado correctamente', 'success').then(() => location.reload());</script>";
+                    }
+                    break;
+
+                case 'delete':
+                    if (!userExists($conn, $username)) {
+                        echo "<script>swal('Error', 'El usuario no existe.', 'error');</script>";
+                        exit;
+                    }
+
+                    // Primero intentamos matar las sesiones activas del usuario
+                    $kill_session_sql = "SELECT 'ALTER SYSTEM KILL SESSION ''' || sid || ',' || serial# || '''' AS kill_sql 
+                                       FROM v\$session 
+                                       WHERE username = :username";
+                    $stmt = oci_parse($conn, $kill_session_sql);
+                    oci_bind_by_name($stmt, ":username", $username);
                     oci_execute($stmt);
-                }
-                
-                // Revocar roles existentes
-                $revoke_roles = [
-                    "REVOKE DBA FROM $username",
-                    "REVOKE SELECT_CATALOG_ROLE FROM $username",
-                    "REVOKE RESOURCE FROM $username"
-                ];
-                
-                foreach ($revoke_roles as $revoke_sql) {
-                    $stmt = oci_parse($conn, $revoke_sql);
-                    @oci_execute($stmt); // Usamos @ para ignorar errores si el rol no estaba asignado
-                }
-                
-                // Asignar nuevo rol
-                switch ($role) {
-                    case 'admin':
-                        $grant_role = "GRANT DBA TO $username";
-                        break;
-                    case 'read_only':
-                        $grant_role = "GRANT SELECT_CATALOG_ROLE TO $username";
-                        break;
-                    case 'user':
-                        $grant_role = "GRANT RESOURCE TO $username";
-                        break;
-                }
-                
-                $stmt_role = oci_parse($conn, $grant_role);
-                if (oci_execute($stmt_role)) {
-                    echo "<script>swal('Éxito', 'Usuario actualizado correctamente', 'success');</script>";
-                } else {
-                    $error = oci_error($stmt_role);
-                    echo "<script>swal('Error', 'Error al actualizar el usuario: " . $error['message'] . "', 'error');</script>";
-                }
-                break;
+                    
+                    while ($row = oci_fetch_assoc($stmt)) {
+                        $kill_stmt = oci_parse($conn, $row['KILL_SQL']);
+                        @oci_execute($kill_stmt);
+                    }
 
-            case 'delete':
-                $username = strtoupper(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
-                
-                $drop_user_sql = "DROP USER $username CASCADE";
-                $stmt = oci_parse($conn, $drop_user_sql);
-                
-                if (oci_execute($stmt)) {
-                    echo "<script>swal('Éxito', 'Usuario eliminado correctamente', 'success');</script>";
-                } else {
-                    $error = oci_error($stmt);
-                    echo "<script>swal('Error', 'Error al eliminar el usuario: " . $error['message'] . "', 'error');</script>";
-                }
-                break;
+                    // Ahora eliminamos el usuario
+                    $drop_user_sql = "DROP USER :username CASCADE";
+                    $stmt = oci_parse($conn, $drop_user_sql);
+                    oci_bind_by_name($stmt, ":username", $username);
+                    
+                    if (@oci_execute($stmt, OCI_DEFAULT)) {
+                        oci_commit($conn);
+                        echo "<script>swal('Éxito', 'Usuario eliminado correctamente', 'success').then(() => location.reload());</script>";
+                    } else {
+                        $error = handleOracleError($stmt, $conn);
+                        echo "<script>swal('Error', '$error', 'error');</script>";
+                    }
+                    break;
+            }
+        } catch (Exception $e) {
+            oci_rollback($conn);
+            echo "<script>swal('Error', 'Error inesperado: " . htmlspecialchars($e->getMessage()) . "', 'error');</script>";
         }
     }
 }
 
-// Obtener lista de usuarios del sistema
-$users = [];
-$query = "SELECT username, 
-                 created, 
-                 LISTAGG(granted_role, ', ') WITHIN GROUP (ORDER BY granted_role) as roles
-          FROM dba_users 
-          LEFT JOIN dba_role_privs ON dba_users.username = dba_role_privs.grantee
-          WHERE account_status = 'OPEN'
-          AND username NOT IN ('SYS','SYSTEM')
-          GROUP BY username, created
-          ORDER BY created DESC";
+// Obtener lista de usuarios del sistema con información adicional
+$query = "SELECT u.username, 
+                 u.created, 
+                 u.account_status,
+                 u.default_tablespace,
+                 LISTAGG(rp.granted_role, ', ') WITHIN GROUP (ORDER BY rp.granted_role) as roles
+          FROM dba_users u
+          LEFT JOIN dba_role_privs rp ON u.username = rp.grantee
+          WHERE u.account_status = 'OPEN'
+          AND u.username NOT IN ('SYS','SYSTEM', 'OUTLN', 'DIP', 'ORACLE_OCM', 'DBSNMP', 'APPQOSSYS', 'WMSYS', 'EXFSYS', 'CTXSYS', 'XDB', 'ANONYMOUS', 'XS$NULL', 'ORDDATA', 'SI_INFORMTN_SCHEMA', 'ORDPLUGINS', 'ORDSYS', 'MDSYS', 'OLAPSYS', 'MDDATA', 'SPATIAL_WFS_ADMIN_USR', 'SPATIAL_CSW_ADMIN_USR', 'SYSMAN', 'MGMT_VIEW', 'FLOWS_FILES', 'APEX_PUBLIC_USER', 'APEX_030200', 'OWBSYS', 'OWBSYS_AUDIT', 'SCOTT')
+          GROUP BY u.username, u.created, u.account_status, u.default_tablespace
+          ORDER BY u.created DESC";
+
 $result = oci_parse($conn, $query);
 oci_execute($result);
 
+$users = array();
 while ($row = oci_fetch_assoc($result)) {
     $users[] = $row;
 }

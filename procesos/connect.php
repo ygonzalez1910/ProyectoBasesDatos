@@ -1,6 +1,9 @@
 <?php
+
+error_reporting(E_ALL & ~E_WARNING);
+
 $db_username = 'SYSTEM';
-$db_password = 'rootroot';
+$db_password = 'root';
 $db_connection_string = 'localhost/XE'; // Cambia según tu configuración
 
 // Crear la conexión
