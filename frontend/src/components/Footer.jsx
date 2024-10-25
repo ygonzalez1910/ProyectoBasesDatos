@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="container text-center py-3">
-        <p>Desarrollado por Tu Nombre © {new Date().getFullYear()}</p>
+        <p>Desarrollado por Pablo Alvarado Umaña y Yuliana Gonzalez Chaves © {new Date().getFullYear()}</p>
         <p>
           <a href="https://github.com/tuusuario" target="_blank" rel="noopener noreferrer">
             GitHub
