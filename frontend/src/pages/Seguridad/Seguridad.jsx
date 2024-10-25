@@ -6,20 +6,20 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../../components/ui/Card";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
+} from "../../components/ui/Tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../components/ui/Select";
 import {
   Dialog,
   DialogContent,
@@ -27,11 +27,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+} from "../../components/ui/Dialog";
+import { Button } from "../../components/ui/Button";
+import { Input } from "../../components/ui/Input";
+import { Switch } from "../../components/ui/Switch";
+import { Label } from "../../components/ui/Label";
+
 
 const Seguridad = () => {
   const [createRoleData, setCreateRoleData] = useState({
