@@ -10,6 +10,6 @@ namespace Request
     {
         public string nombreSchema { get; set; }
         public string contrasenaSchema { get; set; }
-        public string nombreDirectorio { get; set; }
+        public string directorio { get; set; }
     }
 }

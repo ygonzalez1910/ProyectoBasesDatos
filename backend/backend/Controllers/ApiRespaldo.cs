@@ -2,6 +2,9 @@
 using Logica;
 using Request;
 using Response;
+using backend.Request;
+using backend.Response;
+using Models;
 
 namespace backend.Controllers
 {
@@ -36,6 +39,52 @@ namespace backend.Controllers
             {
                 return BadRequest(res.errores);
             }
+        }
+
+        [HttpPost]
+        [Route("tabla")]
+        public IActionResult RespaldoTabla([FromBody] ReqRespaldoTabla req)
+        {
+            var resultado = _respaldo.RespaldarTabla(req);
+
+            if (resultado.resultado)
+            {
+                return Ok(resultado);
+            }
+            return BadRequest(resultado);
+        }
+
+        [HttpPost]
+        [Route("completo")]
+        public ActionResult<ResRespaldoCompleto> RespaldarBaseDeDatos([FromBody] ReqRespaldoCompleto req)
+        {
+            if (req == null || string.IsNullOrWhiteSpace(req.contrasena) || string.IsNullOrWhiteSpace(req.directorio))
+            {
+                return BadRequest("Los parámetros de entrada no son válidos.");
+            }
+
+            var resultado = _respaldo.RespaldarBaseDeDatos(req);
+
+            if (resultado.resultado)
+            {
+                return Ok(resultado);
+            }
+            else
+            {
+                return StatusCode(500, resultado);
+            }
+        }
+        [HttpGet]
+        public ActionResult<RespuestaDirectorios> ObtenerDirectorios()
+        {
+            var resultado = _respaldo.ObtenerDirectorios();
+
+            if (resultado.Errores.Count > 0)
+            {
+                return BadRequest(resultado.Errores);
+            }
+
+            return Ok(resultado);
         }
     }
 }
