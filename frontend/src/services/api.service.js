@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from './config';
 
 // Configuración global de axios
 const axiosInstance = axios.create({
-    timeout: 10000, // 10 segundos
+    timeout: 300000, // Establecer el timeout a 5 minutos (300000 ms)
     headers: {
         'Content-Type': 'application/json',
     },
@@ -21,6 +21,17 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+export const SchemasService = {
+    getAllSchemas: async (params = {}) => {
+        try {
+            const response = await axiosInstance.get(API_ENDPOINTS.SCHEMAS.GET_ALL, { params });
+            return response.data;
+        } catch (error) {
+            console.error('Error al obtener esquemas:', error);
+            throw error;
+        }
+    },
+};
 
 // Servicio para Respaldos
 export const RespaldoService = {
@@ -47,9 +58,9 @@ export const RespaldoService = {
     },
 
     // Crear nuevo respaldo
-    createRespaldo: async (data) => {
+    createRespaldoSchema: async (data) => {
         try {
-            const response = await axiosInstance.post(API_ENDPOINTS.RESPALDO.CREATE, data);
+            const response = await axiosInstance.post(API_ENDPOINTS.RESPALDO.CREATE_SCHEMA, data);
             return response.data;
         } catch (error) {
             console.error('Error al crear respaldo:', error);

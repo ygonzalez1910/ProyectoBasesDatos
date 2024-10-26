@@ -27,6 +27,14 @@ builder.Services.AddScoped<Respaldo>(provider =>
     var logger = provider.GetRequiredService<ILogger<Respaldo>>();
     return new Respaldo(connectionString, logger);
 });
+// Registrar el servicio de Schemas
+builder.Services.AddScoped<Schema>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    return new Schema(connectionString);
+});
+
 
 // Configuración de Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
