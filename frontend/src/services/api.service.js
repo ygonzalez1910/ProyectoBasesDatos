@@ -1,4 +1,4 @@
-// src/services/api.service.js
+
 import axios from 'axios';
 import { API_ENDPOINTS } from './config';
 
