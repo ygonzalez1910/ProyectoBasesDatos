@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
         GET_ALL: `${API_BASE_URL}/ApiRespaldo`,
         GET_BY_ID: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
         CREATE_SCHEMA: `${API_BASE_URL}/ApiRespaldo/schema`,
+        CREATE_TABLE: `${API_BASE_URL}/ApiRespaldo/tabla`,
         UPDATE: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
         DELETE: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
     },

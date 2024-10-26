@@ -68,6 +68,17 @@ export const RespaldoService = {
         }
     },
 
+        // Crear nuevo respaldo
+        createRespaldoTable: async (data) => {
+            try {
+                const response = await axiosInstance.post(API_ENDPOINTS.RESPALDO.CREATE_TABLE, data);
+                return response.data;
+            } catch (error) {
+                console.error('Error al crear respaldo:', error);
+                throw error;
+            }
+        },
+
     // Actualizar respaldo
     updateRespaldo: async (id, data) => {
         try {

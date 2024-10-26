@@ -48,5 +48,45 @@ namespace Logica
 
             return res;
         }
+        public ResGetTables GetTables()
+        {
+            var res = new ResGetTables();
+            res.Tables = new List<TableModel>(); // Asegúrate de inicializar la lista
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+                    string sql = @"
+                        SELECT owner AS schema_name, table_name 
+                        FROM dba_tables 
+                        WHERE owner NOT LIKE '%SYS%' 
+                        AND owner NOT IN ('ORDDATA', 'GSMADMIN_INTERNAL', 'DBSNMP', 'XDB', 'OUTLN', 'DBSFWUSER') 
+                        ORDER BY owner, table_name";
+                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    {
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.Tables.Add(new TableModel
+                                {
+                                    SchemaName = reader.GetString(0),
+                                    TableName = reader.GetString(1)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Errores.Add($"Error al recuperar las tablas: {ex.Message}");
+            }
+
+            return res;
+        }
+
     }
 }

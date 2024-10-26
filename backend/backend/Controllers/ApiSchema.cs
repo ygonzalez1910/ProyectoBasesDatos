@@ -26,5 +26,15 @@ namespace backend.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("get-tables")]
+        public ActionResult<ResGetTables> GetTables()
+        {
+            var result = _schemaService.GetTables();
+            if (result.Errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

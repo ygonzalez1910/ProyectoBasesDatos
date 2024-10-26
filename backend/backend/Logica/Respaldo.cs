@@ -115,7 +115,7 @@ namespace Logica
 
                 // Preparar el comando para el respaldo usando Data Pump
                 string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
-                                      $"TABLES={req.nombreSchema} " +
+                                      $"SCHEMAS={req.nombreSchema} " +
                                       $"DIRECTORY={nombreDirectorio} " +
                                       $"DUMPFILE={nombreDirectorio}.DMP " +
                                       $"LOGFILE={nombreDirectorio}.LOG";
@@ -185,7 +185,11 @@ namespace Logica
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Arguments = $"/C expdp {req.nombreSchema}/{req.contrasenaSchema}@XE TABLES={req.nombreSchema}.{req.nombreTabla} DIRECTORY={nombreDirectorio} DUMPFILE={nombreDirectorio}.DMP LOGFILE={nombreDirectorio}.LOG",
+                    Arguments = $"/C expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
+                    $"TABLES={req.nombreSchema}.{req.nombreTabla} " +
+                    $"DIRECTORY={nombreDirectorio} " +
+                    $"DUMPFILE={nombreDirectorio}.DMP " +
+                    $"LOGFILE={nombreDirectorio}.LOG",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,

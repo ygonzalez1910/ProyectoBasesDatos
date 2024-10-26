@@ -6,6 +6,8 @@ export const API_ENDPOINTS = {
         GET_ALL: `${API_BASE_URL}/ApiRespaldo`,
         GET_BY_ID: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
         CREATE_SCHEMA: `${API_BASE_URL}/ApiRespaldo/schema`,
+        CREATE_TABLE: `${API_BASE_URL}/ApiRespaldo/tabla`,
+        CREATE_FULL: `${API_BASE_URL}/ApiRespaldo/completo`,
         UPDATE: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
         DELETE: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
     },
@@ -17,6 +19,7 @@ export const API_ENDPOINTS = {
     },
     SCHEMAS: {
         GET_ALL: `${API_BASE_URL}/ApiSchema/get-schemas`,
+        GET_ALL_TABLES: `${API_BASE_URL}/ApiSchema/get-tables`,
         GET_BY_ID: (id) => `${API_BASE_URL}/ApiSchema/${id}`,
         CREATE: `${API_BASE_URL}/ApiSchema`,
         UPDATE: (id) => `${API_BASE_URL}/ApiSchema/${id}`,
