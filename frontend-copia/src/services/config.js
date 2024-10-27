@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
         GET_ALL: `${API_BASE_URL}/ApiSchema/get-schemas`,
         GET_ALL_TABLES: `${API_BASE_URL}/ApiSchema/get-tables`,
         GET_BY_ID: (id) => `${API_BASE_URL}/ApiSchema/${id}`,
-        GET_BY_TYPE: (type) => `${API_BASE_URL}/ApiRespaldo/backup/${type}`,
+        GET_BY_TYPE: `${API_BASE_URL}/ApiSchema/backup`,
         CREATE: `${API_BASE_URL}/ApiSchema`,
         UPDATE: (id) => `${API_BASE_URL}/ApiSchema/${id}`,
         DELETE: (id) => `${API_BASE_URL}/ApiSchema/${id}`,

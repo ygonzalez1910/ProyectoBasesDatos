@@ -25,12 +25,11 @@ const RecuperarRespaldo = () => {
   // Llama a la API cuando se selecciona un nuevo tipo de respaldo
   useEffect(() => {
     const fetchNombresBackup = async () => {
-      if (formData.tipoBackup) {
+      if (typeof formData.tipoBackup === 'string' && formData.tipoBackup.trim() !== '') {
         setLoading(true);
         try {
           // Llama al servicio para obtener los nombres de respaldo según el tipo
-          const data = await SchemasService.GET_BY_TYPE(formData.tipoBackup);
-          console.log("data: ", data);
+          const data = await SchemasService.getRespaldoByType(formData.tipoBackup);
           setNombresBackup(data.nombresBackup || []);
         } catch (err) {
           setError(`Error al cargar respaldos: ${err.message}`);
@@ -42,7 +41,7 @@ const RecuperarRespaldo = () => {
         setNombresBackup([]);
       }
     };
-
+  
     fetchNombresBackup();
   }, [formData.tipoBackup]);
 
@@ -67,6 +66,7 @@ const RecuperarRespaldo = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <Container fluid className="p-4">

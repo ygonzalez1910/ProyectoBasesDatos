@@ -44,18 +44,18 @@ export const SchemasService = {
       throw error;
     }
   },
-  getRespaldoByType: async (params = {}) => {
+  getRespaldoByType: async (tipo) => {
     try {
       const response = await axiosInstance.get(
-        API_ENDPOINTS.SCHEMAS.GET_BY_TYPE,
-        { params }
+        `${API_ENDPOINTS.SCHEMAS.GET_BY_TYPE}/${tipo}`
       );
       return response.data;
     } catch (error) {
-      console.error("Error al obtener esquemas:", error);
+      console.error("Error al obtener respaldos:", error);
       throw error;
     }
   },
+  
 };
 
 // Servicio para Respaldos
@@ -155,32 +155,3 @@ export const RespaldoService = {
   },
 };
 
-// Ejemplo de uso en un componente
-/*
-// src/pages/respaldo/TablaRespaldo.jsx
-import React, { useState, useEffect } from 'react';
-import { RespaldoService } from '../../services/api.service';
-
-const TablaRespaldo = () => {
-    const [respaldos, setRespaldos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchRespaldos = async () => {
-            try {
-                const data = await RespaldoService.getAllRespaldos();
-                setRespaldos(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRespaldos();
-    }, []);
-
-    // Resto del componente...
-};
-*/
