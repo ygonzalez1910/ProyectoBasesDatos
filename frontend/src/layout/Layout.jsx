@@ -24,9 +24,21 @@ const Layout = () => {
       subItems: [
         {
           id: 21,
-          title: "Tabla de Respaldos",
+          title: "Respaldo Tabla",
           path: "/respaldo/tabla",
           icon: "table",
+        },
+        {
+          id: 25,
+          title: "Respaldo de Esquema",
+          path: "/respaldo/esquema",
+          icon: "schema",
+        },
+        {
+          id: 24,
+          title: "Respaldo Completo",
+          path: "/respaldo/completo",
+          icon: "backup",
         },
         {
           id: 22,
@@ -39,18 +51,6 @@ const Layout = () => {
           title: "Administrar Respaldo",
           path: "/respaldo/administrar",
           icon: "settings",
-        },
-        {
-          id: 24,
-          title: "Respaldo Completo",
-          path: "/respaldo/completo",
-          icon: "backup",
-        },
-        {
-          id: 25,
-          title: "Respaldo de Esquema",
-          path: "/respaldo/esquema",
-          icon: "schema",
         },
       ],
     },
