@@ -231,3 +231,70 @@ El trabajo "HR"."SYS_EXPORT_SCHEMA_01" ha terminado correctamente en Sßb Oct 26
 2024-10-26 22:35:03.715 -06:00 [INF] Executed action backend.Controllers.ApiSchema.ObtenerNombresBackupPorTipo (backend) in 4.0555ms
 2024-10-26 22:35:03.717 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.ObtenerNombresBackupPorTipo (backend)'
 2024-10-26 22:35:03.718 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/backup/schema - 200 null application/json; charset=utf-8 16.9123ms
+2024-10-26 22:46:54.636 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-26 22:46:54.642 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:46:54.644 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:46:54.646 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-26 22:46:54.678 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-26 22:46:54.681 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 30.9483ms
+2024-10-26 22:46:54.685 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:46:54.685 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-26 22:46:54.692 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 83.2773ms
+2024-10-26 22:46:54.696 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:46:54.703 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:46:54.705 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-26 22:46:54.735 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-26 22:46:54.739 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 30.6452ms
+2024-10-26 22:46:54.742 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:46:54.744 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 59.0713ms
+2024-10-26 22:46:58.716 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/main.0a53e3268c614e35901c.hot-update.json - null null
+2024-10-26 22:46:58.726 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/main.0a53e3268c614e35901c.hot-update.json - 404 0 null 9.44ms
+2024-10-26 22:46:58.739 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/main.0a53e3268c614e35901c.hot-update.json, Response status code: 404
+2024-10-26 22:46:59.936 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-26 22:46:59.944 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:46:59.946 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:46:59.950 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-26 22:46:59.970 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-26 22:46:59.976 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:46:59.978 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:46:59.981 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-26 22:46:59.998 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-26 22:47:00.008 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 54.2263ms
+2024-10-26 22:47:00.028 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-26 22:47:00.036 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:47:00.040 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 55.1009ms
+2024-10-26 22:47:00.041 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 499 null application/json; charset=utf-8 105.7877ms
+2024-10-26 22:47:00.044 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-26 22:47:00.053 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 499 null application/json; charset=utf-8 83.5641ms
+2024-10-26 22:47:02.690 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - null null
+2024-10-26 22:47:02.696 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:47:02.697 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:02.700 -06:00 [INF] Route matched with {action = "ObtenerDirectorios", controller = "ApiRespaldo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Models.RespuestaDirectorios] ObtenerDirectorios() on controller backend.Controllers.ApiRespaldo (backend).
+2024-10-26 22:47:02.743 -06:00 [INF] Executing OkObjectResult, writing value of type 'Models.RespuestaDirectorios'.
+2024-10-26 22:47:02.748 -06:00 [INF] Executed action backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend) in 44.7683ms
+2024-10-26 22:47:02.750 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:02.751 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - null null
+2024-10-26 22:47:02.753 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - 200 null application/json; charset=utf-8 63.8173ms
+2024-10-26 22:47:02.757 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:47:02.764 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:02.766 -06:00 [INF] Route matched with {action = "ObtenerDirectorios", controller = "ApiRespaldo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Models.RespuestaDirectorios] ObtenerDirectorios() on controller backend.Controllers.ApiRespaldo (backend).
+2024-10-26 22:47:02.772 -06:00 [INF] Executing OkObjectResult, writing value of type 'Models.RespuestaDirectorios'.
+2024-10-26 22:47:02.774 -06:00 [INF] Executed action backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend) in 5.1799ms
+2024-10-26 22:47:02.777 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:02.778 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - 200 null application/json; charset=utf-8 27.0286ms
+2024-10-26 22:47:04.121 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - null null
+2024-10-26 22:47:04.128 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:47:04.129 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:04.131 -06:00 [INF] Route matched with {action = "ObtenerDirectorios", controller = "ApiRespaldo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Models.RespuestaDirectorios] ObtenerDirectorios() on controller backend.Controllers.ApiRespaldo (backend).
+2024-10-26 22:47:04.137 -06:00 [INF] Executing OkObjectResult, writing value of type 'Models.RespuestaDirectorios'.
+2024-10-26 22:47:04.139 -06:00 [INF] Executed action backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend) in 5.3895ms
+2024-10-26 22:47:04.140 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - null null
+2024-10-26 22:47:04.141 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:04.144 -06:00 [INF] CORS policy execution successful.
+2024-10-26 22:47:04.146 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - 200 null application/json; charset=utf-8 24.5777ms
+2024-10-26 22:47:04.147 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:04.154 -06:00 [INF] Route matched with {action = "ObtenerDirectorios", controller = "ApiRespaldo"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Models.RespuestaDirectorios] ObtenerDirectorios() on controller backend.Controllers.ApiRespaldo (backend).
+2024-10-26 22:47:04.160 -06:00 [INF] Executing OkObjectResult, writing value of type 'Models.RespuestaDirectorios'.
+2024-10-26 22:47:04.162 -06:00 [INF] Executed action backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend) in 4.927ms
+2024-10-26 22:47:04.164 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiRespaldo.ObtenerDirectorios (backend)'
+2024-10-26 22:47:04.166 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiRespaldo - 200 null application/json; charset=utf-8 25.8631ms

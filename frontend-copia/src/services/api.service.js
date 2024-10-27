@@ -44,14 +44,15 @@ export const SchemasService = {
       throw error;
     }
   },
-  getRespaldoByType: async (type) => {
+  getRespaldoByType: async (params = {}) => {
     try {
       const response = await axiosInstance.get(
-        API_ENDPOINTS.SCHEMAS.GET_BY_TYPE(type)
+        API_ENDPOINTS.SCHEMAS.GET_BY_TYPE,
+        { params }
       );
       return response.data;
     } catch (error) {
-      console.error(`Error al obtener respaldo ${type}:`, error);
+      console.error("Error al obtener esquemas:", error);
       throw error;
     }
   },
