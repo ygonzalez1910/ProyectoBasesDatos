@@ -27,5 +27,13 @@ export const API_ENDPOINTS = {
         UPDATE: (id) => `${API_BASE_URL}/ApiSchema/${id}`,
         DELETE: (id) => `${API_BASE_URL}/ApiSchema/${id}`,
     },
+    TABLESPACE: {
+        GET_ALL: `${API_BASE_URL}/ApiTablespace/get-tablespaces`,
+        GET_BY_ID: (id) => `${API_BASE_URL}/ApiTablespace/${id}`,
+        CREATE: `${API_BASE_URL}/ApiTablespace`,
+        UPDATE: (id) => `${API_BASE_URL}/ApiTablespace/${id}`,
+        MODIFY_SIZE: `${API_BASE_URL}/ApiTableSpace/modify-tablespace-size`,
+        DELETE: (nombreTableSpace) => `${API_BASE_URL}/ApiTableSpace/${nombreTableSpace}`,
+    }
     // ... más endpoints
 };

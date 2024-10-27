@@ -155,3 +155,43 @@ export const RespaldoService = {
   },
 };
 
+export const TableSpaceService = {
+  getAllTableSpaces: async (params = {}) => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.TABLESPACE.GET_ALL,
+        {
+          params,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener tablespaces:", error);
+      throw error;
+    }
+  },
+  updateSizeTableSpace: async (data) => {
+    try {
+        const response = await axiosInstance.put(
+            API_ENDPOINTS.TABLESPACE.MODIFY_SIZE, // Usar el endpoint específico
+            data
+        );
+        return response.data;
+    } catch (error) {
+        console.error(`Error al actualizar el tamaño del tablespace:`, error);
+        throw error;
+    }
+  },
+  deleteTableSpace: async (nombreTableSpace) => {
+    try {
+      const response = await axiosInstance.delete(
+        API_ENDPOINTS.TABLESPACE.DELETE(nombreTableSpace)
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error al eliminar tablespace ${nombreTableSpace}:`, error);
+      throw error;
+    }
+  },
+  
+};

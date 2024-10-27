@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configuración de Serilog para archivo de log y consola
 var logger = new LoggerConfiguration()
-    .WriteTo.Console()  // Agrega la salida a la consola
-    .WriteTo.File("logs/logfile.log", rollingInterval: RollingInterval.Day)  // Salida al archivo
+    .WriteTo.Console()  // Salida a la consola
+    .WriteTo.File("logs/logfile.log", rollingInterval: RollingInterval.Day)  // Salida al archivo de logs con archivo por día
     .CreateLogger();
 
 builder.Logging.ClearProviders();
@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Registrar el servicio Respaldo
+// Registrar el servicio de Respaldo
 builder.Services.AddScoped<Respaldo>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
@@ -44,6 +44,14 @@ builder.Services.AddScoped<Schema>(provider =>
     var configuration = provider.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetConnectionString("OracleConnection");
     return new Schema(connectionString);
+});
+
+// Registrar el servicio de TableSpace
+builder.Services.AddScoped<TableSpace>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    return new TableSpace(connectionString);
 });
 
 // Configuración de Swagger/OpenAPI
