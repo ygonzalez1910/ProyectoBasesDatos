@@ -50,7 +50,7 @@ const TablaRespaldo = () => {
     setError(null);
 
     try {
-      await RespaldoService.createRespaldoSchema(formData);
+      await RespaldoService.createRespaldoTable(formData);
       // Limpiar el formulario después de un envío exitoso
       setFormData({
         nombreSchema: "",

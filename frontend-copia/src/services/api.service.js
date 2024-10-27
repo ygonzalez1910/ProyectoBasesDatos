@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from "./config";
 
 // Configuración global de axios
 const axiosInstance = axios.create({
-  timeout: 600000, // Establecer el timeout a 10 minutos (600000 ms)
+  timeout: 1200000, // Establecer el timeout a 20 minutos (1200000 ms)
   headers: {
     "Content-Type": "application/json",
   },
