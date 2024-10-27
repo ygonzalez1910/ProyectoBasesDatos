@@ -2,8 +2,6 @@
 using Logica;
 using Request;
 using Response;
-using backend.Request;
-using backend.Response;
 using Models;
 
 namespace backend.Controllers
@@ -74,6 +72,7 @@ namespace backend.Controllers
                 return StatusCode(500, resultado);
             }
         }
+
         [HttpGet]
         public ActionResult<RespuestaDirectorios> ObtenerDirectorios()
         {
@@ -85,6 +84,25 @@ namespace backend.Controllers
             }
 
             return Ok(resultado);
+        }
+
+        [HttpPost]
+        [Route("recuperar")]
+        public IActionResult RecuperarRespaldo([FromBody] ReqRecuperarRespaldo req)
+        {
+            if (req == null || string.IsNullOrEmpty(req.TipoBackup) || string.IsNullOrEmpty(req.NombreBackup) || string.IsNullOrEmpty(req.Contrasena))
+            {
+                return BadRequest("Todos los campos son obligatorios.");
+            }
+
+            var res = _respaldo.RecuperarRespaldo(req);
+
+            if (!res.Resultado)
+            {
+                return BadRequest(res.Errores);
+            }
+
+            return Ok(res);
         }
     }
 }

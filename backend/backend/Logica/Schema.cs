@@ -87,6 +87,35 @@ namespace Logica
 
             return res;
         }
-
+        public ResNombresBackup ObtenerNombresBackupPorTipo(ReqTipoBackup req)
+        {
+            ResNombresBackup res = new ResNombresBackup();
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+                    string sql = "SELECT NOMBRE_BACKUP FROM ADMINDB.BACKUPS WHERE TIPO_BACKUP = :tipo";
+                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    {
+                        cmd.Parameters.Add(new OracleParameter("tipo", req.TipoBackup));
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.NombresBackup.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+                res.Resultado = true;
+            }
+            catch (Exception ex)
+            {
+                res.Errores.Add($"Error al obtener nombres de backup: {ex.Message}");
+                res.Resultado = false;
+            }
+            return res;
+        }
     }
 }

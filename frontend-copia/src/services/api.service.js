@@ -44,6 +44,17 @@ export const SchemasService = {
       throw error;
     }
   },
+  getRespaldoByType: async (type) => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.SCHEMAS.GET_BY_TYPE(type)
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error al obtener respaldo ${type}:`, error);
+      throw error;
+    }
+  },
 };
 
 // Servicio para Respaldos
@@ -57,19 +68,6 @@ export const RespaldoService = {
       return response.data;
     } catch (error) {
       console.error("Error al obtener respaldos:", error);
-      throw error;
-    }
-  },
-
-  // Obtener un respaldo por ID
-  getRespaldoById: async (id) => {
-    try {
-      const response = await axiosInstance.get(
-        API_ENDPOINTS.RESPALDO.GET_BY_ID(id)
-      );
-      return response.data;
-    } catch (error) {
-      console.error(`Error al obtener respaldo ${id}:`, error);
       throw error;
     }
   },
@@ -106,6 +104,19 @@ export const RespaldoService = {
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.RESPALDO.CREATE_FULL,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear respaldo:", error);
+      throw error;
+    }
+  },
+
+  recuperarRespaldo: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.RESPALDO.RECUPERAR_RESPALDO,
         data
       );
       return response.data;

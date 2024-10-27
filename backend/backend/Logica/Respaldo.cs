@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
-using backend.Request;
-using backend.Response;
 using Oracle.ManagedDataAccess.Client;
 using Request;
 using Models;
@@ -77,13 +75,13 @@ namespace Logica
             }
         }
 
-        private bool SaveInfoDirectorio(string nombre, string nombreDirectorio, string tipo)
+        private bool SaveInfoDirectorio(string nombre, string nombreDirectorio, string tipo, string nombreSchema, string nombreTable)
         {
             using (OracleConnection conexion = new OracleConnection(_connectionString))
             {
                 _logger.LogInformation("-----------------Ejecutando el saveInfoDirectorio");
                 conexion.Open();
-                string sql = $"INSERT INTO ADMINDB.BACKUPS (nombre_backup, directorio, tipo_backup) VALUES ('{nombre}', '{nombreDirectorio}', '{tipo}')";
+                string sql = $"INSERT INTO ADMINDB.BACKUPS (nombre_backup, directorio, tipo_backup, name_schema, name_table) VALUES ('{nombre}', '{nombreDirectorio}', '{tipo}', '{nombreSchema}', '{nombreTable}')";
                 using (OracleCommand cmd = new OracleCommand(sql, conexion))
                 {
                     return cmd.ExecuteNonQuery() > 0;
@@ -174,7 +172,7 @@ namespace Logica
                     else
                     {
                         // Guardar la información del respaldo en la base de datos
-                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "schema"))
+                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "schema", req.nombreSchema, "N/A"))
                         {
                             res.errores.Add("Error al guardar información del respaldo en la base de datos.");
                             res.resultado = false;
@@ -276,7 +274,7 @@ namespace Logica
                     {
                         // Guardar la información del respaldo en la base de datos
                         _logger.LogInformation("Comprobando si 6...");
-                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "table"))
+                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "table", req.nombreSchema, req.nombreTabla))
                         {
                             res.errores.Add("Error al guardar información del respaldo en la base de datos.");
                             res.resultado = false;
@@ -357,7 +355,7 @@ namespace Logica
                     else
                     {
                         // Guardar la información del respaldo en la base de datos
-                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "full"))
+                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "full", "N/A", "N/A"))
                         {
                             res.errores.Add("Error al guardar información del respaldo en la base de datos.");
                             res.resultado = false;
@@ -424,6 +422,95 @@ namespace Logica
             }
 
             return respuesta;
+        }
+        public ResRecuperarRespaldo RecuperarRespaldo(ReqRecuperarRespaldo req)
+        {
+            ResRecuperarRespaldo res = new ResRecuperarRespaldo();
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+                    string directorio = null;
+                    string nombreSchema = null;
+                    string nombreTabla = null;
+
+                    // Definir la consulta SQL según el tipo de respaldo
+                    string sql = req.TipoBackup switch
+                    {
+                        "table" => "SELECT directorio, name_schema, name_table FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        "schema" => "SELECT directorio, name_schema FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        "full" => "SELECT directorio FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        _ => throw new ArgumentException("Tipo de respaldo no válido.")
+                    };
+
+                    // Ejecutar la consulta y obtener los valores necesarios
+                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    {
+                        cmd.Parameters.Add(new OracleParameter("nombreBackup", req.NombreBackup));
+                        cmd.Parameters.Add(new OracleParameter("tipoBackup", req.TipoBackup));
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                directorio = reader.GetString(0);
+                                if (req.TipoBackup != "full") nombreSchema = reader.GetString(1);
+                                if (req.TipoBackup == "table") nombreTabla = reader.GetString(2);
+                            }
+                            else
+                            {
+                                res.Errores.Add("No se encontró el respaldo especificado.");
+                                return res;
+                            }
+                        }
+                    }
+
+                    // Construir el comando IMPDP según el tipo de respaldo
+                    string impdpCommand = req.TipoBackup switch
+                    {
+                        "table" => $"IMPDP {nombreSchema}/{req.Contrasena}@XE TABLES={nombreSchema}.{nombreTabla} DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
+                        "schema" => $"IMPDP {nombreSchema}/{req.Contrasena}@XE SCHEMAS={nombreSchema} DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
+                        "full" => $"IMPDP SYSTEM/{req.Contrasena}@XE FULL=Y DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
+                        _ => throw new ArgumentException("Tipo de respaldo no válido.")
+                    };
+
+                    // Ejecutar el comando en el sistema
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = $"/C {impdpCommand}",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    };
+
+                    using (Process process = Process.Start(startInfo))
+                    {
+                        string output = process.StandardOutput.ReadToEnd();
+                        string error = process.StandardError.ReadToEnd();
+                        process.WaitForExit();
+
+                        if (process.ExitCode != 0)
+                        {
+                            res.Errores.Add($"Error al ejecutar la recuperación: {error}");
+                            res.Resultado = false;
+                        }
+                        else
+                        {
+                            res.Resultado = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Errores.Add($"Error al recuperar el respaldo: {ex.Message}");
+                res.Resultado = false;
+            }
+
+            return res;
         }
     }
 }

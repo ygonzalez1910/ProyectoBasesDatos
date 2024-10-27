@@ -1,6 +1,7 @@
 ﻿using Logica;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Request;
 using Response;
 
 namespace backend.Controllers
@@ -35,6 +36,25 @@ namespace backend.Controllers
                 return BadRequest(result);
             }
             return Ok(result);
+        }
+
+        [HttpGet("backup/{tipo}")]
+        public IActionResult ObtenerNombresBackupPorTipo(string tipo)
+        {
+            if (string.IsNullOrEmpty(tipo))
+            {
+                return BadRequest("El tipo de respaldo es obligatorio.");
+            }
+
+            var req = new ReqTipoBackup { TipoBackup = tipo };
+            ResNombresBackup res = _schemaService.ObtenerNombresBackupPorTipo(req);
+
+            if (!res.Resultado)
+            {
+                return BadRequest(res.Errores);
+            }
+
+            return Ok(res);
         }
     }
 }

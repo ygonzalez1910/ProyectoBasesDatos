@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Request
 {
-    public class ReqRespaldoCompleto
+    public class ReqTipoBackup
     {
-        public string contrasena { get; set; }  
-        public string directorio { get; set; }
+        public string TipoBackup { get; set; }
     }
 }
