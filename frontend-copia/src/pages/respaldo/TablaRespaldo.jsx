@@ -1,21 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Table, Form, FormGroup, Label, Input, Button, Spinner } from 'reactstrap';
+import React, { useEffect, useState } from "react";
+import {
+  Container,
+  Table,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Spinner,
+} from "reactstrap";
 import { SchemasService, RespaldoService } from "../../services/api.service";
 
 const TablaRespaldo = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    nombreSchema: '',
-    contrasenaSchema: '',
-    nombreTabla: '',
-    directorio: ''
+    nombreSchema: "",
+    contrasenaSchema: "",
+    nombreTabla: "",
+    directorio: "",
   });
   const [tables, setTables] = useState([]);
   const directorios = [
     "C:\\ORACLE_FILES\\HD1",
     "C:\\ORACLE_FILES\\HD2",
-    "C:\\ORACLE_FILES\\HD3"
+    "C:\\ORACLE_FILES\\HD3",
   ];
 
   useEffect(() => {
@@ -34,13 +43,6 @@ const TablaRespaldo = () => {
     fetchTables();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
 
   const handleCreateRespaldo = async (e) => {
     e.preventDefault();
@@ -51,15 +53,33 @@ const TablaRespaldo = () => {
       await RespaldoService.createRespaldoSchema(formData);
       // Limpiar el formulario después de un envío exitoso
       setFormData({
-        nombreSchema: '',
-        contrasenaSchema: '',
-        nombreTabla: '',
-        directorio: ''
+        nombreSchema: "",
+        contrasenaSchema: "",
+        nombreTabla: "",
+        directorio: "",
       });
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "nombreTabla") {
+      const [schema, table] = value.split("|");
+      setFormData((prevData) => ({
+        ...prevData,
+        nombreSchema: schema,
+        nombreTabla: table,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
   };
 
@@ -76,13 +96,16 @@ const TablaRespaldo = () => {
             type="select"
             name="nombreTabla"
             id="nombreTabla"
-            value={formData.nombreTabla}
+            value={`${formData.nombreSchema}|${formData.nombreTabla}`}
             onChange={handleChange}
             required
           >
             <option value="">Selecciona una tabla</option>
             {tables.map((table, index) => (
-              <option key={index} value={table.tableName}>
+              <option
+                key={index}
+                value={`${table.schemaName}|${table.tableName}`}
+              >
                 {table.schemaName}.{table.tableName}
               </option>
             ))}
@@ -121,11 +144,9 @@ const TablaRespaldo = () => {
         </FormGroup>
 
         <Button type="submit" color="primary" disabled={loading}>
-          {loading ? <Spinner size="sm" /> : 'Crear Respaldo'}
+          {loading ? <Spinner size="sm" /> : "Crear Respaldo"}
         </Button>
       </Form>
-
-    
     </Container>
   );
 };
