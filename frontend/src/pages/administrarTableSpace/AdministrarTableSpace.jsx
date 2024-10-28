@@ -32,17 +32,6 @@ const AdministrarTableSpace = () => {
   const [newMaxSize, setNewMaxSize] = useState(0);
 
   useEffect(() => {
-    const fetchTables = async () => {
-      setLoading(true);
-      try {
-        const result = await TableSpaceService.getAllTableSpaces();
-        setTables(result.tableSpaces);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchTables();
   }, []);
 
@@ -61,18 +50,33 @@ const AdministrarTableSpace = () => {
   };
 
   const handleDeleteClick = async (table) => {
-    const confirmDelete = window.confirm(
-      `¿Estás seguro de que deseas eliminar el tablespace ${table.tableSpaceName}?`
-    );
-    if (confirmDelete) {
+    const confirmDelete = await Swal.fire({
+      title: `¿Estás seguro de que deseas eliminar el tablespace ${table.tableSpaceName}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (confirmDelete.isConfirmed) {
       try {
         await TableSpaceService.deleteTableSpace(table.tableSpaceName);
         setTables(
           tables.filter((t) => t.tableSpaceName !== table.tableSpaceName)
         );
+        Swal.fire({
+          icon: "success",
+          title: "¡Éxito!",
+          text: `El tablespace ${table.tableSpaceName} ha sido eliminado.`,
+        });
       } catch (error) {
         console.error("Error al eliminar el tablespace:", error);
         setError(error.message);
+        Swal.fire({
+          icon: "error",
+          title: "¡Error!",
+          text: error.message || "Ocurrió un error al eliminar el tablespace.",
+        });
       }
     }
   };
@@ -95,16 +99,37 @@ const AdministrarTableSpace = () => {
         )
       );
       toggleModal();
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: `El tamaño del tablespace ${selectedTable.tableSpaceName} ha sido modificado.`,
+      });
     } catch (error) {
       console.error("Error al modificar el tamaño del tablespace:", error);
       setError(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "¡Error!",
+        text: error.message || "Ocurrió un error al modificar el tamaño del tablespace.",
+      });
+    }
+  };
+
+  const fetchTables = async () => {
+    setLoading(true);
+    try {
+      const result = await TableSpaceService.getAllTableSpaces();
+      setTables(result.tableSpaces);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleCreateTableSpace = async () => {
-    // Inicia el spinner de carga
     setLoading(true);
-
+  
     const data = {
       tableSpaceName: newTableSpaceName,
       dataFileName: newDataFileName,
@@ -112,16 +137,21 @@ const AdministrarTableSpace = () => {
       autoExtendSizeMB: newAutoExtendSize,
       maxSizeMB: newMaxSize,
     };
-
+  
     try {
       console.log("data: ", data);
       const result = await TableSpaceService.createTableSpace(data);
       console.log("Respuesta de la API:", result);
+      
+      // Llama nuevamente a fetchTables para actualizar la lista
+      await fetchTables();
+  
       Swal.fire({
         icon: "success",
         title: "¡Éxito!",
         text: "Tablespace creado correctamente.",
       });
+      
       toggleCreateModal();
       // Reinicia los valores del formulario
       setNewTableSpaceName("");
@@ -138,7 +168,6 @@ const AdministrarTableSpace = () => {
         text: error.message || "Ocurrió un error al crear el tablespace.",
       });
     } finally {
-      // Detiene el spinner de carga
       setLoading(false);
     }
   };
