@@ -1,17 +1,19 @@
+/* Estilos base del sidebar */
 .sidebar {
   height: 100%;
-  width: 250px; /* Cambia el valor según el ancho que desees */
-  position: fixed; /* Cambia a fixed para que ocupe todo el lado izquierdo */
+  width: 250px;
+  position: fixed;
   transition: all 0.3s ease;
-  background-color: #343a40; /* Color de fondo más oscuro */
+  background-color: #343a40;
   border-right: 1px solid #dee2e6;
-  z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+  z-index: 1000;
 }
 
 .sidebar.closed {
-  width: 50px; /* Ancho del sidebar cuando está cerrado */
+  width: 50px;
 }
 
+/* Botón de toggle */
 .toggle-btn {
   position: absolute;
   right: -15px;
@@ -19,49 +21,85 @@
   z-index: 1000;
   padding: 5px 10px;
   border-radius: 50%;
-  background-color: #007bff; /* Color del botón de alternar */
-  color: white; /* Color del texto del botón de alternar */
+  background-color: #007bff;
+  color: white;
+  border: none;
 }
 
+/* Navegación principal */
 .sidebar-nav {
   padding: 1rem;
 }
 
-.sidebar-item {
+/* Elementos de navegación */
+.nav-item {
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
-/* Cambia el color de las letras aquí */
+/* Enlaces principales */
 .nav-link {
-  cursor: pointer;
-  color: #ffffff; /* Color del texto de los enlaces */
+  color: white !important;
+  text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  display: flex; /* Asegúrate de que los íconos y el texto estén alineados */
-  align-items: center; /* Centrar verticalmente */
-}
-
-.nav-link .fa-icon {
-  color: white; /* Color de los íconos */
-  margin-right: 0.5rem; /* Espacio entre el ícono y el texto */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s;
 }
 
 .nav-link:hover {
-  background-color: #495057; /* Color de fondo al pasar el mouse */
-  color: #ffffff; /* Mantiene el color blanco al pasar el mouse */
+  background-color: #495057;
+  color: white !important;
+  text-decoration: none;
 }
 
+/* Iconos */
+.fa-icon {
+  color: white !important;
+  margin-right: 0.75rem;
+}
+
+/* Subelementos */
 .sub-items {
-  padding-left: 1.5rem; /* Ajusta la indentación de los sub-items */
+  padding-left: 1rem;
+  margin-top: 0.5rem;
 }
 
 .sub-item {
-  padding-left: 1.5rem;
+  color: white !important;
+  padding: 0.4rem 0.5rem 0.4rem 2rem !important;
   font-size: 0.9rem;
-  color: #ffffff; /* Cambia el color de las letras de sub-items aquí */
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-/* Color de los íconos de sub-items */
-.sub-item .fa-icon {
-  color: white; /* Color de los íconos en sub-items */
+.sub-item:hover {
+  background-color: #495057;
+  color: white !important;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+/* Flechas de expansión */
+.arrow-icon {
+  color: white !important;
+  font-size: 0.8rem;
+}
+
+/* Asegurarse que el texto sea visible cuando el sidebar está abierto */
+.sidebar.open .nav-link span,
+.sidebar.open .sub-item span {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Ocultar texto cuando el sidebar está cerrado */
+.sidebar.closed .nav-link span,
+.sidebar.closed .sub-item span,
+.sidebar.closed .arrow-icon {
+  opacity: 0;
+  visibility: hidden;
 }

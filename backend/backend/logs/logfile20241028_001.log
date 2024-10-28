@@ -447,3 +447,43 @@ https://docs.oracle.com/error-help/db/ora-28000/, Código: 28000
 2024-10-28 13:06:07.310 -06:00 [INF] CORS policy execution successful.
 2024-10-28 13:06:07.317 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 17.5391ms
 2024-10-28 13:06:07.329 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 13:16:33.984 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 13:16:34.154 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 13:16:34.157 -06:00 [INF] Hosting environment: Development
+2024-10-28 13:16:34.157 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 13:16:34.670 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 13:16:34.986 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 321.5356ms
+2024-10-28 13:16:35.196 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 13:16:35.196 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 13:16:35.202 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 6.3686ms
+2024-10-28 13:16:35.248 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 52.7485ms
+2024-10-28 13:16:35.943 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 13:16:36.077 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 134.5662ms
+2024-10-28 13:17:22.469 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 13:17:22.489 -06:00 [INF] CORS policy execution successful.
+2024-10-28 13:17:22.503 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 34.5252ms
+2024-10-28 13:17:22.512 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 13:17:22.687 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 13:17:22.687 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 13:17:22.700 -06:00 [INF] CORS policy execution successful.
+2024-10-28 13:17:22.700 -06:00 [INF] CORS policy execution successful.
+2024-10-28 13:17:22.703 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 16.196ms
+2024-10-28 13:17:22.703 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 16.4662ms
+2024-10-28 13:17:22.763 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 13:17:22.766 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 14:17:54.541 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 14:17:54.541 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 14:17:54.610 -06:00 [INF] CORS policy execution successful.
+2024-10-28 14:17:54.610 -06:00 [INF] CORS policy execution successful.
+2024-10-28 14:17:54.627 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 106.6398ms
+2024-10-28 14:17:54.627 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 106.6844ms
+2024-10-28 14:17:54.632 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 14:17:54.635 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 14:18:04.325 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 14:18:04.334 -06:00 [INF] CORS policy execution successful.
+2024-10-28 14:18:04.339 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 16.1265ms
+2024-10-28 14:18:04.351 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 14:18:04.478 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 14:18:04.486 -06:00 [INF] CORS policy execution successful.
+2024-10-28 14:18:04.489 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 11.7755ms
+2024-10-28 14:18:04.499 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
