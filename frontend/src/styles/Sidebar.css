@@ -3,7 +3,7 @@
   width: 250px; /* Cambia el valor según el ancho que desees */
   position: fixed; /* Cambia a fixed para que ocupe todo el lado izquierdo */
   transition: all 0.3s ease;
-  background-color: #585656;
+  background-color: #343a40; /* Color de fondo más oscuro */
   border-right: 1px solid #dee2e6;
   z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
 }
@@ -19,6 +19,8 @@
   z-index: 1000;
   padding: 5px 10px;
   border-radius: 50%;
+  background-color: #007bff; /* Color del botón de alternar */
+  color: white; /* Color del texto del botón de alternar */
 }
 
 .sidebar-nav {
@@ -29,24 +31,37 @@
   margin-bottom: 0.5rem;
 }
 
+/* Cambia el color de las letras aquí */
 .nav-link {
   cursor: pointer;
-  color: #ffffff; /* Cambia el color de las letras aquí */
+  color: #ffffff; /* Color del texto de los enlaces */
   padding: 0.5rem 1rem;
   border-radius: 4px;
+  display: flex; /* Asegúrate de que los íconos y el texto estén alineados */
+  align-items: center; /* Centrar verticalmente */
+}
+
+.nav-link .fa-icon {
+  color: white; /* Color de los íconos */
+  margin-right: 0.5rem; /* Espacio entre el ícono y el texto */
 }
 
 .nav-link:hover {
-  background-color: #c2c2c2;
-  color: #000000; /* Cambia el color al pasar el mouse aquí */
+  background-color: #495057; /* Color de fondo al pasar el mouse */
+  color: #ffffff; /* Mantiene el color blanco al pasar el mouse */
 }
 
 .sub-items {
-  padding-left: 1rem;
+  padding-left: 1.5rem; /* Ajusta la indentación de los sub-items */
 }
 
 .sub-item {
   padding-left: 1.5rem;
   font-size: 0.9rem;
-  color: #ffffff; /* Cambia el color de las letras de sub-items aquí si es necesario */
+  color: #ffffff; /* Cambia el color de las letras de sub-items aquí */
+}
+
+/* Color de los íconos de sub-items */
+.sub-item .fa-icon {
+  color: white; /* Color de los íconos en sub-items */
 }

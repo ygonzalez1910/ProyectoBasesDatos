@@ -1,9 +1,11 @@
+// src/layouts/Layout.js
 import React, { useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import AppRoutes from "../routes/AppRoutes";
+import { faTachometerAlt, faDatabase, faTable, faFileArchive, faUndoAlt, faCog, faShieldAlt, faChartLine, faFire, faBook, faDownload, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -13,44 +15,44 @@ const Layout = () => {
       id: 1,
       title: "Dashboard",
       path: "/",
-      icon: "dashboard",
+      icon: faTachometerAlt,
       subItems: [],
     },
     {
       id: 2,
       title: "Respaldo",
       path: "/respaldo",
-      icon: "backup",
+      icon: faDatabase,
       subItems: [
         {
           id: 21,
           title: "Respaldo Tabla",
           path: "/respaldo/tabla",
-          icon: "table",
+          icon: faTable,
         },
         {
           id: 25,
           title: "Respaldo de Esquema",
           path: "/respaldo/esquema",
-          icon: "schema",
+          icon: faFileArchive,
         },
         {
           id: 24,
           title: "Respaldo Completo",
           path: "/respaldo/completo",
-          icon: "backup",
+          icon: faDownload,
         },
         {
           id: 22,
           title: "Recuperar Respaldo",
           path: "/respaldo/recuperar",
-          icon: "restore",
+          icon: faUndoAlt,
         },
         {
           id: 23,
           title: "Administrar Respaldo",
           path: "/respaldo/administrar",
-          icon: "settings",
+          icon: faCog,
         },
       ],
     },
@@ -58,54 +60,35 @@ const Layout = () => {
       id: 3,
       title: "Administrar TableSpace",
       path: "/administrarTableSpace",
-      icon: "storage",
+      icon: faFolderOpen,
       subItems: [],
     },
     {
       id: 4,
       title: "Tunning",
       path: "/tunning",
-      icon: "tune",
-      subItems: [
-        {
-          id: 41,
-          title: "Estadísticas",
-          path: "/tunning/estadisticas",
-          icon: "analytics",
-        },
-        {
-          id: 42,
-          title: "Índices",
-          path: "/tunning/indices",
-          icon: "list",
-        },
-        {
-          id: 43,
-          title: "Planes de Ejecución",
-          path: "/tunning/planes",
-          icon: "assessment",
-        },
-      ],
+      icon: faFire,
+      subItems: [],
     },
     {
       id: 5,
       title: "Performance",
       path: "/performance",
-      icon: "speed",
+      icon: faChartLine,
       subItems: [],
     },
     {
       id: 6,
       title: "Auditoría",
       path: "/auditoria",
-      icon: "security",
+      icon: faBook,
       subItems: [],
     },
     {
       id: 7,
       title: "Seguridad",
       path: "/seguridad",
-      icon: "shield",
+      icon: faShieldAlt,
       subItems: [],
     },
   ]);

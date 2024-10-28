@@ -11,9 +11,7 @@ import TablaRespaldo from '../pages/respaldo/TablaRespaldo';
 
 import AdministrarTableSpace from '../pages/administrarTableSpace/AdministrarTableSpace';
 
-import EstadisticasTunning from '../pages/tunning/Estadisticas';
-import IndicesTunning from '../pages/tunning/Indices';
-import PlanesEjecucionTunning from '../pages/tunning/PlanesEjecucion';
+import Tunning from '../pages/tunning/Tunning';
 
 import Performance from '../pages/performance/Performace';
 
@@ -35,9 +33,7 @@ const AppRoutes = () => {
         
         <Route path="/administrarTableSpace" element={<AdministrarTableSpace />} />
 
-        <Route path="/tunning/estadisticas" element={<EstadisticasTunning />} />
-        <Route path="/tunning/indices" element={<IndicesTunning />} />
-        <Route path="/tunning/planes" element={<PlanesEjecucionTunning />} />
+        <Route path="/tunning/" element={<Tunning />} />
 
         <Route path="/performance" element={<Performance />} />
 

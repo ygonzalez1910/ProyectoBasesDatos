@@ -3,11 +3,13 @@ import { API_ENDPOINTS } from "./config";
 
 // Configuración global de axios
 const axiosInstance = axios.create({
-  timeout: 1200000, // Establecer el timeout a 20 minutos (1200000 ms)
+  baseURL: API_ENDPOINTS.BASE_URL, // Asegúrate de definir esta URL en config.js
+  timeout: 1200000, // 20 minutos
   headers: {
     "Content-Type": "application/json",
   },
 });
+
 // Interceptor para manejar errores
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -20,6 +22,48 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const tunningService = {
+  analizarConsulta: async (sqlQuery, schema) => {
+    try {
+      const response = await axiosInstance.post("/api/tunning/analizarConsulta", {
+        sqlQuery,
+        schema
+      });
+      return response;
+    } catch (error) {
+      console.error("Error al analizar consulta:", error);
+      throw error;
+    }
+  },
+
+  obtenerEstadisticasTabla: async (schema, tabla) => {
+    try {
+      const response = await axiosInstance.post(
+        "/api/tunning/obtenerEstadisticasTabla",
+        { schema, tabla } // Ahora pasamos los datos en el cuerpo de la solicitud
+      );
+      return response;
+    } catch (error) {
+      console.error("Error al obtener estadísticas:", error);
+      throw error;
+    }
+  },
+
+  obtenerListaTablas: async (schema) => {
+    try {
+      const response = await axiosInstance.post(
+        "/api/tunning/obtenerListaTablas",
+        { schema } // Ahora pasamos el schema en el cuerpo de la solicitud
+      );
+      return response;
+    } catch (error) {
+      console.error("Error al obtener lista de tablas:", error);
+      throw error;
+    }
+  }
+};
+
 export const SchemasService = {
   getAllSchemas: async (params = {}) => {
     try {

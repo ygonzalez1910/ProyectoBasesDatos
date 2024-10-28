@@ -1,15 +1,31 @@
-.layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .sidebar-col {
-    transition: all 0.3s ease;
-    background-color: #f8f9fa;
-  }
-  
-  .main-content-col {
-    transition: all 0.3s ease;
-  }
-  
+/* src/styles/Layaout.css */
+.sidebar {
+  background-color: #f8f9fa;
+  transition: width 0.3s;
+}
+
+.sidebar.open {
+  width: 250px;
+}
+
+.sidebar.closed {
+  width: 60px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  background-color: #e9ecef;
+}
+
+.sidebar button {
+  margin: 10px;
+}

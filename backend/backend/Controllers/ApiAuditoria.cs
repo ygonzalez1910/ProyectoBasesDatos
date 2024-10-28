@@ -1,79 +1,88 @@
+﻿using Logica;
+using Logica.Request;
+using Logica.Response;
 using Microsoft.AspNetCore.Mvc;
-using Logica;
-using Request;
-using Response;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ApiAuditoria : ControllerBase
+namespace Api.Controllers
 {
-    private readonly Auditoria _auditoria;
-
-    public ApiAuditoria(Auditoria auditoria)
+    public class ApiAuditoria : ControllerBase
     {
-        _auditoria = auditoria;
-    }
+        private readonly Auditoria _auditoria;
 
-    // Endpoint para registrar una auditoría de tipo INSERT
-    [HttpPost]
-    [Route("auditarInsert")]
-    public IActionResult AuditarInsert([FromBody] ReqConfigurarAuditoria req)
-    {
-        var res = _auditoria.AuditarInsert(req);
-        if (res.resultado)
+        public ApiAuditoria(Auditoria auditoria)
         {
-            return Ok(res);
+            _auditoria = auditoria;
         }
-        else
+
+        [HttpGet]
+        [Route("api/auditoria/estado")]
+        public IActionResult ObtenerEstadoAuditoria()
         {
+            var res = _auditoria.ObtenerEstadoAuditoria();
+            if (res.Exitoso)
+            {
+                return Ok(res);
+            }
             return BadRequest(res);
         }
-    }
 
-    // Endpoint para registrar una auditoría de tipo UPDATE
-    [HttpPost]
-    [Route("auditarUpdate")]
-    public IActionResult AuditarUpdate([FromBody] ReqConfigurarAuditoria req)
-    {
-        var res = _auditoria.AuditarUpdate(req);
-        if (res.resultado)
+        [HttpPost]
+        [Route("api/auditoria/configurar/conexiones")]
+        public IActionResult ConfigurarAuditoriaConexiones([FromBody] ReqAuditoria req)
         {
-            return Ok(res);
-        }
-        else
-        {
+            var res = _auditoria.ConfigurarAuditoriaConexiones(req);
+            if (res.Exitoso)
+            {
+                return Ok(res);
+            }
             return BadRequest(res);
         }
-    }
 
-    // Endpoint para registrar una auditoría de tipo DELETE
-    [HttpPost]
-    [Route("auditarDelete")]
-    public IActionResult AuditarDelete([FromBody] ReqConfigurarAuditoria req)
-    {
-        var res = _auditoria.AuditarDelete(req);
-        if (res.resultado)
+        [HttpPost]
+        [Route("api/auditoria/configurar/tablas")]
+        public IActionResult ConfigurarAuditoriaTablas([FromBody] List<ReqAuditoriaTablas> req)
         {
-            return Ok(res);
-        }
-        else
-        {
+            var res = _auditoria.ConfigurarAuditoriaTablas(req);
+            if (res.Exitoso)
+            {
+                return Ok(res);
+            }
             return BadRequest(res);
         }
-    }
 
-    // Endpoint para registrar una auditoría de tipo SELECT
-    [HttpPost]
-    [Route("auditarSelect")]
-    public IActionResult AuditarSelect([FromBody] ReqConfigurarAuditoria req)
-    {
-        var res = _auditoria.AuditarSelect(req);
-        if (res.resultado)
+        [HttpPost]
+        [Route("api/auditoria/configurar/acciones")]
+        public IActionResult ConfigurarAuditoriaAcciones([FromBody] ReqAuditoriaAcciones req)
         {
-            return Ok(res);
+            var res = _auditoria.ConfigurarAuditoriaAcciones(req);
+            if (res.Exitoso)
+            {
+                return Ok(res);
+            }
+            return BadRequest(res);
         }
-        else
+
+        [HttpPost]
+        [Route("api/auditoria/consultar")]
+        public IActionResult ConsultarRegistrosAuditoria([FromBody] ReqAuditoria req)
         {
+            var res = _auditoria.ConsultarRegistrosAuditoria(req);
+            if (res.Exitoso)
+            {
+                return Ok(res);
+            }
+            return BadRequest(res);
+        }
+
+        [HttpGet]
+        [Route("api/auditoria/resumen")]
+        public IActionResult ConsultarResumenAuditoria()
+        {
+            var res = _auditoria.ConsultarResumenAuditoria();
+            if (res.Exitoso)
+            {
+                return Ok(res);
+            }
             return BadRequest(res);
         }
     }
