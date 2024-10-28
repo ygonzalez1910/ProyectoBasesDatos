@@ -69,5 +69,22 @@ namespace backend.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpPost("create-tablespace")]
+        public ActionResult<ResCreateTableSpace> CreateTableSpace([FromBody] ReqCreateTableSpace request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.TableSpaceName))
+            {
+                return BadRequest("Request no válida.");
+            }
+
+            var result = _tableSpaceService.CreateTableSpace(request);
+            if (!result.Exito)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

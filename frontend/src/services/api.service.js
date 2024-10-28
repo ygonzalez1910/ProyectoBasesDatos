@@ -170,6 +170,18 @@ export const TableSpaceService = {
       throw error;
     }
   },
+  createTableSpace: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.TABLESPACE.CREATE,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear tablespace:", error);
+      throw error;
+    }
+  },
   updateSizeTableSpace: async (data) => {
     try {
         const response = await axiosInstance.put(

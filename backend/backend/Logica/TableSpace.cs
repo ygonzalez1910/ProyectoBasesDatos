@@ -4,6 +4,7 @@ using Oracle.ManagedDataAccess.Client;
 using Request;
 using Response;
 using Models;
+using Serilog;
 
 namespace Logica
 {
@@ -137,6 +138,46 @@ namespace Logica
             {
                 response.Mensaje = $"Error al modificar el tamaño del tablespace: {ex.Message}";
                 response.Exito = false;
+            }
+
+            return response;
+        }
+
+        public ResCreateTableSpace CreateTableSpace(ReqCreateTableSpace request)
+        {
+            var response = new ResCreateTableSpace();
+
+            try
+            {
+                Log.Information($"Creando tablespace: {request.TableSpaceName}");
+
+                using (OracleConnection connection = new OracleConnection(_connectionString))
+                {
+                    connection.Open();
+                    Log.Information($"Conexión abierta a la base de datos.");
+
+                    // Crear el comando SQL para crear el tablespace
+                    string sql = $@"
+                CREATE TABLESPACE {request.TableSpaceName}
+                DATAFILE '{request.DataFileName}/{request.TableSpaceName}.dbf'
+                SIZE {request.InitialSizeMB}M
+                AUTOEXTEND ON NEXT {request.AutoExtendSizeMB}M
+                MAXSIZE {request.MaxSizeMB}M";
+
+                    using (OracleCommand cmd = new OracleCommand(sql, connection))
+                    {
+                        cmd.ExecuteNonQuery();
+                        response.Mensaje = $"Tablespace {request.TableSpaceName} creado correctamente.";
+                        response.Exito = true;
+                        Log.Information(response.Mensaje);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Mensaje = $"Error al crear el tablespace: {ex.Message}";
+                response.Exito = false;
+                Log.Error(ex, response.Mensaje);
             }
 
             return response;

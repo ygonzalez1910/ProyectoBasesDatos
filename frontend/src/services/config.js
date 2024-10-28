@@ -29,8 +29,8 @@ export const API_ENDPOINTS = {
     },
     TABLESPACE: {
         GET_ALL: `${API_BASE_URL}/ApiTablespace/get-tablespaces`,
-        GET_BY_ID: (id) => `${API_BASE_URL}/ApiTablespace/${id}`,
-        CREATE: `${API_BASE_URL}/ApiTablespace`,
+        GET_BY_ID: (id) => `${API_BASE_URL}/ApiTableSpace/${id}`,
+        CREATE: `${API_BASE_URL}/ApiTableSpace/create-tablespace`,
         UPDATE: (id) => `${API_BASE_URL}/ApiTablespace/${id}`,
         MODIFY_SIZE: `${API_BASE_URL}/ApiTableSpace/modify-tablespace-size`,
         DELETE: (nombreTableSpace) => `${API_BASE_URL}/ApiTableSpace/${nombreTableSpace}`,
