@@ -5,3 +5,6 @@ obj/
 
 # React
 node_modules/
+
+# Ignorar logs
+backend/backend/logs/
