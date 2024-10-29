@@ -25,58 +25,82 @@ namespace Logica
             ResObtenerAuditoria res = new ResObtenerAuditoria();
             res.Errores = new List<string>();
             res.Registros = new List<AuditoriaInfo>();
-
             try
             {
+                if (string.IsNullOrEmpty(req.NombreTabla))
+                {
+                    res.Errores.Add("El nombre de la tabla es requerido");
+                    res.Resultado = false;
+                    return res;
+                }
+
                 using (OracleConnection conexion = new OracleConnection(_connectionString))
                 {
                     conexion.Open();
                     string sql = @"
-                    SELECT 
-                        AUDIT_ID as AuditoriaId,
-                        TABLE_NAME as NombreTabla,
-                        ACTION_NAME as TipoAccion,
-                        TIMESTAMP as FechaHora,
-                        DB_USER as Usuario,
-                        SESSIONID as SesionId,
-                        OBJ_SCHEMA as Esquema,
-                        SQL_TEXT as ConsultaSQL
-                    FROM sys.dba_audit_trail 
-                    WHERE TABLE_NAME = :nombreTabla";
+    SELECT 
+        NVL(ENTRYID, 0) as AuditoriaId,
+        NVL(OBJ_NAME, '') as NombreTabla,
+        NVL(ACTION_NAME, '') as TipoAccion,
+        NVL(TIMESTAMP, SYSDATE) as FechaHora,
+        NVL(USERNAME, '') as Usuario,
+        NVL(SESSIONID, '') as SesionId,
+        NVL(OWNER, '') as Esquema,
+        NVL(SQL_TEXT, '') as ConsultaSQL
+    FROM sys.dba_audit_trail 
+    WHERE OBJ_NAME = :nombreTabla";
 
                     if (req.FechaInicio.HasValue)
-                        sql += " AND TIMESTAMP >= :fechaInicio";
+                        sql += " AND CAST(TIMESTAMP AS DATE) >= CAST(:fechaInicio AS DATE)";
                     if (req.FechaFin.HasValue)
-                        sql += " AND TIMESTAMP <= :fechaFin";
+                        sql += " AND CAST(TIMESTAMP AS DATE) <= CAST(:fechaFin AS DATE)";
                     if (!string.IsNullOrEmpty(req.TipoAccion))
-                        sql += " AND ACTION_NAME = :tipoAccion";
+                        sql += " AND UPPER(ACTION_NAME) = UPPER(:tipoAccion)";
+
+                    sql += " ORDER BY TIMESTAMP DESC";
 
                     using (OracleCommand cmd = new OracleCommand(sql, conexion))
                     {
-                        cmd.Parameters.Add(new OracleParameter("nombreTabla", req.NombreTabla));
+                        // Configurar parámetros con tipo de datos específico
+                        cmd.Parameters.Add(new OracleParameter("nombreTabla", OracleDbType.Varchar2)
+                        {
+                            Value = req.NombreTabla.ToUpper()
+                        });
 
                         if (req.FechaInicio.HasValue)
-                            cmd.Parameters.Add(new OracleParameter("fechaInicio", req.FechaInicio.Value));
+                            cmd.Parameters.Add(new OracleParameter("fechaInicio", OracleDbType.Date)
+                            {
+                                Value = req.FechaInicio.Value
+                            });
+
                         if (req.FechaFin.HasValue)
-                            cmd.Parameters.Add(new OracleParameter("fechaFin", req.FechaFin.Value));
+                            cmd.Parameters.Add(new OracleParameter("fechaFin", OracleDbType.Date)
+                            {
+                                Value = req.FechaFin.Value
+                            });
+
                         if (!string.IsNullOrEmpty(req.TipoAccion))
-                            cmd.Parameters.Add(new OracleParameter("tipoAccion", req.TipoAccion));
+                            cmd.Parameters.Add(new OracleParameter("tipoAccion", OracleDbType.Varchar2)
+                            {
+                                Value = req.TipoAccion.ToUpper()
+                            });
 
                         using (OracleDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                res.Registros.Add(new AuditoriaInfo
+                                var registro = new AuditoriaInfo
                                 {
                                     AuditoriaId = Convert.ToInt32(reader["AuditoriaId"]),
-                                    NombreTabla = reader["NombreTabla"].ToString(),
-                                    TipoAccion = reader["TipoAccion"].ToString(),
+                                    NombreTabla = reader["NombreTabla"].ToString().Trim(),
+                                    TipoAccion = reader["TipoAccion"].ToString().Trim(),
                                     FechaHora = Convert.ToDateTime(reader["FechaHora"]),
-                                    Usuario = reader["Usuario"].ToString(),
-                                    SesionId = reader["SesionId"].ToString(),
-                                    Esquema = reader["Esquema"].ToString(),
-                                    ConsultaSQL = reader["ConsultaSQL"].ToString()
-                                });
+                                    Usuario = reader["Usuario"].ToString().Trim(),
+                                    SesionId = reader["SesionId"].ToString().Trim(),
+                                    Esquema = reader["Esquema"].ToString().Trim(),
+                                    ConsultaSQL = reader["ConsultaSQL"].ToString().Trim()
+                                };
+                                res.Registros.Add(registro);
                             }
                         }
                     }
@@ -86,9 +110,12 @@ namespace Logica
             catch (Exception ex)
             {
                 res.Errores.Add($"Error al obtener auditoría: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    res.Errores.Add($"Error interno: {ex.InnerException.Message}");
+                }
                 res.Resultado = false;
             }
-
             return res;
         }
 
@@ -109,12 +136,64 @@ namespace Logica
                     if (req.AuditarDelete) acciones.Add("DELETE");
                     if (req.AuditarSelect) acciones.Add("SELECT");
 
+                    // Construcción de la sentencia SQL para activar la auditoría
                     string accionesConcatenadas = string.Join(", ", acciones);
                     string sql = $"AUDIT {accionesConcatenadas} ON {req.NombreTabla} BY ACCESS";
 
-                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    try
                     {
-                        cmd.ExecuteNonQuery();
+                        using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        res.Resultado = true;
+                    }
+                    catch (OracleException ex) when (ex.Number == 942) // ORA-00942: Table or view does not exist
+                    {
+                        res.Errores.Add($"Error al activar auditoría: La tabla o vista '{req.NombreTabla}' no existe o no se puede acceder.");
+                        res.Errores.Add("Verifique que el nombre de la tabla esté correcto y que el usuario tenga permisos de auditoría para esta tabla.");
+                        res.Resultado = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Errores.Add($"Error al activar auditoría: {ex.Message}");
+                res.Resultado = false;
+            }
+
+            return res;
+        }
+
+
+        public ResListarTablas ListarTablas()
+        {
+            ResListarTablas res = new ResListarTablas
+            {
+                Resultado = false
+            };
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+
+                    string query = @"
+                        SELECT TABLE_NAME 
+                        FROM ALL_TABLES
+                        ORDER BY TABLE_NAME";
+
+                    using (OracleCommand cmd = new OracleCommand(query, conexion))
+                    {
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.Tablas.Add(reader.GetString(0));
+                            }
+                        }
                     }
 
                     res.Resultado = true;
@@ -122,7 +201,7 @@ namespace Logica
             }
             catch (Exception ex)
             {
-                res.Errores.Add($"Error al activar auditoría: {ex.Message}");
+                res.Errores.Add($"Error al listar las tablas: {ex.Message}");
                 res.Resultado = false;
             }
 

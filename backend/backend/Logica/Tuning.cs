@@ -19,9 +19,9 @@ namespace Logica
             _connectionString = connectionString;
         }
 
-        public ResListaTablas ObtenerListaTablas(string schema)
+        public ResListarTablas ObtenerListaTablas(string schema)
         {
-            ResListaTablas res = new ResListaTablas
+            ResListarTablas res = new ResListarTablas
             {
                 Tablas = new List<string>(),
                 Resultado = false,
