@@ -64,6 +64,17 @@ export const AuditoriaService = {
       console.error("Error al activar auditoría:", error);
       throw error;
     }
+  },
+  obtenerListaTablas: async () => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.AUDITORIA.LISTAR_TABLAS
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener la lista de tablas:", error);
+      throw error;
+    }
   }
 };
 

@@ -26,8 +26,9 @@ export const API_ENDPOINTS = {
         LISTAR_ROLES: `${API_BASE_URL}/ApiSeguridad/listarRoles`
     },
     AUDITORIA: {
-        OBTENER_AUDITORIA: '/api/auditoria/obtener',
-        ACTIVAR_AUDITORIA: '/api/auditoria/activar'
+        OBTENER_AUDITORIA: `${API_BASE_URL}/ApiAuditoria/obtener`,
+        ACTIVAR_AUDITORIA: `${API_BASE_URL}/ApiAuditoria/activar`,
+        LISTAR_TABLAS: `${API_BASE_URL}/ApiAuditoria/listar-tablas`
     },
     SCHEMAS: {
         GET_ALL: `${API_BASE_URL}/ApiSchema/get-schemas`,

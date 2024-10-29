@@ -1,31 +1,65 @@
-﻿using Logica;
-using Logica.Request;
-using Logica.Response;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Logica;
 using Request;
 using Response;
 
-namespace Api.Controllers
+namespace backend.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ApiAuditoria : ControllerBase
     {
         private readonly Auditoria _auditoria;
 
-        public ApiAuditoria(IConfiguration configuration)
+        public ApiAuditoria(Auditoria auditoria)
         {
-            _auditoria = new Auditoria(configuration.GetConnectionString("DefaultConnection"));
+            _auditoria = auditoria;
         }
 
-        [HttpPost("obtener")]
-        public ActionResult<ResObtenerAuditoria> ObtenerAuditoria([FromBody] ReqObtenerAuditoria req)
+        [HttpPost]
+        [Route("obtener")]
+        public IActionResult ObtenerAuditoria([FromBody] ReqObtenerAuditoria req)
         {
-            return _auditoria.ObtenerAuditoria(req);
+            ResObtenerAuditoria res = _auditoria.ObtenerAuditoria(req);
+            if (res.Resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
         }
 
-        [HttpPost("activar")]
-        public ActionResult<ResActivarAuditoria> ActivarAuditoria([FromBody] ReqActivarAuditoria req)
+        [HttpPost]
+        [Route("activar")]
+        public IActionResult ActivarAuditoria([FromBody] ReqActivarAuditoria req)
         {
-            return _auditoria.ActivarAuditoria(req);
+            ResActivarAuditoria res = _auditoria.ActivarAuditoria(req);
+            if (res.Resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("listar-tablas")]
+        public IActionResult ListarTablas()
+        {
+            ResListarTablas res = _auditoria.ListarTablas();
+            if (res.Resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
         }
     }
 }
