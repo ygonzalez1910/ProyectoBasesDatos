@@ -133,6 +133,48 @@ namespace Logica
             return res;
         }
 
+        public ResModificarUsuario ModificarUsuario(ReqModificarUsuario req)
+        {
+            ResModificarUsuario res = new ResModificarUsuario();
+            res.errores = new List<string>();
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+
+                    // Modificar contraseña si se especificó
+                    if (!string.IsNullOrEmpty(req.nuevoPassword))
+                    {
+                        string alterUserSql = $"ALTER USER {req.nombreUsuario} IDENTIFIED BY {req.nuevoPassword}";
+                        using (OracleCommand cmd = new OracleCommand(alterUserSql, conexion))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Bloquear o desbloquear cuenta
+                    string lockUnlockSql = req.bloquear ?
+                        $"ALTER USER {req.nombreUsuario} ACCOUNT LOCK" :
+                        $"ALTER USER {req.nombreUsuario} ACCOUNT UNLOCK";
+                    using (OracleCommand cmd = new OracleCommand(lockUnlockSql, conexion))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    res.resultado = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.errores.Add($"Error al modificar usuario: {ex.Message}");
+                res.resultado = false;
+            }
+
+            return res;
+        }
+
         public ResCrearRol CrearRol(ReqCrearRol req)
         {
             ResCrearRol res = new ResCrearRol();
@@ -143,32 +185,27 @@ namespace Logica
                 using (OracleConnection conexion = new OracleConnection(_connectionString))
                 {
                     conexion.Open();
-                    string sql = "";
 
-                    if (req.esRolExterno)
-                        sql = "CREATE ROLE :rol IDENTIFIED EXTERNALLY";
-                    else if (!string.IsNullOrEmpty(req.package))
-                        sql = "CREATE ROLE :rol IDENTIFIED USING :schema.:package";
-                    else if (!string.IsNullOrEmpty(req.password))
-                        sql = "CREATE ROLE :rol IDENTIFIED BY :password";
-                    else
-                        sql = "CREATE ROLE :rol";
-
-                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    // Crear el rol
+                    string createRoleSql = $"CREATE ROLE {req.nombreRol}";
+                    using (OracleCommand cmd = new OracleCommand(createRoleSql, conexion))
                     {
-                        cmd.Parameters.Add(new OracleParameter("rol", req.nombreRol));
-
-                        if (!string.IsNullOrEmpty(req.password))
-                            cmd.Parameters.Add(new OracleParameter("password", req.password));
-
-                        if (!string.IsNullOrEmpty(req.package))
-                        {
-                            cmd.Parameters.Add(new OracleParameter("schema", req.schema));
-                            cmd.Parameters.Add(new OracleParameter("package", req.package));
-                        }
-
                         cmd.ExecuteNonQuery();
                     }
+
+                    // Asignar privilegios si se especificaron
+                    if (req.privilegios != null && req.privilegios.Count > 0)
+                    {
+                        foreach (string privilegio in req.privilegios)
+                        {
+                            string grantPrivilegeSql = $"GRANT {privilegio} TO {req.nombreRol}";
+                            using (OracleCommand cmd = new OracleCommand(grantPrivilegeSql, conexion))
+                            {
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
                     res.resultado = true;
                 }
             }
@@ -180,7 +217,6 @@ namespace Logica
 
             return res;
         }
-
         public ResListarPrivilegios ListarPrivilegios(ReqListarPrivilegios req)
         {
             ResListarPrivilegios res = new ResListarPrivilegios();

@@ -41,19 +41,34 @@ namespace backend.Controllers
             return res.resultado ? Ok(res) : BadRequest(res);
         }
 
-
-        [HttpPut("cambiarPassword")]
-        public IActionResult CambiarPassword([FromBody] ReqCambiarPassword req)
-        {
-            var res = _seguridad.CambiarPassword(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
-        }
-
-        [HttpPost("crearRol")]
+        [HttpPost]
+        [Route("crearRol")]
         public IActionResult CrearRol([FromBody] ReqCrearRol req)
         {
-            var res = _seguridad.CrearRol(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
+            ResCrearRol res = _seguridad.CrearRol(req);
+            if (res.resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/seguridad/modificarUsuario")]
+        public IActionResult ModificarUsuario([FromBody] ReqModificarUsuario req)
+        {
+            ResModificarUsuario res = _seguridad.ModificarUsuario(req);
+            if (res.resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
         }
 
         [HttpGet("listarPrivilegios")]

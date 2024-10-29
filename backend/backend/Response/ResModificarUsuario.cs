@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Response
 {
-    public class ResCrearRol
+    public class ResModificarUsuario
     {
         public bool resultado { get; set; }
         public List<string> errores { get; set; }
