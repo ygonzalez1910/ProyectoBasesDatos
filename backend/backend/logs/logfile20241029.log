@@ -2165,3 +2165,119 @@ System.InvalidOperationException: Unable to resolve service for type 'Logica.Tun
 2024-10-29 12:24:08.272 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 180.0036ms
 2024-10-29 12:24:08.274 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
 2024-10-29 12:24:08.275 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 196.113ms
+2024-10-29 12:44:23.254 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-29 12:44:23.454 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-29 12:44:23.455 -06:00 [INF] Hosting environment: Development
+2024-10-29 12:44:23.456 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-29 12:44:23.922 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-29 12:44:24.318 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 404.2467ms
+2024-10-29 12:44:24.560 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-29 12:44:24.569 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 9.1729ms
+2024-10-29 12:44:24.575 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-29 12:44:24.924 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 348.3211ms
+2024-10-29 12:44:26.696 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-29 12:44:26.917 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 222.1275ms
+2024-10-29 12:45:12.627 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - application/json 152
+2024-10-29 12:45:12.640 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:45:12.645 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:45:12.688 -06:00 [INF] Route matched with {action = "ObtenerAuditoria", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ObtenerAuditoria(Request.ReqObtenerAuditoria) on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:45:15.340 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResObtenerAuditoria'.
+2024-10-29 12:45:15.367 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 2668.56ms
+2024-10-29 12:45:15.370 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:45:15.372 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 2745.4105ms
+2024-10-29 12:50:11.209 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - null null
+2024-10-29 12:50:11.329 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:50:11.347 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:11.425 -06:00 [INF] Route matched with {action = "ListarTablas", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarTablas() on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:50:14.557 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarTablas'.
+2024-10-29 12:50:14.589 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ListarTablas (backend) in 3159.4387ms
+2024-10-29 12:50:14.591 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:14.593 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - 200 null application/json; charset=utf-8 3403.0188ms
+2024-10-29 12:50:34.540 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - null null
+2024-10-29 12:50:34.599 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:50:34.603 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:34.611 -06:00 [INF] Route matched with {action = "ListarTablas", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarTablas() on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:50:34.738 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarTablas'.
+2024-10-29 12:50:34.754 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ListarTablas (backend) in 133.166ms
+2024-10-29 12:50:34.757 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:34.765 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - null null
+2024-10-29 12:50:34.767 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - 200 null application/json; charset=utf-8 228.1247ms
+2024-10-29 12:50:34.773 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:50:34.779 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:34.789 -06:00 [INF] Route matched with {action = "ListarTablas", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarTablas() on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:50:34.888 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarTablas'.
+2024-10-29 12:50:34.891 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ListarTablas (backend) in 93.198ms
+2024-10-29 12:50:34.892 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:34.894 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - 200 null application/json; charset=utf-8 128.815ms
+2024-10-29 12:50:50.474 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 12:50:50.476 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - null null
+2024-10-29 12:50:50.490 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:50:50.491 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:50:50.492 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:50.495 -06:00 [INF] Route matched with {action = "ListarTablas", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarTablas() on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:50:50.496 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 21.5821ms
+2024-10-29 12:50:50.509 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 12:50:50.565 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarTablas'.
+2024-10-29 12:50:50.568 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ListarTablas (backend) in 66.178ms
+2024-10-29 12:50:50.572 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - null null
+2024-10-29 12:50:50.572 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:50.577 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:50:50.580 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - 200 null application/json; charset=utf-8 104.4765ms
+2024-10-29 12:50:50.582 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:50.588 -06:00 [INF] Route matched with {action = "ListarTablas", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarTablas() on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:50:50.668 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarTablas'.
+2024-10-29 12:50:50.672 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ListarTablas (backend) in 78.8574ms
+2024-10-29 12:50:50.674 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ListarTablas (backend)'
+2024-10-29 12:50:50.676 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiAuditoria/listar-tablas - 200 null application/json; charset=utf-8 104.4235ms
+2024-10-29 12:51:28.246 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - null null
+2024-10-29 12:51:28.249 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:51:28.264 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - 204 null null 18.75ms
+2024-10-29 12:51:28.270 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - application/json 135
+2024-10-29 12:51:28.271 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:51:28.273 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:51:28.275 -06:00 [INF] Route matched with {action = "ObtenerAuditoria", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ObtenerAuditoria(Request.ReqObtenerAuditoria) on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:51:28.320 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResObtenerAuditoria'.
+2024-10-29 12:51:28.322 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 46.0429ms
+2024-10-29 12:51:28.323 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:51:28.324 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 54.3921ms
+2024-10-29 12:52:16.995 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - null null
+2024-10-29 12:52:17.037 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:17.038 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - 204 null null 45.2753ms
+2024-10-29 12:52:17.050 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - application/json 131
+2024-10-29 12:52:17.052 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:17.053 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:17.054 -06:00 [INF] Route matched with {action = "ObtenerAuditoria", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ObtenerAuditoria(Request.ReqObtenerAuditoria) on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:52:17.095 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResObtenerAuditoria'.
+2024-10-29 12:52:17.096 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 39.9426ms
+2024-10-29 12:52:17.097 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:17.099 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 48.9108ms
+2024-10-29 12:52:27.347 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - null null
+2024-10-29 12:52:27.351 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:27.353 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - 204 null null 5.6206ms
+2024-10-29 12:52:27.356 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - application/json 135
+2024-10-29 12:52:27.359 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:27.359 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:27.360 -06:00 [INF] Route matched with {action = "ObtenerAuditoria", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ObtenerAuditoria(Request.ReqObtenerAuditoria) on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:52:27.369 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResObtenerAuditoria'.
+2024-10-29 12:52:27.370 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 8.6883ms
+2024-10-29 12:52:27.372 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:27.374 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 18.5556ms
+2024-10-29 12:52:30.210 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - application/json 135
+2024-10-29 12:52:30.212 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:30.213 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:30.216 -06:00 [INF] Route matched with {action = "ObtenerAuditoria", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ObtenerAuditoria(Request.ReqObtenerAuditoria) on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:52:30.224 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResObtenerAuditoria'.
+2024-10-29 12:52:30.226 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 5.9469ms
+2024-10-29 12:52:30.228 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:30.231 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 20.6448ms
+2024-10-29 12:52:38.840 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - null null
+2024-10-29 12:52:38.843 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:38.845 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiAuditoria/obtener - 204 null null 5.7627ms
+2024-10-29 12:52:38.847 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - application/json 131
+2024-10-29 12:52:38.851 -06:00 [INF] CORS policy execution successful.
+2024-10-29 12:52:38.852 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:38.853 -06:00 [INF] Route matched with {action = "ObtenerAuditoria", controller = "ApiAuditoria"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ObtenerAuditoria(Request.ReqObtenerAuditoria) on controller backend.Controllers.ApiAuditoria (backend).
+2024-10-29 12:52:38.857 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResObtenerAuditoria'.
+2024-10-29 12:52:38.858 -06:00 [INF] Executed action backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend) in 4.0075ms
+2024-10-29 12:52:38.859 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiAuditoria.ObtenerAuditoria (backend)'
+2024-10-29 12:52:38.860 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiAuditoria/obtener - 200 null application/json; charset=utf-8 12.5193ms
