@@ -30,6 +30,7 @@ const AdministrarTableSpace = () => {
   const [newInitialSize, setNewInitialSize] = useState(0);
   const [newAutoExtendSize, setNewAutoExtendSize] = useState(0);
   const [newMaxSize, setNewMaxSize] = useState(0);
+  const [userPassword, setUserPassword] = useState(""); // Nuevo estado para la contraseña
 
   useEffect(() => {
     fetchTables();
@@ -136,6 +137,7 @@ const AdministrarTableSpace = () => {
       initialSizeMB: newInitialSize,
       autoExtendSizeMB: newAutoExtendSize,
       maxSizeMB: newMaxSize,
+      userPassword: userPassword, // Agregar la contraseña al objeto de datos
     };
   
     try {
@@ -159,6 +161,7 @@ const AdministrarTableSpace = () => {
       setNewInitialSize(0);
       setNewAutoExtendSize(0);
       setNewMaxSize(0);
+      setUserPassword(""); // Reiniciar la contraseña
     } catch (error) {
       console.error("Error al crear el tablespace:", error);
       setError(error.message);
@@ -264,6 +267,16 @@ const AdministrarTableSpace = () => {
             />
           </FormGroup>
           <FormGroup>
+            <Label for="userPassword">Contraseña</Label> {/* Nuevo campo de contraseña */}
+            <Input
+              type="password"
+              id="userPassword"
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
+              required // Puedes agregar required si quieres que sea obligatorio
+            />
+          </FormGroup>
+          <FormGroup>
             <Label for="dataFileName">Nombre del Archivo de Datos</Label>
             <Input
               type="select"
@@ -286,7 +299,7 @@ const AdministrarTableSpace = () => {
             />
           </FormGroup>
           <FormGroup>
-            <Label for="autoExtendSize">Tamaño de Autoextensión (MB)</Label>
+            <Label for="autoExtendSize">Tamaño Autoextensión (MB)</Label>
             <Input
               type="number"
               id="autoExtendSize"

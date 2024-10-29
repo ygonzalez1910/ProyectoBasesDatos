@@ -13,5 +13,6 @@ namespace Request
         public int InitialSizeMB { get; set; }
         public int AutoExtendSizeMB { get; set; }
         public int MaxSizeMB { get; set; }
+        public string UserPassword { get; set; }
     }
 }

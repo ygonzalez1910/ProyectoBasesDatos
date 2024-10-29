@@ -119,20 +119,3 @@ export const SecurityService = {
     }
 };
 
-// services/api/api.utils.js
-export const handleResponse = (response) => {
-    if (response.status >= 200 && response.status < 300) {
-        return {
-            success: true,
-            data: response.data
-        };
-    }
-    throw new Error(response.data.message || 'Error en la solicitud');
-};
-
-export const handleError = (error) => {
-    return {
-        success: false,
-        error: error.response?.data?.message || error.message || 'Error desconocido'
-    };
-};
