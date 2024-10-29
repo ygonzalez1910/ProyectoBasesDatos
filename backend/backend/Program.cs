@@ -61,6 +61,13 @@ builder.Services.AddScoped<Seguridad>(provider =>
     return new Seguridad(connectionString);
 });
 
+builder.Services.AddScoped<Tuning>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    return new Tuning(connectionString);
+});
+
 // Configuración de Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

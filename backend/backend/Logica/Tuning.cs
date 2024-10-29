@@ -13,9 +13,10 @@ namespace Logica
     {
         private readonly string _connectionString;
 
-        public Tuning(IConfiguration configuration)
+       
+        public Tuning(string connectionString)
         {
-            _connectionString = "User Id=SYSTEM ;Password=rootroot ;Data Source=localhost:1521/XE";
+            _connectionString = connectionString;
         }
 
         public ResListaTablas ObtenerListaTablas(string schema)
@@ -269,7 +270,59 @@ namespace Logica
 
             return res;
         }
+
+        public ResTablasPorSchema ObtenerTablasPorSchema(ReqTablasPorSchema request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Schema))
+            {
+                return new ResTablasPorSchema
+                {
+                    Resultado = false,
+                    Errores = new List<string> { "El schema es requerido" }
+                };
+            }
+
+            var response = new ResTablasPorSchema();
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+
+                    string query = @"
+                    SELECT TABLE_NAME 
+                    FROM ALL_TABLES 
+                    WHERE OWNER = :schema
+                    ORDER BY TABLE_NAME";
+
+                    using (OracleCommand cmd = new OracleCommand(query, conexion))
+                    {
+                        cmd.Parameters.Add(new OracleParameter("schema", request.Schema.ToUpper()));
+
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response.Tablas.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+
+                    response.Resultado = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Errores.Add($"Error al obtener las tablas del schema: {ex.Message}");
+                response.Resultado = false;
+            }
+
+            return response;
+        }
+
     }
+
     
 }
 

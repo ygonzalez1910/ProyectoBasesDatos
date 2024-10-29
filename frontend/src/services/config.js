@@ -45,6 +45,9 @@ export const API_ENDPOINTS = {
         UPDATE: (id) => `${API_BASE_URL}/ApiTablespace/${id}`,
         MODIFY_SIZE: `${API_BASE_URL}/ApiTableSpace/modify-tablespace-size`,
         DELETE: (nombreTableSpace) => `${API_BASE_URL}/ApiTableSpace/${nombreTableSpace}`,
+    },
+    TUNING:{
+        TABLAS_POR_SCHEMA: `${API_BASE_URL}/tuning/obtenerTablasPorSchema`
     }
     // ... más endpoints
 };

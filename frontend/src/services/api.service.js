@@ -24,62 +24,19 @@ axiosInstance.interceptors.response.use(
 
 export const SeguridadService = {
   crearUsuario: async (data) => {
-    try {
-      const response = await axiosInstance.post(
-        API_ENDPOINTS.SEGURIDAD.CREAR_USUARIO,
-        data
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error al crear usuario:", error);
-      throw error;
-    }
+    return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.CREAR_USUARIO, data);
   },
   eliminarUsuario: async (data) => {
-    try {
-      const response = await axiosInstance.delete(
-        API_ENDPOINTS.SEGURIDAD.ELIMINAR_USUARIO,
-        { data }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error al eliminar usuario:", error);
-      throw error;
-    }
+    return await axiosInstance.delete(API_ENDPOINTS.SEGURIDAD.ELIMINAR_USUARIO, { data });
   },
   cambiarContraseña: async (data) => {
-    try {
-      const response = await axiosInstance.put(
-        API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO,
-        data
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error al cambiar contraseña:", error);
-      throw error;
-    }
+    return await axiosInstance.put(API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO, data);
   },
   crearRol: async (data) => {
-    try {
-      const response = await axiosInstance.post(
-        API_ENDPOINTS.SEGURIDAD.CREAR_ROL,
-        data
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error al crear rol:", error);
-      throw error;
-    }
+    return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.CREAR_ROL, data);
   },
-  listarRoles: async () => {
-    try {
-      const response = await axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES);
-      return response.data;
-    } catch (error) {
-      console.error("Error al cargar los roles:", error);
-      throw error;
-    }
-  },
+  listarRoles: () =>
+    axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES),
 };
 
 export const AuditoriaService = {
@@ -143,8 +100,18 @@ export const tunningService = {
       console.error("Error al obtener lista de tablas:", error);
       throw error;
     }
+  },
+  obtenerTablasPorSchema: async (schema) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.TUNING.TABLAS_POR_SCHEMA}/${schema}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener tablas por schema:", error);
+      throw error;
+    }
   }
-  
 };
 
 export const SchemasService = {
@@ -182,7 +149,7 @@ export const SchemasService = {
       throw error;
     }
   },
-  
+
 };
 
 // Servicio para Respaldos
@@ -311,14 +278,14 @@ export const TableSpaceService = {
   },
   updateSizeTableSpace: async (data) => {
     try {
-        const response = await axiosInstance.put(
-            API_ENDPOINTS.TABLESPACE.MODIFY_SIZE, // Usar el endpoint específico
-            data
-        );
-        return response.data;
+      const response = await axiosInstance.put(
+        API_ENDPOINTS.TABLESPACE.MODIFY_SIZE, // Usar el endpoint específico
+        data
+      );
+      return response.data;
     } catch (error) {
-        console.error(`Error al actualizar el tamaño del tablespace:`, error);
-        throw error;
+      console.error(`Error al actualizar el tamaño del tablespace:`, error);
+      throw error;
     }
   },
   deleteTableSpace: async (nombreTableSpace) => {
@@ -332,5 +299,5 @@ export const TableSpaceService = {
       throw error;
     }
   },
-  
+
 };

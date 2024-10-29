@@ -38,11 +38,35 @@ const Tunning = () => {
     }));
   };
 
-  const handleSchemaChange = (e) => {
-    const selectedSchema = e.target.value;
-    setSelectedSchema(selectedSchema);
-    fetchTables(selectedSchema);
-  };
+  const handleSchemaChange = async (e) => {
+    const schema = e.target.value;
+    setSelectedSchema(schema);
+    setSelectedTable(''); // Reset selected table
+    
+    if (schema) {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await tunningService.obtenerTablasPorSchema(schema);
+        
+        if (response && response.resultado) {
+          setTables(response.tablas || []);
+        } else {
+          setError(response.errores?.[0] || 'Error al obtener las tablas');
+          setTables([]);
+        }
+      } catch (error) {
+        console.error('Error al obtener las tablas:', error);
+        setError('Error al obtener las tablas del schema');
+        setTables([]);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setTables([]);
+    }
+
+};
 
   const fetchTables = async (schema) => {
     try {
@@ -92,32 +116,32 @@ const Tunning = () => {
               <h3>Seleccionar Schema y Tabla</h3>
             </CardHeader>
             <CardBody>
-              <FormGroup>
-              <Label for="nombreSchema">Seleccionar Esquema</Label>
-          <Input
-            type="select"
-            name="nombreSchema"
-            id="nombreSchema"
-            value={formData.nombreSchema}
-            onChange={handleSchemaChange}
-            required
-          >
-            <option value="" disabled>Select an option</option>
-            {schemas.map((schema, index) => (
-              <option key={index} value={schema.schemaName}>
-                {schema.schemaName}
-              </option>
-            ))}
-          </Input>
-        </FormGroup>
+            <FormGroup>
+                <Label for="schema-select">Seleccionar Schema</Label>
+                <Input
+                  type="select"
+                  id="schema-select"
+                  value={selectedSchema}
+                  onChange={handleSchemaChange}
+                  disabled={loading}
+                >
+                  <option value="">Seleccione un schema</option>
+                  {schemas.map((schema, index) => (
+                    <option key={index} value={schema.schemaName}>
+                      {schema.schemaName}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
 
               <FormGroup>
-                <Label for="table-select">Seleccionar tabla:</Label>
+                <Label for="table-select">Seleccionar Tabla</Label>
                 <Input
                   type="select"
                   id="table-select"
                   value={selectedTable}
                   onChange={handleTableChange}
+                  disabled={loading || !selectedSchema}
                 >
                   <option value="">Seleccione una tabla</option>
                   {tables.map((table, index) => (

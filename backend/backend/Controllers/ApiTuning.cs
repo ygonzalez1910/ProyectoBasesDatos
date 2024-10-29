@@ -14,6 +14,7 @@ namespace Api.Controllers
             _tuning = tuning;
         }
 
+
         [HttpPost]
         [Route("api/tuning/analizarConsulta")]
         public IActionResult analizarConsulta([FromBody] ReqAnalisisConsulta req)
@@ -43,6 +44,29 @@ namespace Api.Controllers
                 return BadRequest(res);
             }
         }
+
+
+        [HttpGet]
+        [Route("api/tuning/obtenerTablasPorSchema/{schema}")]
+        public IActionResult obtenerTablasPorSchema(string schema)
+        {
+            var request = new ReqTablasPorSchema
+            {
+                Schema = schema
+            };
+
+            ResTablasPorSchema res = _tuning.ObtenerTablasPorSchema(request);
+            if (res.Resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
+        }
+
+
 
     }
 }
