@@ -911,3 +911,182 @@ System.InvalidOperationException: Unable to resolve service for type 'Logica.Tun
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
 2024-10-29 01:50:18.087 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/OUTLN - 500 null text/plain; charset=utf-8 108.1931ms
+2024-10-29 01:52:38.204 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-29 01:52:38.323 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-29 01:52:38.325 -06:00 [INF] Hosting environment: Development
+2024-10-29 01:52:38.326 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-29 01:52:39.230 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-29 01:52:39.607 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 414.6771ms
+2024-10-29 01:52:39.634 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-29 01:52:39.642 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 8.2588ms
+2024-10-29 01:52:39.762 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-29 01:52:39.954 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 192.1218ms
+2024-10-29 01:52:40.919 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-29 01:52:41.091 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 172.4419ms
+2024-10-29 01:52:51.934 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/OUTLN - null null
+2024-10-29 01:52:51.944 -06:00 [INF] Executing endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 01:52:51.976 -06:00 [INF] Route matched with {action = "obtenerTablasPorSchema", controller = "ApiTuning"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult obtenerTablasPorSchema(System.String) on controller Api.Controllers.ApiTuning (backend).
+2024-10-29 01:52:54.334 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResTablasPorSchema'.
+2024-10-29 01:52:54.356 -06:00 [INF] Executed action Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend) in 2372.947ms
+2024-10-29 01:52:54.359 -06:00 [INF] Executed endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 01:52:54.361 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/OUTLN - 200 null application/json; charset=utf-8 2426.5301ms
+2024-10-29 01:53:43.669 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 01:53:43.676 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSeguridad/listarRoles - null null
+2024-10-29 01:53:43.687 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:53:43.687 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:53:43.689 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.ListarRoles (backend)'
+2024-10-29 01:53:43.692 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 22.7008ms
+2024-10-29 01:53:43.697 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 01:53:43.699 -06:00 [INF] Route matched with {action = "ListarRoles", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarRoles() on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 01:53:43.867 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarRoles'.
+2024-10-29 01:53:43.873 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.ListarRoles (backend) in 163.4882ms
+2024-10-29 01:53:43.876 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.ListarRoles (backend)'
+2024-10-29 01:53:43.876 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSeguridad/listarRoles - null null
+2024-10-29 01:53:43.877 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSeguridad/listarRoles - 200 null application/json; charset=utf-8 200.8527ms
+2024-10-29 01:53:43.885 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:53:43.888 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.ListarRoles (backend)'
+2024-10-29 01:53:43.890 -06:00 [INF] Route matched with {action = "ListarRoles", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarRoles() on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 01:53:43.899 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarRoles'.
+2024-10-29 01:53:43.902 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.ListarRoles (backend) in 7.9438ms
+2024-10-29 01:53:43.903 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.ListarRoles (backend)'
+2024-10-29 01:53:43.904 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSeguridad/listarRoles - 200 null application/json; charset=utf-8 28.8649ms
+2024-10-29 01:53:48.677 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/eliminarUsuario - null null
+2024-10-29 01:53:48.681 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:53:48.683 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 204 null null 5.8873ms
+2024-10-29 01:53:48.686 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 26
+2024-10-29 01:53:48.689 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:53:48.689 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-29 01:53:48.692 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 01:53:52.235 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-29 01:53:52.240 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 3545.1373ms
+2024-10-29 01:53:52.242 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-29 01:53:52.245 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 200 null application/json; charset=utf-8 3558.2754ms
+2024-10-29 01:54:15.622 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/crearRol - null null
+2024-10-29 01:54:15.624 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:54:15.625 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/crearRol - 204 null null 3.779ms
+2024-10-29 01:54:15.632 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearRol - application/json 84
+2024-10-29 01:54:15.635 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:54:15.637 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearRol (backend)'
+2024-10-29 01:54:15.640 -06:00 [INF] Route matched with {action = "CrearRol", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearRol(Request.ReqCrearRol) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 01:54:15.829 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearRol'.
+2024-10-29 01:54:15.832 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearRol (backend) in 190.267ms
+2024-10-29 01:54:15.833 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearRol (backend)'
+2024-10-29 01:54:15.835 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearRol - 400 null application/json; charset=utf-8 202.6739ms
+2024-10-29 01:54:33.452 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/crearUsuario - null null
+2024-10-29 01:54:33.455 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:54:33.456 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/crearUsuario - 204 null null 3.4117ms
+2024-10-29 01:54:33.460 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 71
+2024-10-29 01:54:33.463 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:54:33.463 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-29 01:54:33.467 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 01:54:33.539 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-29 01:54:33.541 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 69.8669ms
+2024-10-29 01:54:33.542 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-29 01:54:33.544 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 200 null application/json; charset=utf-8 83.502ms
+2024-10-29 01:54:39.455 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/cambiarPassword - null null
+2024-10-29 01:54:39.458 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:54:39.459 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5172/api/ApiSeguridad/cambiarPassword - 204 null null 3.9464ms
+2024-10-29 01:54:39.463 -06:00 [INF] Request starting HTTP/1.1 PUT http://localhost:5172/api/ApiSeguridad/cambiarPassword - application/json 57
+2024-10-29 01:54:39.465 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:54:39.466 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CambiarPassword (backend)'
+2024-10-29 01:54:39.467 -06:00 [INF] Route matched with {action = "CambiarPassword", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CambiarPassword(Request.ReqCambiarPassword) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 01:54:39.515 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCambiarPassword'.
+2024-10-29 01:54:39.517 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CambiarPassword (backend) in 47.4706ms
+2024-10-29 01:54:39.518 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CambiarPassword (backend)'
+2024-10-29 01:54:39.519 -06:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5172/api/ApiSeguridad/cambiarPassword - 400 null application/json; charset=utf-8 55.9692ms
+2024-10-29 01:55:09.302 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 01:55:09.321 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:55:09.323 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:09.327 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 01:55:09.336 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 01:55:09.341 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 11.4605ms
+2024-10-29 01:55:09.342 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:09.343 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 01:55:09.344 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 41.4719ms
+2024-10-29 01:55:09.366 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:55:09.373 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:09.374 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 01:55:09.380 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 01:55:09.383 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 4.2226ms
+2024-10-29 01:55:09.384 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:09.385 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 42.3423ms
+2024-10-29 01:55:09.651 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 01:55:09.653 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:55:09.657 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 3.7276ms
+2024-10-29 01:55:09.662 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 01:55:31.863 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 01:55:31.867 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:55:31.869 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:31.871 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 01:55:31.878 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 01:55:31.879 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 5.6833ms
+2024-10-29 01:55:31.881 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:31.884 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 20.9816ms
+2024-10-29 01:55:34.877 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 01:55:34.881 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:55:34.884 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:34.886 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 01:55:34.891 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 01:55:34.895 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 5.2756ms
+2024-10-29 01:55:34.897 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:55:34.900 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 23.1883ms
+2024-10-29 01:57:33.057 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 01:57:33.092 -06:00 [INF] CORS policy execution successful.
+2024-10-29 01:57:33.097 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:57:33.102 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 01:57:33.173 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 01:57:33.181 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 74.7876ms
+2024-10-29 01:57:33.186 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 01:57:33.188 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 138.9381ms
+2024-10-29 02:10:24.693 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 02:10:24.693 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 02:10:24.735 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:24.735 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:24.739 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 02:10:24.740 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 55.2267ms
+2024-10-29 02:10:24.803 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 02:10:24.804 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 02:10:24.920 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 02:10:24.928 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 121.9442ms
+2024-10-29 02:10:24.930 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 02:10:24.932 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 247.1343ms
+2024-10-29 02:10:24.954 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 02:10:24.959 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:24.960 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 02:10:24.961 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 02:10:24.966 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 02:10:24.971 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 7.8684ms
+2024-10-29 02:10:24.973 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 02:10:24.974 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 20.2946ms
+2024-10-29 02:10:26.984 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/REMOTE_SCHEDULER_AGENT - null null
+2024-10-29 02:10:26.989 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:26.990 -06:00 [INF] Executing endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:26.992 -06:00 [INF] Route matched with {action = "obtenerTablasPorSchema", controller = "ApiTuning"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult obtenerTablasPorSchema(System.String) on controller Api.Controllers.ApiTuning (backend).
+2024-10-29 02:10:28.528 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResTablasPorSchema'.
+2024-10-29 02:10:28.531 -06:00 [INF] Executed action Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend) in 1537.4018ms
+2024-10-29 02:10:28.532 -06:00 [INF] Executed endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:28.533 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/REMOTE_SCHEDULER_AGENT - 200 null application/json; charset=utf-8 1549.2437ms
+2024-10-29 02:10:33.777 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/GSMUSER - null null
+2024-10-29 02:10:33.781 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:33.781 -06:00 [INF] Executing endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:33.782 -06:00 [INF] Route matched with {action = "obtenerTablasPorSchema", controller = "ApiTuning"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult obtenerTablasPorSchema(System.String) on controller Api.Controllers.ApiTuning (backend).
+2024-10-29 02:10:33.795 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResTablasPorSchema'.
+2024-10-29 02:10:33.797 -06:00 [INF] Executed action Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend) in 13.0551ms
+2024-10-29 02:10:33.798 -06:00 [INF] Executed endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:33.799 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/GSMUSER - 200 null application/json; charset=utf-8 21.9059ms
+2024-10-29 02:10:49.354 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/REMOTE_SCHEDULER_AGENT - null null
+2024-10-29 02:10:49.357 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:49.359 -06:00 [INF] Executing endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:49.361 -06:00 [INF] Route matched with {action = "obtenerTablasPorSchema", controller = "ApiTuning"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult obtenerTablasPorSchema(System.String) on controller Api.Controllers.ApiTuning (backend).
+2024-10-29 02:10:49.374 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResTablasPorSchema'.
+2024-10-29 02:10:49.375 -06:00 [INF] Executed action Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend) in 8.6969ms
+2024-10-29 02:10:49.376 -06:00 [INF] Executed endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:49.377 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/REMOTE_SCHEDULER_AGENT - 200 null application/json; charset=utf-8 22.8191ms
+2024-10-29 02:10:50.545 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/OUTLN - null null
+2024-10-29 02:10:50.547 -06:00 [INF] CORS policy execution successful.
+2024-10-29 02:10:50.548 -06:00 [INF] Executing endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:50.549 -06:00 [INF] Route matched with {action = "obtenerTablasPorSchema", controller = "ApiTuning"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult obtenerTablasPorSchema(System.String) on controller Api.Controllers.ApiTuning (backend).
+2024-10-29 02:10:50.582 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResTablasPorSchema'.
+2024-10-29 02:10:50.583 -06:00 [INF] Executed action Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend) in 32.2347ms
+2024-10-29 02:10:50.584 -06:00 [INF] Executed endpoint 'Api.Controllers.ApiTuning.obtenerTablasPorSchema (backend)'
+2024-10-29 02:10:50.585 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tuning/obtenerTablasPorSchema/OUTLN - 200 null application/json; charset=utf-8 40.074ms
