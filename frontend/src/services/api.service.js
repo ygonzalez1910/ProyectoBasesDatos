@@ -9,9 +9,6 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Interceptor para manejar errores
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -80,12 +77,6 @@ export const AuditoriaService = {
     }
   }
 };
-=======
->>>>>>> 4372bdd66cad9443f12e0613e8ad78d3e26dbcaf
-=======
->>>>>>> 4372bdd66cad9443f12e0613e8ad78d3e26dbcaf
-=======
->>>>>>> 4372bdd66cad9443f12e0613e8ad78d3e26dbcaf
 
 export const tunningService = {
   analizarConsulta: async (sqlQuery, schema) => {
