@@ -11,5 +11,4 @@ namespace Response
         public bool resultado { get; set; }
         public List<string> errores { get; set; }
     }
-
 }
