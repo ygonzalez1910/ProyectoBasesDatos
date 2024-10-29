@@ -149,35 +149,116 @@ namespace Logica
 
             try
             {
-                Log.Information($"Creando tablespace: {request.TableSpaceName}");
+                // Log para verificar los datos de entrada
+                Log.Information($"Iniciando proceso de creación de tablespace con los siguientes datos: " +
+                                $"Nombre: {request.TableSpaceName}, " +
+                                $"Ruta del archivo de datos: {request.DataFileName}, " +
+                                $"Tamaño inicial: {request.InitialSizeMB} MB, " +
+                                $"Autoextend: {request.AutoExtendSizeMB} MB, " +
+                                $"Tamaño máximo: {request.MaxSizeMB} MB");
+
+                // Validaciones iniciales de los datos
+                if (string.IsNullOrEmpty(request.TableSpaceName) ||
+                    string.IsNullOrEmpty(request.DataFileName) ||
+                    request.InitialSizeMB <= 0 ||
+                    request.AutoExtendSizeMB <= 0 ||
+                    request.MaxSizeMB <= 0 ||
+                    string.IsNullOrEmpty(request.UserPassword))
+                {
+                    response.Mensaje = "Error: uno o más datos de entrada son inválidos o están ausentes.";
+                    response.Exito = false;
+                    Log.Warning(response.Mensaje);
+                    return response;
+                }
 
                 using (OracleConnection connection = new OracleConnection(_connectionString))
                 {
                     connection.Open();
-                    Log.Information($"Conexión abierta a la base de datos.");
+                    Log.Information("Conexión abierta a la base de datos.");
 
-                    // Crear el comando SQL para crear el tablespace
-                    string sql = $@"
-                CREATE TABLESPACE {request.TableSpaceName}
-                DATAFILE '{request.DataFileName}/{request.TableSpaceName}.dbf'
-                SIZE {request.InitialSizeMB}M
-                AUTOEXTEND ON NEXT {request.AutoExtendSizeMB}M
-                MAXSIZE {request.MaxSizeMB}M";
-
-                    using (OracleCommand cmd = new OracleCommand(sql, connection))
+                    // Iniciar la transacción
+                    using (var transaction = connection.BeginTransaction())
                     {
-                        cmd.ExecuteNonQuery();
-                        response.Mensaje = $"Tablespace {request.TableSpaceName} creado correctamente.";
-                        response.Exito = true;
-                        Log.Information(response.Mensaje);
+                        try
+                        {
+                            // Crear el comando SQL para crear el tablespace
+                            string createTablespaceSql = $@"
+                        CREATE TABLESPACE ""{request.TableSpaceName}""
+                        DATAFILE '{request.DataFileName}/{request.TableSpaceName}.dbf'
+                        SIZE {request.InitialSizeMB}M
+                        AUTOEXTEND ON NEXT {request.AutoExtendSizeMB}M
+                        MAXSIZE {request.MaxSizeMB}M";
+
+                            Log.Information($"Ejecutando SQL: {createTablespaceSql}");
+
+                            using (OracleCommand cmd = new OracleCommand(createTablespaceSql, connection))
+                            {
+                                cmd.ExecuteNonQuery();
+                                Log.Information($"Tablespace {request.TableSpaceName} creado correctamente en la base de datos.");
+                            }
+
+                            // Habilitar el script de creación de usuario
+                            string enableScriptSql = "ALTER SESSION SET \"_ORACLE_SCRIPT\" = true";
+                            using (OracleCommand cmd = new OracleCommand(enableScriptSql, connection))
+                            {
+                                cmd.ExecuteNonQuery();
+                                Log.Information("Script de usuario habilitado para la sesión.");
+                            }
+
+                            // Crear el usuario
+                            string createUserSql = $@"
+                        CREATE USER ""{request.TableSpaceName}"" IDENTIFIED BY ""{request.UserPassword}""
+                        DEFAULT TABLESPACE ""{request.TableSpaceName}""";
+
+                            using (OracleCommand cmd = new OracleCommand(createUserSql, connection))
+                            {
+                                cmd.ExecuteNonQuery();
+                                Log.Information($"Usuario {request.TableSpaceName} creado con éxito.");
+                            }
+
+                            // Asignar permisos al usuario
+                            string[] grantPrivileges = new[]
+                            {
+                        $@"GRANT RESOURCE TO ""{request.TableSpaceName}""",
+                        $@"GRANT CONNECT TO ""{request.TableSpaceName}""",
+                        $@"GRANT ALL PRIVILEGES TO ""{request.TableSpaceName}"""
+                    };
+
+                            foreach (string grantSql in grantPrivileges)
+                            {
+                                using (OracleCommand cmd = new OracleCommand(grantSql, connection))
+                                {
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+                            Log.Information($"Permisos asignados al usuario {request.TableSpaceName}.");
+
+                            // Si todo fue exitoso, confirmar la transacción
+                            transaction.Commit();
+                            response.Mensaje = $"Tablespace {request.TableSpaceName} y usuario creados correctamente.";
+                            response.Exito = true;
+                            Log.Information($"Proceso finalizado con éxito: {response.Mensaje}");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Si ocurre un error, revertir la transacción
+                            transaction.Rollback();
+                            response.Mensaje = $"Error al crear el tablespace y usuario: {ex.Message}";
+                            response.Exito = false;
+                            Log.Error(ex, response.Mensaje);
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                response.Mensaje = $"Error al crear el tablespace: {ex.Message}";
+                response.Mensaje = $"Error al establecer conexión con la base de datos: {ex.Message}";
                 response.Exito = false;
                 Log.Error(ex, response.Mensaje);
+            }
+            finally
+            {
+                Log.Information("Proceso de creación de tablespace finalizado.");
             }
 
             return response;

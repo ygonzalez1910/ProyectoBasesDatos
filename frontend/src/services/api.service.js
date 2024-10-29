@@ -10,19 +10,6 @@ const axiosInstance = axios.create({
   },
 });
 
-// Interceptor para manejar errores
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Manejar error de autenticación
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
-);
-
 export const tunningService = {
   analizarConsulta: async (sqlQuery, schema) => {
     try {
