@@ -77,7 +77,6 @@ export const AuditoriaService = {
     }
   }
 };
-
 export const tunningService = {
   analizarConsulta: async (sqlQuery, schema) => {
     try {
