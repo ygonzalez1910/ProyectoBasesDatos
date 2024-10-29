@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 // Interceptor para manejar errores
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -22,6 +21,94 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const SeguridadService = {
+  crearUsuario: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.SEGURIDAD.CREAR_USUARIO,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear usuario:", error);
+      throw error;
+    }
+  },
+  eliminarUsuario: async (data) => {
+    try {
+      const response = await axiosInstance.delete(
+        API_ENDPOINTS.SEGURIDAD.ELIMINAR_USUARIO,
+        { data }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al eliminar usuario:", error);
+      throw error;
+    }
+  },
+  cambiarContraseña: async (data) => {
+    try {
+      const response = await axiosInstance.put(
+        API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al cambiar contraseña:", error);
+      throw error;
+    }
+  },
+  crearRol: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.SEGURIDAD.CREAR_ROL,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear rol:", error);
+      throw error;
+    }
+  },
+  listarRoles: async () => {
+    try {
+      const response = await axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES);
+      return response.data;
+    } catch (error) {
+      console.error("Error al cargar los roles:", error);
+      throw error;
+    }
+  },
+};
+
+export const AuditoriaService = {
+  obtenerAuditoria: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.AUDITORIA.OBTENER_AUDITORIA,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener auditoría:", error);
+      throw error;
+    }
+  },
+
+  activarAuditoria: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.AUDITORIA.ACTIVAR_AUDITORIA,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al activar auditoría:", error);
+      throw error;
+    }
+  }
+};
 
 export const tunningService = {
   analizarConsulta: async (sqlQuery, schema) => {
@@ -39,9 +126,8 @@ export const tunningService = {
 
   obtenerEstadisticasTabla: async (schema, tabla) => {
     try {
-      const response = await axiosInstance.post(
-        "/api/tunning/obtenerEstadisticasTabla",
-        { schema, tabla } // Ahora pasamos los datos en el cuerpo de la solicitud
+      const response = await axiosInstance.get(
+        `/api/tunning/obtenerEstadisticasTabla/${schema}/${tabla}`
       );
       return response;
     } catch (error) {
@@ -49,19 +135,16 @@ export const tunningService = {
       throw error;
     }
   },
-
   obtenerListaTablas: async (schema) => {
     try {
-      const response = await axiosInstance.post(
-        "/api/tunning/obtenerListaTablas",
-        { schema } // Ahora pasamos el schema en el cuerpo de la solicitud
-      );
-      return response;
+      const response = await axiosInstance.get(`/api/tunning/obtenerListaTablas/${schema}`);
+      return response.data.Tables;
     } catch (error) {
       console.error("Error al obtener lista de tablas:", error);
       throw error;
     }
   }
+  
 };
 
 export const SchemasService = {

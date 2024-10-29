@@ -18,6 +18,17 @@ export const API_ENDPOINTS = {
         REGISTER: `${API_BASE_URL}/auth/register`,
         PROFILE: `${API_BASE_URL}/auth/profile`,
     },
+    SEGURIDAD: {
+        CREAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/crearUsuario`,
+        ELIMINAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/eliminarUsuario`,
+        MODIFICAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/cambiarPassword`,
+        CREAR_ROL: `${API_BASE_URL}/ApiSeguridad/crearRol`,
+        LISTAR_ROLES: `${API_BASE_URL}/ApiSeguridad/listarRoles`
+    },
+    AUDITORIA: {
+        OBTENER_AUDITORIA: '/api/auditoria/obtener',
+        ACTIVAR_AUDITORIA: '/api/auditoria/activar'
+    },
     SCHEMAS: {
         GET_ALL: `${API_BASE_URL}/ApiSchema/get-schemas`,
         GET_ALL_TABLES: `${API_BASE_URL}/ApiSchema/get-tables`,

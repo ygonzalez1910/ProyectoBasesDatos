@@ -1,370 +1,527 @@
-import React, { useState } from 'react';
-import { Shield, Users, Key, Lock, Database, Code, Server, Cog } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/Card";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/Tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/Select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../components/ui/Dialog";
-import { Button } from "../../components/ui/Button";
-import { Input } from "../../components/ui/Input";
-import { Switch } from "../../components/ui/Switch";
-import { Label } from "../../components/ui/Label";
-
+import React, { useState, useEffect, useCallback } from 'react';
+import { SeguridadService } from "../../services/api.service";
+import { Container, Row, Col, Card, CardHeader, CardBody, CardTitle, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
+import { FaUserPlus, FaTrash, FaKey, FaShieldAlt } from 'react-icons/fa';
 
 const Seguridad = () => {
-  const [createRoleData, setCreateRoleData] = useState({
-    roleName: '',
-    roleType: 'basic',
+  // Estado para la creación de usuario
+  const [createUserForm, setCreateUserForm] = useState({
+    nombreUsuario: '',
     password: '',
-    schema: '',
-    package: ''
+    roles: [],
   });
 
-  const [selectedSchema, setSelectedSchema] = useState('');
-  const schemas = ['HR', 'SYSTEM', 'SYS'];
-  const objectTypes = ['TABLE', 'VIEW', 'SEQUENCE', 'PROCEDURE', 'PACKAGE', 'FUNCTION'];
+  const [creatingUser, setCreatingUser] = useState(false);
+  const [createUserError, setCreateUserError] = useState(null);
 
-  const handleCreateRole = () => {
-    console.log('Crear rol:', createRoleData);
+  // Estado para la eliminación de usuario
+  const [deleteUserForm, setDeleteUserForm] = useState({
+    nombreUsuario: '',
+  });
+
+  const [deletingUser, setDeletingUser] = useState(false);
+  const [deleteUserError, setDeleteUserError] = useState(null);
+
+  // Estado para el cambio de contraseña
+  const [changePasswordForm, setChangePasswordForm] = useState({
+    nombreUsuario: '',
+    nuevoPassword: '',
+  });
+
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [changePasswordError, setChangePasswordError] = useState(null);
+
+  // Estado para la creación de rol
+  const [createRoleForm, setCreateRoleForm] = useState({
+    nombreRol: '',
+    esRolExterno: false,
+    password: '',
+    schema: '',
+    package: '',
+  });
+
+  const [creatingRole, setCreatingRole] = useState(false);
+  const [createRoleError, setCreateRoleError] = useState(null);
+
+  const [roles, setRoles] = useState([]);
+
+
+  const styles = {
+    gradient: {
+      background: 'linear-gradient(45deg, #2c3e50 0%, #3498db 100%)',
+      color: 'white'
+    },
+    card: {
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-5px)',
+        boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important'
+      }
+    },
+    button: {
+      padding: '0.5rem 1.5rem',
+      borderRadius: '4px',
+      fontWeight: '500',
+      textTransform: 'none',
+      fontSize: '0.9rem',
+      boxShadow: 'none',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        transform: 'translateY(-1px)',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }
+    },
+    divider: {
+      width: '25%',
+      margin: '0 auto',
+      borderTop: '2px solid #e3e6f0'
+    }
   };
 
-  const RoleCreationForm = () => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">Nombre del Rol</Label>
-        <Input 
-          value={createRoleData.roleName}
-          onChange={(e) => setCreateRoleData({...createRoleData, roleName: e.target.value})}
-          placeholder="Nombre del rol"
-          className="w-full"
-        />
-      </div>
+  const cargarRoles = useCallback(async () => {
+    try {
+      const response = await SeguridadService.listarRoles();
 
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">Tipo de Rol</Label>
-        <Select 
-          value={createRoleData.roleType}
-          onValueChange={(value) => setCreateRoleData({...createRoleData, roleType: value})}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Seleccionar tipo de rol" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="basic">Rol Básico (NOT IDENTIFIED)</SelectItem>
-            <SelectItem value="password">Rol con Contraseña</SelectItem>
-            <SelectItem value="application">Rol de Aplicación</SelectItem>
-            <SelectItem value="external">Rol Externo (SO)</SelectItem>
-            <SelectItem value="global">Rol Global (Directorio)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      if (response.data && response.data.resultado) {
+        const listaRoles = response.data.roles || [];
+        setRoles(listaRoles);
+      } else {
+        setRoles([]);
+      }
+    } catch (error) {
+      console.error('Error al cargar roles:', error);
+      setRoles([]);
+    }
+  }, []);
 
-      {createRoleData.roleType === 'password' && (
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">Contraseña</Label>
-          <Input 
-            type="password"
-            value={createRoleData.password}
-            onChange={(e) => setCreateRoleData({...createRoleData, password: e.target.value})}
-            placeholder="Contraseña del rol"
-            className="w-full"
-          />
-        </div>
-      )}
+  useEffect(() => {
+    cargarRoles();
+  }, [cargarRoles]);
 
-      {createRoleData.roleType === 'application' && (
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Schema</Label>
-            <Input 
-              value={createRoleData.schema}
-              onChange={(e) => setCreateRoleData({...createRoleData, schema: e.target.value})}
-              placeholder="Nombre del schema"
-              className="w-full"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Package</Label>
-            <Input 
-              value={createRoleData.package}
-              onChange={(e) => setCreateRoleData({...createRoleData, package: e.target.value})}
-              placeholder="Nombre del package"
-              className="w-full"
-            />
-          </div>
-        </div>
-      )}
+  const handleInputChange = (event, setter) => {
+    const { name, value, checked } = event.target;
+    setter((prevState) => ({
+      ...prevState,
+      [name]: name === 'esRolExterno' ? checked : value,
+    }));
+  };
 
-      <Button className="w-full mt-6" onClick={handleCreateRole}>
-        Crear Rol
-      </Button>
-    </div>
-  );
+  const handleRoleChange = (roleName) => {
+    setCreateUserForm(prev => ({
+      ...prev,
+      roles: prev.roles.includes(roleName)
+        ? prev.roles.filter(role => role !== roleName)
+        : [...prev.roles, roleName]
+    }));
+  };
 
-  const SchemaPrivilegesSection = () => (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="w-full">
-          <Database className="h-4 w-4 mr-2" />
-          Asignar Privilegios de Schema
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>Privilegios de Schema</DialogTitle>
-          <DialogDescription>
-            Asignar privilegios de schema al rol
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-6">
-          <Select value={selectedSchema} onValueChange={setSelectedSchema}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccionar Schema" />
-            </SelectTrigger>
-            <SelectContent>
-              {schemas.map(schema => (
-                <SelectItem key={schema} value={schema}>
-                  {schema}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+  const handleCreateUser = async (event) => {
+    event.preventDefault();
+    setCreatingUser(true);
+    setCreateUserError(null);
 
-          {selectedSchema && (
-            <div className="border rounded-lg p-6 space-y-4 bg-white">
-              {objectTypes.map(type => (
-                <div key={type} className="flex items-center justify-between py-2 border-b last:border-0">
-                  <Label className="font-medium">{type}</Label>
-                  <div className="flex items-center gap-6">
-                    {type === 'TABLE' && (
-                      <>
-                        <div className="flex items-center gap-2">
-                          <Label className="text-sm">SELECT</Label>
-                          <Switch />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Label className="text-sm">INSERT</Label>
-                          <Switch />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Label className="text-sm">UPDATE</Label>
-                          <Switch />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Label className="text-sm">DELETE</Label>
-                          <Switch />
-                        </div>
-                      </>
-                    )}
-                    {(type === 'VIEW' || type === 'SEQUENCE') && (
-                      <div className="flex items-center gap-2">
-                        <Label className="text-sm">SELECT</Label>
-                        <Switch />
-                      </div>
-                    )}
-                    {(type === 'PROCEDURE' || type === 'PACKAGE' || type === 'FUNCTION') && (
-                      <div className="flex items-center gap-2">
-                        <Label className="text-sm">EXECUTE</Label>
-                        <Switch />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+    try {
+      await SeguridadService.crearUsuario(createUserForm);
+      // Limpiar el formulario después de un envío exitoso
+      setCreateUserForm({
+        nombreUsuario: '',
+        password: '',
+        roles: [],
+      });
+    } catch (error) {
+      setCreateUserError(error.message);
+    } finally {
+      setCreatingUser(false);
+    }
+  };
+
+  const handleDeleteUser = async (event) => {
+    event.preventDefault();
+    setDeletingUser(true);
+    setDeleteUserError(null);
+
+    try {
+      await SeguridadService.eliminarUsuario(deleteUserForm);
+      // Limpiar el formulario después de un envío exitoso
+      setDeleteUserForm({
+        nombreUsuario: '',
+      });
+    } catch (error) {
+      setDeleteUserError(error.message);
+    } finally {
+      setDeletingUser(false);
+    }
+  };
+
+  const handleChangePassword = async (event) => {
+    event.preventDefault();
+    setChangingPassword(true);
+    setChangePasswordError(null);
+
+    try {
+      await SeguridadService.cambiarContraseña(changePasswordForm);
+      // Limpiar el formulario después de un envío exitoso
+      setChangePasswordForm({
+        nombreUsuario: '',
+        nuevoPassword: '',
+      });
+    } catch (error) {
+      setChangePasswordError(error.message);
+    } finally {
+      setChangingPassword(false);
+    }
+  };
+
+  const handleCreateRole = async (event) => {
+    event.preventDefault();
+    setCreatingRole(true);
+    setCreateRoleError(null);
+
+    try {
+      await SeguridadService.crearRol(createRoleForm);
+      // Limpiar el formulario después de un envío exitoso
+      setCreateRoleForm({
+        nombreRol: '',
+        esRolExterno: false,
+        password: '',
+        schema: '',
+        package: '',
+      });
+    } catch (error) {
+      setCreateRoleError(error.message);
+    } finally {
+      setCreatingRole(false);
+    }
+  };
+
+  const scrollableContainerStyle = {
+    maxHeight: '200px',
+    overflowY: 'auto',
+    border: '1px solid #dee2e6',
+    borderRadius: '0.25rem',
+    padding: '0.5rem',
+    backgroundColor: '#f8f9fa',
+    marginBottom: '0.5rem'
+  };
+
+  // Estilo para cada ítem en las listas
+  const itemStyle = {
+    borderBottom: '1px solid #eee',
+    transition: 'background-color 0.2s'
+  };
+
+  // Estilo para el último ítem (sin borde inferior)
+  const lastItemStyle = {
+    ...itemStyle,
+    borderBottom: 'none'
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center">
-      <div className="w-full max-w-7xl p-8">
-        <Card className="w-full shadow-lg">
-          <CardHeader className="border-b bg-white">
-            <CardTitle className="flex items-center gap-2 text-2xl">
-              <Lock className="h-6 w-6" />
-              Gestión de Roles
-            </CardTitle>
-            <CardDescription className="text-gray-600">
-              Administración de roles y privilegios del sistema
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-6">
-            <Tabs defaultValue="create" className="space-y-6">
-              <TabsList className="w-full justify-start bg-white border-b p-0 h-12">
-                <TabsTrigger 
-                  value="create" 
-                  className="flex-1 data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 rounded-none h-full"
-                >
-                  Crear Rol
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="assign" 
-                  className="flex-1 data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 rounded-none h-full"
-                >
-                  Asignar Privilegios
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="sysdba" 
-                  className="flex-1 data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 rounded-none h-full"
-                >
-                  Roles SYSDBA
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="create">
-                <div className="grid gap-6 md:grid-cols-2">
-                  <Card className="shadow-sm">
-                    <CardHeader className="bg-white">
-                      <CardTitle className="text-lg font-semibold">Crear Nuevo Rol</CardTitle>
-                      <CardDescription>
-                        Define las características del nuevo rol
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6">
-                      <RoleCreationForm />
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="shadow-sm">
-                    <CardHeader className="bg-white">
-                      <CardTitle className="text-lg font-semibold">Privilegios del Rol</CardTitle>
-                      <CardDescription>
-                        Asigna privilegios al rol
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-4">
-                      <SchemaPrivilegesSection />
-                      <Button variant="outline" className="w-full">
-                        <Key className="h-4 w-4 mr-2" />
-                        Asignar Privilegios del Sistema
-                      </Button>
-                    </CardContent>
-                  </Card>
+    <Container className="py-5">
+
+      {/* Header con estilo mejorado */}
+      <Row className="mb-5">
+        <Col className="text-center">
+          <h2 className="display-4 mb-2">Seguridad</h2>
+          <p className="text-muted lead">Gestión de usuarios y roles del sistema</p>
+          <hr style={styles.divider} className="my-4" />
+        </Col>
+      </Row>
+
+      <Row className="g-4">
+        {/* Crear Usuario */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaUserPlus size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Crear Usuario</CardTitle>
+                  <small>Añadir nuevo usuario al sistema</small>
                 </div>
-              </TabsContent>
-    
-              <TabsContent value="assign">
-                <Card className="shadow-sm">
-                  <CardHeader className="bg-white">
-                    <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                      <Users className="h-5 w-5" />
-                      Asignar Roles a Usuarios
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-6">
-                      <Select>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Seleccionar Usuario" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="user1">Usuario 1</SelectItem>
-                          <SelectItem value="user2">Usuario 2</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      
-                      <div className="border rounded-lg p-6 bg-white">
-                        <Label className="text-lg font-medium mb-4 block">Roles Disponibles</Label>
-                        <div className="space-y-4">
-                          {['CONNECT', 'RESOURCE', 'DBA', 'SYSDBA'].map(role => (
-                            <div key={role} className="flex items-center justify-between py-2 border-b last:border-0">
-                              <Label className="font-medium">{role}</Label>
-                              <Switch />
-                            </div>
-                          ))}
+              </div>
+            </CardHeader>
+            <CardBody className="p-4">
+              <Form onSubmit={handleCreateUser}>
+                <FormGroup className="mb-3">
+                  <Label for="nombreUsuario" className="form-label text-muted">
+                    Username
+                  </Label>
+                  <Input
+                    type="text"
+                    id="nombreUsuario"
+                    name="nombreUsuario"
+                    placeholder="Ingrese nombre de usuario"
+                    value={createUserForm.nombreUsuario}
+                    onChange={(e) => handleInputChange(e, setCreateUserForm)}
+                  />
+                </FormGroup>
+                <FormGroup className="mb-3">
+                  <Label for="password" className="form-label text-muted">
+                    Password
+                  </Label>
+                  <Input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Ingrese contraseña"
+                    value={createUserForm.password}
+                    onChange={(e) => handleInputChange(e, setCreateUserForm)}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="roles">Roles</Label>
+                  <div style={scrollableContainerStyle}>
+                    {roles.length === 0 ? (
+                      <div className="text-muted">Cargando roles...</div>
+                    ) : (
+                      roles.map((rol, index) => (
+                        <div
+                          key={rol.nombreRol}
+                          style={index === roles.length - 1 ? lastItemStyle : itemStyle}
+                          className="form-check"
+                        >
+                          <Input
+                            type="checkbox"
+                            className="form-check-input"
+                            id={`role-${rol.nombreRol}`}
+                            checked={createUserForm.roles.includes(rol.nombreRol)}
+                            onChange={() => handleRoleChange(rol.nombreRol)}
+                          />
+                          <Label
+                            className="form-check-label"
+                            for={`role-${rol.nombreRol}`}
+                          >
+                            {rol.nombreRol}
+                          </Label>
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="sysdba">
-                <Card className="shadow-sm">
-                  <CardHeader className="bg-white">
-                    <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                      <Shield className="h-5 w-5" />
-                      Gestión de Roles SYSDBA
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-6">
-                      <div className="rounded-lg border bg-white overflow-hidden">
-                        <table className="w-full">
-                          <thead>
-                            <tr className="bg-gray-50 border-b">
-                              <th className="text-left p-4 font-medium">Usuario</th>
-                              <th className="text-left p-4 font-medium">SYSDBA</th>
-                              <th className="text-left p-4 font-medium">SYSOPER</th>
-                              <th className="text-left p-4 font-medium">Acciones</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b">
-                              <td className="p-4">SYS</td>
-                              <td className="p-4">TRUE</td>
-                              <td className="p-4">TRUE</td>
-                              <td className="p-4">
-                                <Button variant="ghost" size="sm">
-                                  <Cog className="h-4 w-4" />
-                                </Button>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="p-4">DBA_USER</td>
-                              <td className="p-4">TRUE</td>
-                              <td className="p-4">FALSE</td>
-                              <td className="p-4">
-                                <Button variant="ghost" size="sm">
-                                  <Cog className="h-4 w-4" />
-                                </Button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      
-                      <div className="flex justify-end">
-                        <Button>
-                          Asignar SYSDBA a Usuario
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+                      ))
+                    )}
+                  </div>
+                  {createUserForm.roles.length > 0 && (
+                    <small className="text-muted d-block mt-2">
+                      Roles seleccionados: {createUserForm.roles.length}
+                    </small>
+                  )}
+                </FormGroup>
+                <div className="text-end">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    style={styles.button}
+                    disabled={creatingUser}
+                  >
+                    {creatingUser ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Creando...
+                      </>
+                    ) : (
+                      'Crear Usuario'
+                    )}
+                  </Button>
+                </div>
+                {createUserError && (
+                  <Alert color="danger" className="mt-3 mb-0">
+                    {createUserError}
+                  </Alert>
+                )}
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+
+        {/* Eliminar Usuario */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaTrash size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Eliminar Usuario</CardTitle>
+                  <small>Eliminar usuario existente</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody className="p-4">
+              <Form onSubmit={handleDeleteUser}>
+                <FormGroup className="mb-4">
+                  <Label for="deleteUsername" className="form-label text-muted">
+                    Username
+                  </Label>
+                  <Input
+                    type="text"
+                    id="deleteUsername"
+                    name="nombreUsuario"
+                    placeholder="Ingrese usuario a eliminar"
+                    value={deleteUserForm.nombreUsuario}
+                    onChange={(e) => handleInputChange(e, setDeleteUserForm)}
+                  />
+                </FormGroup>
+                <div className="text-end">
+                  <Button
+                    type="submit"
+                    color="danger"
+                    style={styles.button}
+                    disabled={deletingUser}
+                  >
+                    {deletingUser ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Eliminando...
+                      </>
+                    ) : (
+                      'Eliminar Usuario'
+                    )}
+                  </Button>
+                </div>
+                {deleteUserError && (
+                  <Alert color="danger" className="mt-3 mb-0">
+                    {deleteUserError}
+                  </Alert>
+                )}
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+
+        {/* Modificar Usuario */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaKey size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Modificar Usuario</CardTitle>
+                  <small>Actualizar contraseña de usuario</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody className="p-4">
+              <Form onSubmit={handleChangePassword}>
+                <FormGroup className="mb-3">
+                  <Label for="changeUsername" className="form-label text-muted">
+                    Username
+                  </Label>
+                  <Input
+                    type="text"
+                    id="changeUsername"
+                    name="nombreUsuario"
+                    placeholder="Ingrese nombre de usuario"
+                    value={changePasswordForm.nombreUsuario}
+                    onChange={(e) => handleInputChange(e, setChangePasswordForm)}
+                  />
+                </FormGroup>
+                <FormGroup className="mb-4">
+                  <Label for="nuevoPassword" className="form-label text-muted">
+                    New Password
+                  </Label>
+                  <Input
+                    type="password"
+                    id="nuevoPassword"
+                    name="nuevoPassword"
+                    placeholder="Ingrese nueva contraseña"
+                    value={changePasswordForm.nuevoPassword}
+                    onChange={(e) => handleInputChange(e, setChangePasswordForm)}
+                  />
+                </FormGroup>
+                <div className="text-end">
+                  <Button
+                    type="submit"
+                    color="warning"
+                    style={styles.button}
+                    disabled={changingPassword}
+                  >
+                    {changingPassword ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Actualizando...
+                      </>
+                    ) : (
+                      'Cambiar Contraseña'
+                    )}
+                  </Button>
+                </div>
+                {changePasswordError && (
+                  <Alert color="danger" className="mt-3 mb-0">
+                    {changePasswordError}
+                  </Alert>
+                )}
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+
+        {/* Crear Rol */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaShieldAlt size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Crear Rol</CardTitle>
+                  <small>Añadir nuevo rol al sistema</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody className="p-4">
+              <Form onSubmit={handleCreateRole}>
+                <FormGroup className="mb-3">
+                  <Label for="nombreRol" className="form-label text-muted">
+                    Role Name
+                  </Label>
+                  <Input
+                    type="text"
+                    id="nombreRol"
+                    name="nombreRol"
+                    placeholder="Ingrese nombre del rol"
+                    value={createRoleForm.nombreRol}
+                    onChange={(e) => handleInputChange(e, setCreateRoleForm)}
+                  />
+                </FormGroup>
+                <FormGroup check className="mb-4">
+                  <Label check className="text-muted">
+                    <Input
+                      type="checkbox"
+                      id="esRolExterno"
+                      name="esRolExterno"
+                      className="me-2"
+                      checked={createRoleForm.esRolExterno}
+                      onChange={(e) => handleInputChange(e, setCreateRoleForm)}
+                    />
+                    External Role
+                  </Label>
+                </FormGroup>
+                <div className="text-end">
+                  <Button
+                    type="submit"
+                    color="success"
+                    style={styles.button}
+                    disabled={creatingRole}
+                  >
+                    {creatingRole ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Creando...
+                      </>
+                    ) : (
+                      'Crear Rol'
+                    )}
+                  </Button>
+                </div>
+                {createRoleError && (
+                  <Alert color="danger" className="mt-3 mb-0">
+                    {createRoleError}
+                  </Alert>
+                )}
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
+
 };
 
 export default Seguridad;

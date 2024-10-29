@@ -487,3 +487,804 @@ https://docs.oracle.com/error-help/db/ora-28000/, Código: 28000
 2024-10-28 14:18:04.486 -06:00 [INF] CORS policy execution successful.
 2024-10-28 14:18:04.489 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 11.7755ms
 2024-10-28 14:18:04.499 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:29:58.928 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:29:58.928 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:29:58.948 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:29:58.948 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:29:58.950 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 38.014ms
+2024-10-28 21:29:58.950 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 37.9024ms
+2024-10-28 21:29:58.962 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:29:58.964 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:30:57.214 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-28 21:30:57.247 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:30:57.257 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:30:57.350 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-28 21:30:57.504 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 21:30:57.507 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:30:57.508 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 5.8972ms
+2024-10-28 21:30:57.510 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 21:30:58.481 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-28 21:30:58.511 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-28 21:30:58.514 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 1158.2437ms
+2024-10-28 21:30:58.514 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:30:58.514 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:30:58.515 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:30:58.515 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 1301.8144ms
+2024-10-28 21:30:58.516 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-28 21:30:58.564 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-28 21:30:58.567 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 45.5943ms
+2024-10-28 21:30:58.567 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:30:58.568 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 57.459ms
+2024-10-28 21:31:01.374 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 21:31:01.376 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:01.376 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.2959ms
+2024-10-28 21:31:01.378 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 21:31:09.166 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-28 21:31:09.170 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:09.172 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:31:09.176 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-28 21:31:09.562 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-28 21:31:09.565 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 385.2755ms
+2024-10-28 21:31:09.566 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:31:09.566 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-28 21:31:09.571 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 405.3638ms
+2024-10-28 21:31:09.574 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:09.577 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:31:09.578 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-28 21:31:09.606 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-28 21:31:09.608 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 28.6405ms
+2024-10-28 21:31:09.609 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:31:09.610 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 43.2515ms
+2024-10-28 21:31:15.516 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-28 21:31:15.519 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:15.519 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:31:15.521 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-28 21:31:15.577 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-28 21:31:15.578 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 54.587ms
+2024-10-28 21:31:15.579 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:31:15.579 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-28 21:31:15.580 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 64.7209ms
+2024-10-28 21:31:15.582 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:15.584 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:31:15.584 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-28 21:31:15.629 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-28 21:31:15.631 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 45.4531ms
+2024-10-28 21:31:15.632 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:31:15.634 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 54.9076ms
+2024-10-28 21:31:18.037 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:31:18.037 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:31:18.039 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:18.040 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:31:18.041 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 3.4714ms
+2024-10-28 21:31:18.041 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 3.8644ms
+2024-10-28 21:31:18.044 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:31:18.045 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:32:01.558 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:32:01.561 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:32:01.564 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:32:01.565 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:32:01.566 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 7.962ms
+2024-10-28 21:32:01.566 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 5.8052ms
+2024-10-28 21:32:01.574 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:32:01.576 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:32:29.384 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 21:32:29.493 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 21:32:29.495 -06:00 [INF] Hosting environment: Development
+2024-10-28 21:32:29.496 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 21:32:30.180 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 21:32:30.443 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 266.9857ms
+2024-10-28 21:32:30.600 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 21:32:30.600 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 21:32:30.613 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 9.7385ms
+2024-10-28 21:32:30.657 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 56.6723ms
+2024-10-28 21:32:31.053 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 21:32:31.196 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 143.7175ms
+2024-10-28 21:35:03.721 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-28 21:35:03.755 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:35:03.765 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:35:03.814 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-28 21:35:05.121 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-28 21:35:05.142 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-28 21:35:05.146 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 1323.9289ms
+2024-10-28 21:35:05.147 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:35:05.147 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 1430.413ms
+2024-10-28 21:35:05.148 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:35:05.150 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:35:05.151 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-28 21:35:05.181 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-28 21:35:05.183 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 30.2628ms
+2024-10-28 21:35:05.184 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-28 21:35:05.185 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 43.8518ms
+2024-10-28 21:35:23.317 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-28 21:35:23.326 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:35:23.327 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:35:23.331 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-28 21:35:23.494 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-28 21:35:23.501 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 167.6971ms
+2024-10-28 21:35:23.503 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:35:23.504 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-28 21:35:23.505 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 190.3685ms
+2024-10-28 21:35:23.508 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:35:23.509 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:35:23.509 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-28 21:35:23.544 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-28 21:35:23.545 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 34.7686ms
+2024-10-28 21:35:23.546 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-28 21:35:23.547 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 43.5111ms
+2024-10-28 21:35:25.370 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:35:25.371 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:35:25.373 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:35:25.374 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:35:25.375 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 5.5252ms
+2024-10-28 21:35:25.375 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 4.1096ms
+2024-10-28 21:35:25.378 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:35:25.379 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:37:36.940 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:37:36.940 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:37:36.947 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:37:36.948 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:37:36.949 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 37.6757ms
+2024-10-28 21:37:36.949 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 36.8501ms
+2024-10-28 21:37:36.993 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:37:36.995 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:50:50.512 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:50:50.543 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:50:50.550 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 46.1569ms
+2024-10-28 21:50:50.570 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:51:01.784 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:51:01.785 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:51:01.791 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:01.797 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:01.797 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 14.2107ms
+2024-10-28 21:51:01.798 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 13.2681ms
+2024-10-28 21:51:01.814 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:51:01.817 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:51:43.324 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 21:51:43.327 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:51:43.340 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:43.341 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 15.1691ms
+2024-10-28 21:51:43.382 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:51:43.383 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:43.385 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 94.087ms
+2024-10-28 21:51:43.387 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 21:51:43.588 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:51:43.589 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:43.590 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 2.0359ms
+2024-10-28 21:51:43.592 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:51:51.469 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 21:51:51.472 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:51.474 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 5.029ms
+2024-10-28 21:51:51.480 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:51:51.477 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:51:51.486 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 21:51:51.488 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:51.490 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:51:51.492 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 11.6493ms
+2024-10-28 21:51:51.493 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 15.7716ms
+2024-10-28 21:51:51.495 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:51:51.499 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:53:27.906 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 21:53:27.909 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:53:27.910 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 5.0387ms
+2024-10-28 21:53:27.945 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 21:53:56.842 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/analizarConsulta - application/json 27
+2024-10-28 21:53:56.845 -06:00 [INF] CORS policy execution successful.
+2024-10-28 21:53:56.846 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/analizarConsulta - 404 0 null 5.5745ms
+2024-10-28 21:53:56.851 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/analizarConsulta, Response status code: 404
+2024-10-28 22:13:01.370 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:13:01.793 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:13:01.799 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:13:01.802 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:13:02.317 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:13:02.959 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 658.0107ms
+2024-10-28 22:13:03.035 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:13:03.057 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 21.6798ms
+2024-10-28 22:13:03.282 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:13:03.459 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 177.809ms
+2024-10-28 22:13:04.557 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:13:04.966 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 408.3919ms
+2024-10-28 22:18:38.838 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 22:18:38.838 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - application/json 13
+2024-10-28 22:18:39.015 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:18:39.015 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:18:39.038 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 219.2741ms
+2024-10-28 22:18:39.038 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/tunning/obtenerListaTablas - 404 0 null 219.2767ms
+2024-10-28 22:18:39.052 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 22:18:39.052 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5172/api/tunning/obtenerListaTablas, Response status code: 404
+2024-10-28 22:21:05.403 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 22:21:05.428 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:21:05.432 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 29.367ms
+2024-10-28 22:21:05.443 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 22:21:20.879 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 22:21:20.884 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 3.9191ms
+2024-10-28 22:21:20.887 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 22:21:20.889 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 22:21:20.891 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 1.7197ms
+2024-10-28 22:21:20.893 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 22:21:26.988 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 22:21:27.159 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 165.2783ms
+2024-10-28 22:21:27.201 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 22:21:35.896 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 22:21:35.901 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:21:35.902 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 5.7725ms
+2024-10-28 22:21:35.904 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 22:21:37.012 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 22:21:37.017 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:21:37.017 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 5.7449ms
+2024-10-28 22:21:37.021 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 22:28:34.673 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:28:35.109 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:28:35.111 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:28:35.112 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:28:35.718 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:28:36.183 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 477.4489ms
+2024-10-28 22:28:36.244 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:28:36.377 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 132.274ms
+2024-10-28 22:28:36.452 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:28:36.572 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 120.296ms
+2024-10-28 22:28:37.406 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:28:37.670 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 263.6841ms
+2024-10-28 22:29:11.937 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/api/seguridad/crearUsuario - application/json 95
+2024-10-28 22:29:11.950 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:29:11.955 -06:00 [INF] Executing endpoint 'ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:29:11.982 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller ApiSeguridad (backend).
+2024-10-28 22:29:11.995 -06:00 [INF] Executed action ApiSeguridad.CrearUsuario (backend) in 8.4635ms
+2024-10-28 22:29:11.998 -06:00 [INF] Executed endpoint 'ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:29:12.000 -06:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Logica.Seguridad' while attempting to activate 'ApiSeguridad'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method4(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-10-28 22:29:12.077 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/api/seguridad/crearUsuario - 500 null text/plain; charset=utf-8 140.3546ms
+2024-10-28 22:29:14.557 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/api/seguridad/crearUsuario - application/json 95
+2024-10-28 22:29:14.561 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:29:14.562 -06:00 [INF] Executing endpoint 'ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:29:14.563 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller ApiSeguridad (backend).
+2024-10-28 22:29:14.565 -06:00 [INF] Executed action ApiSeguridad.CrearUsuario (backend) in 0.6013ms
+2024-10-28 22:29:14.567 -06:00 [INF] Executed endpoint 'ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:29:14.568 -06:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Logica.Seguridad' while attempting to activate 'ApiSeguridad'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method4(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-10-28 22:29:14.573 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/api/seguridad/crearUsuario - 500 null text/plain; charset=utf-8 16.7783ms
+2024-10-28 22:37:46.837 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:37:46.960 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:37:46.961 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:37:46.962 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:37:48.955 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:37:49.718 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 773.9529ms
+2024-10-28 22:37:49.812 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:37:49.967 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 155.0657ms
+2024-10-28 22:37:50.097 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:37:50.321 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 224.2082ms
+2024-10-28 22:37:51.275 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:37:51.521 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 246.3817ms
+2024-10-28 22:38:21.728 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 84
+2024-10-28 22:38:21.742 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:38:21.748 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:38:21.783 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:38:21.797 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 5.9005ms
+2024-10-28 22:38:21.799 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:38:21.803 -06:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Logica.Seguridad' while attempting to activate 'backend.Controllers.ApiSeguridad'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method4(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-10-28 22:38:21.874 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 500 null text/plain; charset=utf-8 146.0165ms
+2024-10-28 22:38:23.804 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 84
+2024-10-28 22:38:23.808 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:38:23.809 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:38:23.812 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:38:23.813 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 0.4555ms
+2024-10-28 22:38:23.815 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:38:23.816 -06:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Logica.Seguridad' while attempting to activate 'backend.Controllers.ApiSeguridad'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method4(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-10-28 22:38:23.822 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 500 null text/plain; charset=utf-8 17.833ms
+2024-10-28 22:43:39.080 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 85
+2024-10-28 22:43:39.101 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:43:39.104 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:43:39.111 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:43:39.119 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 5.8754ms
+2024-10-28 22:43:39.122 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:43:39.128 -06:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'Logica.Seguridad' while attempting to activate 'backend.Controllers.ApiSeguridad'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method4(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2024-10-28 22:43:39.146 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 500 null text/plain; charset=utf-8 72.7421ms
+2024-10-28 22:45:00.408 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:45:00.675 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:45:00.677 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:45:00.680 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:45:00.916 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:45:01.211 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 301.0035ms
+2024-10-28 22:45:01.264 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:45:01.290 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 25.295ms
+2024-10-28 22:45:01.449 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:45:01.592 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 142.8142ms
+2024-10-28 22:45:02.501 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:45:02.906 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 404.6972ms
+2024-10-28 22:45:27.278 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 85
+2024-10-28 22:45:27.298 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:45:27.308 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:45:27.347 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:45:28.576 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:45:28.590 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 1232.8244ms
+2024-10-28 22:45:28.593 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:45:28.595 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 1317.9636ms
+2024-10-28 22:49:03.983 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:49:04.207 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:49:04.209 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:49:04.214 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:49:04.916 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:49:06.360 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 1463.5876ms
+2024-10-28 22:49:06.417 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:49:06.479 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 63.0056ms
+2024-10-28 22:49:06.538 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:49:06.613 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 74.8621ms
+2024-10-28 22:49:07.325 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:49:07.671 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 345.8033ms
+2024-10-28 22:49:19.538 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 86
+2024-10-28 22:49:19.550 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:49:19.555 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:49:19.584 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuarios) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:49:20.802 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:49:20.816 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 1224.5467ms
+2024-10-28 22:49:20.817 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:49:20.819 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 1281.16ms
+2024-10-28 22:52:38.742 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:52:38.885 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:52:38.889 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:52:38.891 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:52:39.700 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:52:40.143 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 454.4949ms
+2024-10-28 22:52:40.214 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:52:40.316 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 102.6078ms
+2024-10-28 22:52:40.432 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:52:40.781 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 349.1192ms
+2024-10-28 22:52:42.989 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:52:43.186 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 197.553ms
+2024-10-28 22:53:07.951 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 89
+2024-10-28 22:53:07.961 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:53:07.966 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:53:07.995 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:53:11.487 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:53:11.499 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 3495.2232ms
+2024-10-28 22:53:11.501 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:53:11.503 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 3551.9406ms
+2024-10-28 22:53:56.618 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 83
+2024-10-28 22:53:56.624 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:53:56.625 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:53:56.626 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:53:56.663 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:53:56.664 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 36.9613ms
+2024-10-28 22:53:56.666 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:53:56.667 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 49.5186ms
+2024-10-28 22:53:59.405 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 83
+2024-10-28 22:53:59.410 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:53:59.410 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:53:59.411 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:53:59.962 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:53:59.963 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 550.4589ms
+2024-10-28 22:53:59.963 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:53:59.965 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 559.8664ms
+2024-10-28 22:54:15.174 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 80
+2024-10-28 22:54:15.177 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:54:15.178 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:54:15.179 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:54:15.213 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:54:15.214 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 33.2021ms
+2024-10-28 22:54:15.215 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:54:15.216 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 41.7669ms
+2024-10-28 22:56:12.431 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:56:12.555 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:56:12.556 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:56:12.557 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:56:13.488 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:56:13.771 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 292.1661ms
+2024-10-28 22:56:13.805 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:56:13.814 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 9.2019ms
+2024-10-28 22:56:13.946 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:56:14.023 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 77.347ms
+2024-10-28 22:56:14.782 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:56:14.959 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 177.8577ms
+2024-10-28 22:56:23.244 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 86
+2024-10-28 22:56:23.258 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:56:23.264 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:56:23.306 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:56:24.555 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:56:24.565 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 1252.2767ms
+2024-10-28 22:56:24.566 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:56:24.567 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 1323.9953ms
+2024-10-28 22:56:52.264 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 87
+2024-10-28 22:56:52.271 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:56:52.273 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:56:52.275 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:56:52.323 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 22:56:52.324 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 47.5071ms
+2024-10-28 22:56:52.325 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:56:52.326 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 61.7427ms
+2024-10-28 22:58:11.621 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 143
+2024-10-28 22:58:11.624 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:58:11.625 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:58:11.625 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:58:11.646 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2024-10-28 22:58:11.670 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 43.8889ms
+2024-10-28 22:58:11.672 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:58:11.672 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/problem+json; charset=utf-8 73.9054ms
+2024-10-28 22:59:22.511 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 22:59:22.663 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 22:59:22.667 -06:00 [INF] Hosting environment: Development
+2024-10-28 22:59:22.668 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 22:59:23.386 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 22:59:24.779 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 1412.8683ms
+2024-10-28 22:59:24.840 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 22:59:24.875 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 35.9923ms
+2024-10-28 22:59:24.931 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 22:59:25.131 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 200.8668ms
+2024-10-28 22:59:26.088 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 22:59:26.570 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 482.4451ms
+2024-10-28 22:59:43.301 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 143
+2024-10-28 22:59:43.316 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:59:43.320 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:59:43.350 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:59:43.398 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2024-10-28 22:59:43.435 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 75.73ms
+2024-10-28 22:59:43.437 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:59:43.439 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/problem+json; charset=utf-8 137.4822ms
+2024-10-28 22:59:46.849 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 143
+2024-10-28 22:59:46.857 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:59:46.860 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:59:46.861 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 22:59:46.867 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2024-10-28 22:59:46.869 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 4.5415ms
+2024-10-28 22:59:46.870 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 22:59:46.871 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/problem+json; charset=utf-8 21.9175ms
+2024-10-28 22:59:47.967 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 22:59:47.969 -06:00 [INF] CORS policy execution successful.
+2024-10-28 22:59:47.970 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 3.4387ms
+2024-10-28 22:59:47.974 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:00:51.636 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 103
+2024-10-28 23:00:51.642 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:00:51.644 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:00:51.646 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:00:51.660 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2024-10-28 23:00:51.662 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 14.768ms
+2024-10-28 23:00:51.663 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:00:51.664 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/problem+json; charset=utf-8 28.6609ms
+2024-10-28 23:00:53.989 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 103
+2024-10-28 23:00:53.993 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:00:53.993 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:00:53.995 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:00:53.997 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2024-10-28 23:00:53.998 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 1.3594ms
+2024-10-28 23:00:53.998 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:00:53.999 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/problem+json; charset=utf-8 10.13ms
+2024-10-28 23:02:53.400 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:02:53.411 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 10.9147ms
+2024-10-28 23:02:53.418 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:02:54.231 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:02:54.237 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 5.6445ms
+2024-10-28 23:02:54.239 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:02:54.914 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:02:54.916 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 1.5172ms
+2024-10-28 23:02:54.919 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:02:55.691 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:02:55.695 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 3.6983ms
+2024-10-28 23:02:55.697 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:04:59.907 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 23:05:00.213 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 23:05:00.215 -06:00 [INF] Hosting environment: Development
+2024-10-28 23:05:00.217 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 23:05:00.430 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 23:05:00.767 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 352.9982ms
+2024-10-28 23:05:00.978 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 23:05:01.017 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 39.5477ms
+2024-10-28 23:05:01.044 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 23:05:01.238 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 193.5667ms
+2024-10-28 23:05:01.968 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 23:05:02.135 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 167.4481ms
+2024-10-28 23:05:56.052 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 82
+2024-10-28 23:05:56.071 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:05:56.078 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:05:56.116 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:05:57.230 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 23:05:57.241 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 1119.4366ms
+2024-10-28 23:05:57.242 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:05:57.242 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 400 null application/json; charset=utf-8 1190.6685ms
+2024-10-28 23:06:08.779 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - application/json 82
+2024-10-28 23:06:08.784 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:06:08.785 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:06:08.786 -06:00 [INF] Route matched with {action = "CrearUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CrearUsuario(Request.ReqCrearUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:06:11.242 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResCrearUsuario'.
+2024-10-28 23:06:11.244 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.CrearUsuario (backend) in 2454.8622ms
+2024-10-28 23:06:11.244 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.CrearUsuario (backend)'
+2024-10-28 23:06:11.245 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5172/api/ApiSeguridad/crearUsuario - 200 null application/json; charset=utf-8 2466.6707ms
+2024-10-28 23:07:04.752 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 35
+2024-10-28 23:07:04.759 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:07:04.760 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:07:04.764 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:07:04.842 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:07:04.845 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 80.5188ms
+2024-10-28 23:07:04.847 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:07:04.848 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 95.7893ms
+2024-10-28 23:07:11.437 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 35
+2024-10-28 23:07:11.457 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:07:11.462 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:07:11.464 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:07:11.491 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:07:11.493 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 25.8211ms
+2024-10-28 23:07:11.494 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:07:11.495 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 57.3081ms
+2024-10-28 23:09:55.778 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 23:09:55.893 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 23:09:55.895 -06:00 [INF] Hosting environment: Development
+2024-10-28 23:09:55.897 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 23:09:57.366 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 23:09:57.630 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 272.0178ms
+2024-10-28 23:09:57.694 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 23:09:57.714 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 20.207ms
+2024-10-28 23:09:57.788 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 23:09:57.862 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 74.3539ms
+2024-10-28 23:09:58.621 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 23:09:58.766 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 144.6984ms
+2024-10-28 23:10:44.244 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 33
+2024-10-28 23:10:44.297 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:10:44.306 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:10:44.338 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:10:45.407 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:10:45.415 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 1070.6188ms
+2024-10-28 23:10:45.415 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:10:45.416 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 1172.3507ms
+2024-10-28 23:13:14.173 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 23:13:14.264 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 23:13:14.265 -06:00 [INF] Hosting environment: Development
+2024-10-28 23:13:14.266 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 23:13:15.347 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 23:13:15.770 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 428.1543ms
+2024-10-28 23:13:15.821 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 23:13:15.928 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 107.5947ms
+2024-10-28 23:13:15.976 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 23:13:16.054 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 77.9022ms
+2024-10-28 23:13:16.785 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 23:13:17.100 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 315.6687ms
+2024-10-28 23:13:41.588 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 33
+2024-10-28 23:13:41.640 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:13:41.645 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:13:41.678 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:13:44.043 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:13:44.055 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 2369.7265ms
+2024-10-28 23:13:44.058 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:13:44.059 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 2470.7103ms
+2024-10-28 23:13:55.932 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 33
+2024-10-28 23:13:55.937 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:13:55.939 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:13:55.940 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:13:56.173 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:13:56.175 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 233.7818ms
+2024-10-28 23:13:56.176 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:13:56.177 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 245.0697ms
+2024-10-28 23:14:11.292 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 33
+2024-10-28 23:14:11.296 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:14:11.297 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:14:11.298 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:14:11.376 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:14:11.378 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 78.8295ms
+2024-10-28 23:14:11.379 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:14:11.379 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 87.0553ms
+2024-10-28 23:18:05.848 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 23:18:06.284 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 23:18:06.285 -06:00 [INF] Hosting environment: Development
+2024-10-28 23:18:06.286 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 23:18:06.967 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 23:18:07.227 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 267.9984ms
+2024-10-28 23:18:07.501 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 23:18:07.511 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 10.664ms
+2024-10-28 23:18:07.541 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 23:18:07.589 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 48.5671ms
+2024-10-28 23:18:08.599 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 23:18:08.763 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 163.3921ms
+2024-10-28 23:18:41.433 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:41.443 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:41.447 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 46.6614ms
+2024-10-28 23:18:41.451 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:42.189 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:42.192 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:42.193 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 4.0165ms
+2024-10-28 23:18:42.197 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:45.883 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:45.888 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:45.889 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 5.9714ms
+2024-10-28 23:18:45.893 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:46.549 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:18:46.562 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 12.3841ms
+2024-10-28 23:18:46.609 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:18:46.875 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:46.877 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:46.878 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.7619ms
+2024-10-28 23:18:46.882 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:46.931 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:18:46.935 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 3.7965ms
+2024-10-28 23:18:46.939 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:18:50.980 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:50.982 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:50.982 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.1945ms
+2024-10-28 23:18:50.984 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:51.545 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:51.546 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:51.547 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 1.8074ms
+2024-10-28 23:18:51.549 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:54.181 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:54.183 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:54.183 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.6496ms
+2024-10-28 23:18:54.185 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:56.056 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:56.062 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:56.064 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 8.1887ms
+2024-10-28 23:18:56.066 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:18:56.422 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:18:56.424 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:18:56.424 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.402ms
+2024-10-28 23:18:56.426 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:19:48.519 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 58
+2024-10-28 23:19:48.526 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:19:48.528 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:19:48.570 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:19:49.779 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:19:49.787 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 1211.5454ms
+2024-10-28 23:19:49.788 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:19:49.788 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 1269.4703ms
+2024-10-28 23:20:20.091 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 57
+2024-10-28 23:20:20.099 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:20:20.101 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:20:20.102 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:20:20.144 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:20:20.147 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 42.4737ms
+2024-10-28 23:20:20.148 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:20:20.149 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 59.117ms
+2024-10-28 23:20:35.914 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 59
+2024-10-28 23:20:35.920 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:20:35.921 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:20:35.922 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:20:36.746 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:20:36.747 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 822.8313ms
+2024-10-28 23:20:36.748 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:20:36.749 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 835.2627ms
+2024-10-28 23:21:09.301 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 58
+2024-10-28 23:21:09.305 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:21:09.306 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:21:09.306 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:21:09.348 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:21:09.349 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 40.3428ms
+2024-10-28 23:21:09.349 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:21:09.350 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 52.5247ms
+2024-10-28 23:21:15.526 -06:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - application/json 58
+2024-10-28 23:21:15.530 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:21:15.532 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:21:15.532 -06:00 [INF] Route matched with {action = "EliminarUsuario", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult EliminarUsuario(Request.ReqEliminarUsuario) on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-28 23:21:15.577 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResEliminarUsuario'.
+2024-10-28 23:21:15.578 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.EliminarUsuario (backend) in 44.5067ms
+2024-10-28 23:21:15.579 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.EliminarUsuario (backend)'
+2024-10-28 23:21:15.580 -06:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5172/api/ApiSeguridad/eliminarUsuario - 400 null application/json; charset=utf-8 54.2577ms
+2024-10-28 23:23:12.825 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:23:12.830 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:23:12.832 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 8.5329ms
+2024-10-28 23:23:12.834 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:23:12.978 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:23:12.979 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:23:12.980 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.1236ms
+2024-10-28 23:23:12.989 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:33:10.063 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:33:10.084 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 23.7491ms
+2024-10-28 23:33:10.091 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:33:10.803 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:33:10.807 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 3.3688ms
+2024-10-28 23:33:10.810 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:33:21.268 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:33:21.272 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 4.5848ms
+2024-10-28 23:33:21.275 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:33:22.089 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:33:22.093 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 4.2974ms
+2024-10-28 23:33:22.095 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:33:53.740 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:33:53.743 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 3.3629ms
+2024-10-28 23:33:53.748 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:33:54.589 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:33:54.594 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 5.166ms
+2024-10-28 23:33:54.595 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:48:38.549 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-28 23:48:38.659 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-28 23:48:38.662 -06:00 [INF] Hosting environment: Development
+2024-10-28 23:48:38.663 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-28 23:48:39.909 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-28 23:48:40.395 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 499.3328ms
+2024-10-28 23:48:40.519 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-28 23:48:40.610 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 93.647ms
+2024-10-28 23:48:40.701 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-28 23:48:40.918 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 217.7515ms
+2024-10-28 23:48:41.723 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-28 23:48:42.106 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 383.8974ms
+2024-10-28 23:49:45.940 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:49:45.952 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:49:45.959 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 19.1089ms
+2024-10-28 23:49:45.963 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-28 23:51:14.325 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:51:14.330 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 4.7815ms
+2024-10-28 23:51:14.364 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:51:15.139 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:51:15.146 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 7.0241ms
+2024-10-28 23:51:15.147 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:51:15.808 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:51:15.811 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 2.4079ms
+2024-10-28 23:51:15.814 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:51:16.580 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-28 23:51:16.583 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 2.6839ms
+2024-10-28 23:51:16.585 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-28 23:52:25.478 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-28 23:52:25.484 -06:00 [INF] CORS policy execution successful.
+2024-10-28 23:52:25.486 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 10.0664ms
+2024-10-28 23:52:25.499 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404

@@ -53,6 +53,13 @@ builder.Services.AddScoped<TableSpace>(provider =>
     var connectionString = configuration.GetConnectionString("OracleConnection");
     return new TableSpace(connectionString);
 });
+// Registrar el servicio de Seguridad
+builder.Services.AddScoped<Seguridad>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    return new Seguridad(connectionString);
+});
 
 // Configuración de Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

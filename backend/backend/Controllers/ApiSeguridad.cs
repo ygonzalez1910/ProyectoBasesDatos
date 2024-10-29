@@ -1,91 +1,80 @@
-using Microsoft.AspNetCore.Mvc;
 using Logica;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Request;
 using Response;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ApiSeguridad : ControllerBase
+namespace backend.Controllers
 {
-    private readonly Seguridad _seguridad;
-
-    public ApiSeguridad(Seguridad seguridad)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ApiSeguridad : ControllerBase
     {
-        _seguridad = seguridad;
-    }
+        private readonly Seguridad _seguridad;
 
-    [HttpPost]
-    [Route("api/seguridad/crearUsuario")]
-    public IActionResult CrearUsuario([FromBody] ReqCrearUsuarios req)
-    {
-        var res = _seguridad.CrearUsuario(req);
-        if (res.resultado)
+        public ApiSeguridad(Seguridad seguridad)
         {
-            return Ok(res);
+            _seguridad = seguridad;
         }
-        else
-        {
-            return BadRequest(res);
-        }
-    }
 
-    [HttpDelete]
-    [Route("api/seguridad/eliminarUsuario")]
-    public IActionResult EliminarUsuario([FromBody] ReqEliminarUsuario req)
-    {
-        var res = _seguridad.EliminarUsuario(req);
-        if (res.resultado)
+        [HttpPost("crearUsuario")]
+        public IActionResult CrearUsuario([FromBody] ReqCrearUsuario req)
         {
-            return Ok(res);
-        }
-        else
-        {
-            return BadRequest(res);
-        }
-    }
+            if (req == null)
+            {
+                return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
+            }
 
-    [HttpPut]
-    [Route("api/seguridad/cambiarPassword")]
-    public IActionResult CambiarPassword([FromBody] ReqCambiarPassword req)
-    {
-        var res = _seguridad.CambiarPassword(req);
-        if (res.resultado)
-        {
-            return Ok(res);
+            var res = _seguridad.CrearUsuario(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
         }
-        else
-        {
-            return BadRequest(res);
-        }
-    }
 
-    [HttpPost]
-    [Route("api/seguridad/crearRol")]
-    public IActionResult CrearRol([FromBody] ReqCrearRol req)
-    {
-        var res = _seguridad.CrearRol(req);
-        if (res.resultado)
+        [HttpDelete("eliminarUsuario")]
+        public IActionResult EliminarUsuario([FromBody] ReqEliminarUsuario req)
         {
-            return Ok(res);
-        }
-        else
-        {
-            return BadRequest(res);
-        }
-    }
+            if (req == null || string.IsNullOrWhiteSpace(req.nombreUsuario))
+            {
+                return BadRequest("El cuerpo de la solicitud no puede ser nulo y el nombre de usuario es obligatorio.");
+            }
 
-    [HttpGet]
-    [Route("api/seguridad/listarPrivilegios")]
-    public IActionResult ListarPrivilegios([FromQuery] ReqListarPrivilegios req)
-    {
-        var res = _seguridad.ListarPrivilegios(req);
-        if (res.resultado)
-        {
-            return Ok(res);
+            var res = _seguridad.EliminarUsuario(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
         }
-        else
+
+
+        [HttpPut("cambiarPassword")]
+        public IActionResult CambiarPassword([FromBody] ReqCambiarPassword req)
         {
-            return BadRequest(res);
+            var res = _seguridad.CambiarPassword(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
+        }
+
+        [HttpPost("crearRol")]
+        public IActionResult CrearRol([FromBody] ReqCrearRol req)
+        {
+            var res = _seguridad.CrearRol(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
+        }
+
+        [HttpGet("listarPrivilegios")]
+        public IActionResult ListarPrivilegios([FromQuery] ReqListarPrivilegios req)
+        {
+            var res = _seguridad.ListarPrivilegios(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
+        }
+        [HttpGet]
+        [Route("listarRoles")]
+        public IActionResult ListarRoles()
+        {
+            ResListarRoles res = _seguridad.ListarRoles();
+            if (res.resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
         }
     }
 }

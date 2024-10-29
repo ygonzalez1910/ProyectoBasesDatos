@@ -1,0 +1,92 @@
+2024-10-29 00:01:17.113 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:01:17.268 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:01:17.278 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 176.8832ms
+2024-10-29 00:01:17.284 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:07:26.567 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:07:26.581 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:07:26.584 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 19.7514ms
+2024-10-29 00:07:26.591 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:08:41.279 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:08:41.284 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:08:41.285 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 6.3278ms
+2024-10-29 00:08:41.293 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:09:14.629 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:09:14.633 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-29 00:09:14.636 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:14.640 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 6.5571ms
+2024-10-29 00:09:14.641 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 12.7957ms
+2024-10-29 00:09:14.652 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-29 00:09:14.661 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:09:14.831 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - null null
+2024-10-29 00:09:14.833 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/tunning/obtenerListaTablas/ - 404 0 null 2.1596ms
+2024-10-29 00:09:14.835 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/api/tunning/obtenerListaTablas/, Response status code: 404
+2024-10-29 00:09:22.104 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:09:22.108 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:22.109 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 5.4998ms
+2024-10-29 00:09:22.112 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:09:33.991 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-29 00:09:34.013 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:34.019 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-29 00:09:34.102 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-29 00:09:34.325 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:09:34.326 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:34.327 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 2.2359ms
+2024-10-29 00:09:34.329 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:09:35.358 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-29 00:09:35.391 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - null null
+2024-10-29 00:09:35.394 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 1284.6192ms
+2024-10-29 00:09:35.394 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:35.394 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-29 00:09:35.395 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-29 00:09:35.396 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 1405.1523ms
+2024-10-29 00:09:35.399 -06:00 [INF] Route matched with {action = "GetTableSpaces", controller = "ApiTableSpace"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTableSpaces] GetTableSpaces() on controller backend.Controllers.ApiTableSpace (backend).
+2024-10-29 00:09:35.453 -06:00 [INF] Executing BadRequestObjectResult, writing value of type 'Response.ResGetTableSpaces'.
+2024-10-29 00:09:35.455 -06:00 [INF] Executed action backend.Controllers.ApiTableSpace.GetTableSpaces (backend) in 47.0576ms
+2024-10-29 00:09:35.456 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiTableSpace.GetTableSpaces (backend)'
+2024-10-29 00:09:35.456 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiTablespace/get-tablespaces - 400 null application/json; charset=utf-8 65.6032ms
+2024-10-29 00:09:36.943 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - null null
+2024-10-29 00:09:36.947 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:36.947 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/~@/fonts/NotoSans.woff - 404 0 null 4.4688ms
+2024-10-29 00:09:36.949 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5172/~@/fonts/NotoSans.woff, Response status code: 404
+2024-10-29 00:09:39.219 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-29 00:09:39.224 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:39.224 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-29 00:09:39.228 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 00:09:39.675 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-29 00:09:39.677 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 446.2255ms
+2024-10-29 00:09:39.678 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - null null
+2024-10-29 00:09:39.678 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-29 00:09:39.681 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 461.3234ms
+2024-10-29 00:09:39.681 -06:00 [INF] CORS policy execution successful.
+2024-10-29 00:09:39.683 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-29 00:09:39.684 -06:00 [INF] Route matched with {action = "GetTables", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetTables] GetTables() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 00:09:39.713 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetTables'.
+2024-10-29 00:09:39.715 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetTables (backend) in 29.7982ms
+2024-10-29 00:09:39.717 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetTables (backend)'
+2024-10-29 00:09:39.719 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-tables - 200 null application/json; charset=utf-8 40.5157ms
+2024-10-29 00:11:09.198 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - null null
+2024-10-29 00:11:09.203 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 00:11:09.206 -06:00 [INF] Route matched with {action = "GetSchemas", controller = "ApiSchema"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult`1[Response.ResGetSchemas] GetSchemas() on controller backend.Controllers.ApiSchema (backend).
+2024-10-29 00:11:09.219 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResGetSchemas'.
+2024-10-29 00:11:09.222 -06:00 [INF] Executed action backend.Controllers.ApiSchema.GetSchemas (backend) in 13.0177ms
+2024-10-29 00:11:09.223 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSchema.GetSchemas (backend)'
+2024-10-29 00:11:09.224 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSchema/get-schemas - 200 null application/json; charset=utf-8 27.0276ms
+2024-10-29 00:17:48.603 -06:00 [INF] Now listening on: http://localhost:5172
+2024-10-29 00:17:48.723 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-29 00:17:48.725 -06:00 [INF] Hosting environment: Development
+2024-10-29 00:17:48.726 -06:00 [INF] Content root path: C:\xampp\htdocs\ProyectoBasesDatos\backend\backend
+2024-10-29 00:17:49.350 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/index.html - null null
+2024-10-29 00:17:49.975 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/index.html - 200 null text/html;charset=utf-8 634.676ms
+2024-10-29 00:17:50.054 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-29 00:17:50.185 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_framework/aspnetcore-browser-refresh.js - 200 13750 application/javascript; charset=utf-8 131.8818ms
+2024-10-29 00:17:50.251 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/_vs/browserLink - null null
+2024-10-29 00:17:50.336 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/_vs/browserLink - 200 null text/javascript; charset=UTF-8 85.6022ms
+2024-10-29 00:17:51.207 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - null null
+2024-10-29 00:17:51.373 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 165.913ms
+2024-10-29 00:18:03.204 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5172/api/ApiSeguridad/api/seguridad/listarRoles - null null
+2024-10-29 00:18:03.214 -06:00 [INF] Executing endpoint 'backend.Controllers.ApiSeguridad.ListarRoles (backend)'
+2024-10-29 00:18:03.238 -06:00 [INF] Route matched with {action = "ListarRoles", controller = "ApiSeguridad"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult ListarRoles() on controller backend.Controllers.ApiSeguridad (backend).
+2024-10-29 00:18:04.582 -06:00 [INF] Executing OkObjectResult, writing value of type 'Response.ResListarRoles'.
+2024-10-29 00:18:04.600 -06:00 [INF] Executed action backend.Controllers.ApiSeguridad.ListarRoles (backend) in 1353.7641ms
+2024-10-29 00:18:04.601 -06:00 [INF] Executed endpoint 'backend.Controllers.ApiSeguridad.ListarRoles (backend)'
+2024-10-29 00:18:04.602 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5172/api/ApiSeguridad/api/seguridad/listarRoles - 200 null application/json; charset=utf-8 1397.956ms

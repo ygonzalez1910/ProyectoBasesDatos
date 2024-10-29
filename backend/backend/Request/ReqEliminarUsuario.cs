@@ -9,7 +9,7 @@ namespace Request
     public class ReqEliminarUsuario
     {
         public string nombreUsuario { get; set; }
+        public bool includeCascade { get; set; }
     }
-
 
 }
