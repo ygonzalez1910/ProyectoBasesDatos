@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Request
 {
-    public class ReqEliminarUsuario
+    public class ReqTablasPorSchema
     {
-        public string nombreUsuario { get; set; }
-        public bool includeCascade { get; set; }
+        public string Schema { get; set; }
     }
-
 }

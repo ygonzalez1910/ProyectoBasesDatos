@@ -26,9 +26,8 @@ export const tunningService = {
 
   obtenerEstadisticasTabla: async (schema, tabla) => {
     try {
-      const response = await axiosInstance.post(
-        "/api/tunning/obtenerEstadisticasTabla",
-        { schema, tabla } // Ahora pasamos los datos en el cuerpo de la solicitud
+      const response = await axiosInstance.get(
+        `/api/tunning/obtenerEstadisticasTabla/${schema}/${tabla}`
       );
       return response;
     } catch (error) {
@@ -36,16 +35,23 @@ export const tunningService = {
       throw error;
     }
   },
-
   obtenerListaTablas: async (schema) => {
     try {
-      const response = await axiosInstance.post(
-        "/api/tunning/obtenerListaTablas",
-        { schema } // Ahora pasamos el schema en el cuerpo de la solicitud
-      );
-      return response;
+      const response = await axiosInstance.get(`/api/tunning/obtenerListaTablas/${schema}`);
+      return response.data.Tables;
     } catch (error) {
       console.error("Error al obtener lista de tablas:", error);
+      throw error;
+    }
+  },
+  obtenerTablasPorSchema: async (schema) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.TUNING.TABLAS_POR_SCHEMA}/${schema}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener tablas por schema:", error);
       throw error;
     }
   }
@@ -86,7 +92,7 @@ export const SchemasService = {
       throw error;
     }
   },
-  
+
 };
 
 // Servicio para Respaldos
@@ -215,14 +221,14 @@ export const TableSpaceService = {
   },
   updateSizeTableSpace: async (data) => {
     try {
-        const response = await axiosInstance.put(
-            API_ENDPOINTS.TABLESPACE.MODIFY_SIZE, // Usar el endpoint específico
-            data
-        );
-        return response.data;
+      const response = await axiosInstance.put(
+        API_ENDPOINTS.TABLESPACE.MODIFY_SIZE, // Usar el endpoint específico
+        data
+      );
+      return response.data;
     } catch (error) {
-        console.error(`Error al actualizar el tamaño del tablespace:`, error);
-        throw error;
+      console.error(`Error al actualizar el tamaño del tablespace:`, error);
+      throw error;
     }
   },
   deleteTableSpace: async (nombreTableSpace) => {
@@ -236,5 +242,5 @@ export const TableSpaceService = {
       throw error;
     }
   },
-  
+
 };

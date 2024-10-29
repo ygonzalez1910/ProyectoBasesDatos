@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Request
 {
-    public class ReqCrearUsuarios
+    public class ReqCrearUsuario
     {
         public string nombreUsuario { get; set; }
         public string password { get; set; }
