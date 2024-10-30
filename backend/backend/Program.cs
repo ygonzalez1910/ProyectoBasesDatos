@@ -53,19 +53,19 @@ builder.Services.AddScoped<TableSpace>(provider =>
     var connectionString = configuration.GetConnectionString("OracleConnection");
     return new TableSpace(connectionString);
 });
-// Registrar el servicio de Seguridad
-builder.Services.AddScoped<Seguridad>(provider =>
-{
-    var configuration = provider.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("OracleConnection");
-    return new Seguridad(connectionString);
-});
 
 builder.Services.AddScoped<Tuning>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetConnectionString("OracleConnection");
     return new Tuning(connectionString);
+});
+
+builder.Services.AddScoped<Seguridad>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    return new Seguridad(connectionString);
 });
 
 builder.Services.AddScoped<Auditoria>(provider =>

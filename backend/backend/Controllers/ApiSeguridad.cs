@@ -1,6 +1,6 @@
-using Logica;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Logica;
 using Request;
 using Response;
 
@@ -10,81 +10,118 @@ namespace backend.Controllers
     [ApiController]
     public class ApiSeguridad : ControllerBase
     {
-        private readonly Seguridad _seguridad;
+        private readonly Seguridad _seguridadService;
 
-        public ApiSeguridad(Seguridad seguridad)
+        public ApiSeguridad(Seguridad seguridadService)
         {
-            _seguridad = seguridad;
+            _seguridadService = seguridadService;
         }
 
-        [HttpPost("crearUsuario")]
-        public IActionResult CrearUsuario([FromBody] ReqCrearUsuario req)
+        [HttpPost("crear-usuario")]
+        public ActionResult<ResCrearUsuario> CrearUsuario([FromBody] ReqCrearUsuario request)
         {
-            if (req == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
+                return BadRequest(ModelState);
             }
 
-            var res = _seguridad.CrearUsuario(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
+            var result = _seguridadService.CrearUsuario(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpDelete("eliminarUsuario")]
-        public IActionResult EliminarUsuario([FromBody] ReqEliminarUsuario req)
+        [HttpPut("modificar-usuario")]
+        public ActionResult<ResModificarUsuario> ModificarUsuario([FromBody] ReqModificarUsuario request)
         {
-            if (req == null || string.IsNullOrWhiteSpace(req.nombreUsuario))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("El cuerpo de la solicitud no puede ser nulo y el nombre de usuario es obligatorio.");
+                return BadRequest(ModelState);
             }
 
-            var res = _seguridad.EliminarUsuario(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
+            var result = _seguridadService.ModificarUsuario(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpPost]
-        [Route("crearRol")]
-        public IActionResult CrearRol([FromBody] ReqCrearRol req)
+        [HttpDelete("eliminar-usuario")]
+        public ActionResult<ResEliminarUsuario> EliminarUsuario([FromBody] ReqEliminarUsuario request)
         {
-            if (req == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
+                return BadRequest(ModelState);
             }
 
-            var res = _seguridad.CrearRol(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
+            var result = _seguridadService.EliminarUsuario(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpPut]
-        [Route("modificarUsuario")]
-        public IActionResult ModificarUsuario([FromBody] ReqModificarUsuario req)
+        [HttpPost("cambiar-password")]
+        public ActionResult<ResCambiarPassword> CambiarPassword([FromBody] ReqCambiarPassword request)
         {
-            if (req == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
+                return BadRequest(ModelState);
             }
 
-            var res = _seguridad.ModificarUsuario(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
+            var result = _seguridadService.CambiarPassword(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpGet("listarPrivilegios")]
-        public IActionResult ListarPrivilegios([FromQuery] ReqListarPrivilegios req)
+        [HttpPost("crear-rol")]
+        public ActionResult<ResCrearRol> CrearRol([FromBody] ReqCrearRol request)
         {
-            if (req == null || string.IsNullOrWhiteSpace(req.nombreUsuario))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("El nombre de usuario es obligatorio.");
+                return BadRequest(ModelState);
             }
 
-            var res = _seguridad.ListarPrivilegios(req);
-            return res.resultado ? Ok(res) : BadRequest(res);
+            var result = _seguridadService.CrearRol(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpGet]
-        [Route("listarRoles")]
-        public IActionResult ListarRoles()
+        [HttpGet("listar-privilegios")]
+        public ActionResult<ResListarPrivilegios> ListarPrivilegios([FromQuery] ReqListarPrivilegios request)
         {
-            var res = _seguridad.ListarRoles();
-            return res.resultado ? Ok(res) : BadRequest(res);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _seguridadService.ListarPrivilegios(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("listar-roles")]
+        public ActionResult<ResListarRoles> ListarRoles()
+        {
+            var result = _seguridadService.ListarRoles();
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }
