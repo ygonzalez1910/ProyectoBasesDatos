@@ -1,78 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.IO;
 using Oracle.ManagedDataAccess.Client;
 using Request;
-using Response;
 using Models;
+using Response;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Logica
 {
-    public class Seguridad
+    public class Respaldo
+
+
     {
         private readonly string _connectionString;
+        private readonly ILogger<Respaldo> _logger;
 
-        public Seguridad(string connectionString)
+        public Respaldo(string connectionString, ILogger<Respaldo> logger)
         {
             _connectionString = connectionString;
+            _logger = logger;
         }
 
-        public ResCrearUsuario CrearUsuario(ReqCrearUsuario req)
+        public ResCrearDirectorio CrearDirectorio(ReqCrearDirectorio req)
         {
-            ResCrearUsuario res = new ResCrearUsuario();
-            res.errores = new List<string>();
-
-            try
-            {
-                using (OracleConnection conexion = new OracleConnection(_connectionString))
-                {
-                    // Añadir prefijo si no existe
-                    string usuario = req.nombreUsuario.StartsWith("C##") ? req.nombreUsuario : "C##" + req.nombreUsuario;
-
-                    conexion.Open();
-
-                    // Crear el usuario
-                    string createUserSql = $"CREATE USER {req.nombreUsuario} IDENTIFIED BY {req.password}";
-                    using (OracleCommand cmd = new OracleCommand(createUserSql, conexion))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Asignar privilegios básicos
-                    string grantPrivilegesSql = $"GRANT CREATE SESSION TO {req.nombreUsuario}";
-                    using (OracleCommand cmd = new OracleCommand(grantPrivilegesSql, conexion))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Asignar roles si se especificaron
-                    if (req.roles != null && req.roles.Count > 0)
-                    {
-                        foreach (string rol in req.roles)
-                        {
-                            string grantRoleSql = $"GRANT {rol} TO {req.nombreUsuario}";
-                            using (OracleCommand cmd = new OracleCommand(grantRoleSql, conexion))
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                    }
-
-                    res.resultado = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                res.errores.Add($"Error al crear usuario: {ex.Message}");
-                res.resultado = false;
-            }
-
-            return res;
-        }
-
-        public ResEliminarUsuario EliminarUsuario(ReqEliminarUsuario req)
-        {
-            ResEliminarUsuario res = new ResEliminarUsuario();
+            ResCrearDirectorio res = new ResCrearDirectorio();
             res.errores = new List<string>();
 
             try
@@ -81,11 +35,16 @@ namespace Logica
                 {
                     conexion.Open();
 
-                    string dropUserSql = req.includeCascade ?
-                        $"DROP USER {req.nombreUsuario} CASCADE" :
-                        $"DROP USER {req.nombreUsuario}";
+                    // Crear directorio
+                    string sqlCrearDirectorio = $"CREATE OR REPLACE DIRECTORY {req.nombreDirectorio} AS '{req.directorio}'";
+                    using (OracleCommand cmd = new OracleCommand(sqlCrearDirectorio, conexion))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
 
-                    using (OracleCommand cmd = new OracleCommand(dropUserSql, conexion))
+                    // Otorgar permisos
+                    string sqlOtorgarPermisos = $"GRANT READ, WRITE ON DIRECTORY {req.nombreDirectorio} TO {req.nombreSchema}";
+                    using (OracleCommand cmd = new OracleCommand(sqlOtorgarPermisos, conexion))
                     {
                         cmd.ExecuteNonQuery();
                     }
@@ -95,156 +54,350 @@ namespace Logica
             }
             catch (Exception ex)
             {
-                res.errores.Add($"Error al eliminar usuario: {ex.Message}");
+                res.errores.Add($"Error al crear directorio: {ex.Message}");
                 res.resultado = false;
             }
 
             return res;
         }
 
-
-        public ResCambiarPassword CambiarPassword(ReqCambiarPassword req)
+        // Verificar si el directorio ya existe
+        private bool DirectorioExiste(string nombreDirectorio)
         {
-            ResCambiarPassword res = new ResCambiarPassword();
-            res.errores = new List<string>();
-
-            try
+            using (OracleConnection conexion = new OracleConnection(_connectionString))
             {
-                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                conexion.Open();
+                string sql = $"SELECT COUNT(*) FROM all_directories WHERE directory_name = '{nombreDirectorio.ToUpper()}'";
+                using (OracleCommand cmd = new OracleCommand(sql, conexion))
                 {
-                    conexion.Open();
-                    string sql = "ALTER USER :usuario IDENTIFIED BY :password";
-                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
-                    {
-                        cmd.Parameters.Add(new OracleParameter("usuario", req.nombreUsuario));
-                        cmd.Parameters.Add(new OracleParameter("password", req.nuevoPassword));
-                        cmd.ExecuteNonQuery();
-                    }
-                    res.resultado = true;
+                    return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
                 }
             }
-            catch (Exception ex)
-            {
-                res.errores.Add($"Error al cambiar contraseña: {ex.Message}");
-                res.resultado = false;
-            }
-
-            return res;
         }
 
-        public ResCrearRol CrearRol(ReqCrearRol req)
+        private bool SaveInfoDirectorio(string nombre, string nombreDirectorio, string tipo, string nombreSchema, string nombreTable)
         {
-            ResCrearRol res = new ResCrearRol();
+            using (OracleConnection conexion = new OracleConnection(_connectionString))
+            {
+                _logger.LogInformation("-----------------Ejecutando el saveInfoDirectorio");
+                conexion.Open();
+                string sql = $"INSERT INTO ADMINDB.BACKUPS (nombre_backup, directorio, tipo_backup, name_schema, name_table) VALUES ('{nombre}', '{nombreDirectorio}', '{tipo}', '{nombreSchema}', '{nombreTable}')";
+                using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                {
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+
+        public ResRespaldoSchema RespaldarSchema(ReqRespaldoSchema req)
+        {
+            ResRespaldoSchema res = new ResRespaldoSchema();
             res.errores = new List<string>();
 
             try
             {
-                using (OracleConnection conexion = new OracleConnection(_connectionString))
-                {
-                    conexion.Open();
-                    string sql = "";
+                _logger.LogInformation("Iniciando respaldo para el esquema: {NombreEsquema}", req.nombreSchema);
 
-                    if (req.esRolExterno)
-                        sql = "CREATE ROLE :rol IDENTIFIED EXTERNALLY";
-                    else if (!string.IsNullOrEmpty(req.package))
-                        sql = "CREATE ROLE :rol IDENTIFIED USING :schema.:package";
-                    else if (!string.IsNullOrEmpty(req.password))
-                        sql = "CREATE ROLE :rol IDENTIFIED BY :password";
+                // Verificar si el directorio base es uno de los permitidos
+                string nombreDirectorio = null;
+                if (req.directorio == @"C:\ORACLE_FILES\HD1")
+                    nombreDirectorio = "HD1";
+                else if (req.directorio == @"C:\ORACLE_FILES\HD2")
+                    nombreDirectorio = "HD2";
+                else if (req.directorio == @"C:\ORACLE_FILES\HD3")
+                    nombreDirectorio = "HD3";
+
+                if (nombreDirectorio == null)
+                {
+                    res.errores.Add("Directorio no permitido. Solo se permiten HD1, HD2, o HD3.");
+                    return res;
+                }
+
+                // Generar el nombre de respaldo específico
+                string nombreRespaldo = $"{req.nombreSchema}_BACKUP";
+
+                // Verificar si el directorio ya existe
+                if (!DirectorioExiste(nombreDirectorio))
+                {
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", nombreDirectorio);
+                    // Crear directorio
+                    var crearDirectorioRes = CrearDirectorio(new ReqCrearDirectorio
+                    {
+                        directorio = req.directorio, // Usar el directorio base proporcionado
+                        nombreDirectorio = nombreDirectorio,
+                        nombreSchema = req.nombreSchema
+                    });
+
+                    if (!crearDirectorioRes.resultado)
+                    {
+                        res.errores.AddRange(crearDirectorioRes.errores);
+                        return res;
+                    }
+                }
+
+                // Ejecutar el respaldo con Data Pump
+                string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
+                                      $"SCHEMAS={req.nombreSchema} " +
+                                      $"DIRECTORY={nombreDirectorio} " +
+                                      $"DUMPFILE={nombreRespaldo}.DMP " +
+                                      $"LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
+
+                _logger.LogInformation("Ejecutando el comando de respaldo: {Comando}", expdpCommand);
+
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {expdpCommand}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+
+                using (Process process = Process.Start(startInfo))
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+
+                    _logger.LogInformation("Salida del comando: {Salida}", output);
+                    _logger.LogError("Error del comando: {Error}", error);
+
+                    if (process.ExitCode != 0)
+                    {
+                        res.errores.Add($"Error al ejecutar el respaldo: {error}");
+                        res.resultado = false;
+                    }
                     else
-                        sql = "CREATE ROLE :rol";
-
-                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
                     {
-                        cmd.Parameters.Add(new OracleParameter("rol", req.nombreRol));
-
-                        if (!string.IsNullOrEmpty(req.password))
-                            cmd.Parameters.Add(new OracleParameter("password", req.password));
-
-                        if (!string.IsNullOrEmpty(req.package))
+                        // Guardar la información del respaldo en la base de datos
+                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "schema", req.nombreSchema, "N/A"))
                         {
-                            cmd.Parameters.Add(new OracleParameter("schema", req.schema));
-                            cmd.Parameters.Add(new OracleParameter("package", req.package));
+                            res.errores.Add("Error al guardar información del respaldo en la base de datos.");
+                            res.resultado = false;
                         }
-
-                        cmd.ExecuteNonQuery();
+                        else
+                        {
+                            res.resultado = true;
+                        }
                     }
-                    res.resultado = true;
                 }
             }
             catch (Exception ex)
             {
-                res.errores.Add($"Error al crear rol: {ex.Message}");
+                _logger.LogError(ex, "Error al respaldar el esquema {NombreEsquema}", req.nombreSchema);
+                res.errores.Add($"Error al respaldar el esquema: {ex.Message}");
                 res.resultado = false;
             }
 
             return res;
         }
 
-        public ResListarPrivilegios ListarPrivilegios(ReqListarPrivilegios req)
+        public ResRespaldoTabla RespaldarTabla(ReqRespaldoTabla req)
         {
-            ResListarPrivilegios res = new ResListarPrivilegios();
+            ResRespaldoTabla res = new ResRespaldoTabla();
             res.errores = new List<string>();
-            res.privilegios = new List<PrivilegioInfo>();
+            _logger.LogInformation("Inicio del respaldo para la tabla {NombreTabla} en el esquema {NombreEsquema}", req.nombreTabla, req.nombreSchema);
 
             try
             {
-                using (OracleConnection conexion = new OracleConnection(_connectionString))
-                {
-                    conexion.Open();
-                    string sql = @"
-                        SELECT PRIVILEGE, ADMIN_OPTION 
-                        FROM DBA_SYS_PRIVS 
-                        WHERE GRANTEE = :usuario
-                        UNION ALL
-                        SELECT GRANTED_ROLE, ADMIN_OPTION 
-                        FROM DBA_ROLE_PRIVS 
-                        WHERE GRANTEE = :usuario";
+                _logger.LogInformation("Comprobando si 1...");
 
-                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                // Validar si el directorio base es uno de los permitidos
+                string nombreDirectorio = null;
+                if (req.directorio == @"C:\ORACLE_FILES\HD1")
+                    nombreDirectorio = "HD1";
+                else if (req.directorio == @"C:\ORACLE_FILES\HD2")
+                    nombreDirectorio = "HD2";
+                else if (req.directorio == @"C:\ORACLE_FILES\HD3")
+                    nombreDirectorio = "HD3";
+
+                if (nombreDirectorio == null)
+                {
+                    res.errores.Add("Directorio no permitido. Solo se permiten HD1, HD2, o HD3.");
+                    return res;
+                }
+
+                // Generar el nombre de respaldo específico para la tabla
+                string nombreRespaldo = $"{req.nombreSchema}_{req.nombreTabla}_BACKUP";
+                _logger.LogInformation("Comprobando si 2...");
+                // Verificar si el directorio ya existe
+                if (!DirectorioExiste(nombreDirectorio))
+                {
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", nombreDirectorio);
+
+                    // Crear el directorio si no existe
+                    var crearDirectorioRes = CrearDirectorio(new ReqCrearDirectorio
                     {
-                        cmd.Parameters.Add(new OracleParameter("usuario", req.nombreUsuario.ToUpper()));
-                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        directorio = req.directorio, // Usar el directorio base proporcionado
+                        nombreDirectorio = nombreDirectorio,
+                        nombreSchema = req.nombreSchema
+                    });
+
+                    if (!crearDirectorioRes.resultado)
+                    {
+                        res.errores.AddRange(crearDirectorioRes.errores);
+                        return res;
+                    }
+                }
+                _logger.LogInformation("Comprobando si 3...");
+                // Ejecutar el respaldo con Data Pump
+                string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
+                                      $"TABLES={req.nombreSchema}.{req.nombreTabla} " +
+                                      $"DIRECTORY={nombreDirectorio} " +
+                                      $"DUMPFILE={nombreRespaldo}.DMP " +
+                                      $"LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
+
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {expdpCommand}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                _logger.LogInformation("Comprobando si 4...");
+                using (var process = Process.Start(startInfo))
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+                    _logger.LogInformation("Comprobando si 5...");
+                    if (process.ExitCode != 0)
+                    {
+                        res.errores.Add($"Error al realizar el respaldo: {error}");
+                        res.resultado = false;
+                    }
+                    else
+                    {
+                        // Guardar la información del respaldo en la base de datos
+                        _logger.LogInformation("Comprobando si 6...");
+                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "table", req.nombreSchema, req.nombreTabla))
                         {
-                            while (reader.Read())
-                            {
-                                res.privilegios.Add(new PrivilegioInfo
-                                {
-                                    nombrePrivilegio = reader["PRIVILEGE"].ToString(),
-                                    conAdmin = Convert.ToString(reader["ADMIN_OPTION"]) == "YES"
-                                });
-                            }
+                            res.errores.Add("Error al guardar información del respaldo en la base de datos.");
+                            res.resultado = false;
+                            _logger.LogInformation("Comprobando si 7...");
+                        }
+                        else
+                        {
+                            res.resultado = true;
                         }
                     }
-                    res.resultado = true;
                 }
             }
             catch (Exception ex)
             {
-                res.errores.Add($"Error al listar privilegios: {ex.Message}");
+                _logger.LogError("Error al guardar el respaldo en la base de datos: {Message}", ex.Message);
+
+                res.errores.Add($"Excepción: {ex.Message}");
                 res.resultado = false;
             }
 
             return res;
         }
-        public ResListarRoles ListarRoles()
+
+        public ResRespaldoCompleto RespaldarBaseDeDatos(ReqRespaldoCompleto req)
         {
-            ResListarRoles res = new ResListarRoles();
+            ResRespaldoCompleto res = new ResRespaldoCompleto();
             res.errores = new List<string>();
-            res.roles = new List<RolInfo>();
+
+            try
+            {
+                // Validar si el directorio base es uno de los permitidos
+                string nombreDirectorio = null;
+                if (req.directorio == @"C:\ORACLE_FILES\HD1")
+                    nombreDirectorio = "HD1";
+                else if (req.directorio == @"C:\ORACLE_FILES\HD2")
+                    nombreDirectorio = "HD2";
+                else if (req.directorio == @"C:\ORACLE_FILES\HD3")
+                    nombreDirectorio = "HD3";
+
+                if (nombreDirectorio == null)
+                {
+                    res.errores.Add("Directorio no permitido. Solo se permiten HD1, HD2, o HD3.");
+                    return res;
+                }
+
+                // Crear el directorio en Oracle si no existe
+                if (!DirectorioExiste(nombreDirectorio))
+                {
+                    string crearDirectorioCommand = $"CREATE OR REPLACE DIRECTORY {nombreDirectorio} AS '{req.directorio}'";
+                    EjecutarConsultaSQL(crearDirectorioCommand);
+                }
+                string nombreRespaldo = "XE_FULL_BACKUP";
+
+                // Preparar el comando para el respaldo usando Data Pump
+                string expdpCommand = $"expdp SYSTEM/{req.contrasena}@XE FULL=Y DIRECTORY={nombreDirectorio} DUMPFILE={nombreRespaldo}.DMP LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
+
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {expdpCommand}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+
+                using (Process process = Process.Start(startInfo))
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+
+                    if (process.ExitCode != 0)
+                    {
+                        res.errores.Add($"Error al ejecutar el respaldo: {error}");
+                        res.resultado = false;
+                    }
+                    else
+                    {
+                        // Guardar la información del respaldo en la base de datos
+                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "full", "N/A", "N/A"))
+                        {
+                            res.errores.Add("Error al guardar información del respaldo en la base de datos.");
+                            res.resultado = false;
+                        }
+                        else
+                        {
+                            res.resultado = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.errores.Add($"Error al respaldar la base de datos: {ex.Message}");
+                res.resultado = false;
+            }
+
+            return res;
+        }
+
+        private void EjecutarConsultaSQL(string consulta)
+        {
+            using (OracleConnection conexion = new OracleConnection(_connectionString))
+            {
+                conexion.Open();
+                using (var command = new OracleCommand(consulta, conexion))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public RespuestaDirectorios ObtenerDirectorios()
+        {
+            RespuestaDirectorios respuesta = new RespuestaDirectorios();
 
             try
             {
                 using (OracleConnection conexion = new OracleConnection(_connectionString))
                 {
                     conexion.Open();
-                    string sql = @"
-        SELECT 
-            ROLE,
-            AUTHENTICATION_TYPE,
-            COMMON,
-            ORACLE_MAINTAINED
-        FROM DBA_ROLES
-        ORDER BY ROLE";
+                    string sql = "SELECT * FROM ALL_DIRECTORIES";
 
                     using (OracleCommand cmd = new OracleCommand(sql, conexion))
                     {
@@ -252,28 +405,112 @@ namespace Logica
                         {
                             while (reader.Read())
                             {
-                                res.roles.Add(new RolInfo
+                                var directorio = new Directorio
                                 {
-                                    nombreRol = reader["ROLE"].ToString(),
-                                    autenticacion = reader["AUTHENTICATION_TYPE"].ToString(),
-                                    comun = reader["COMMON"].ToString(),
-                                    oracle = reader["ORACLE_MAINTAINED"].ToString(),
-                                });
+                                    NombreDirectorio = reader["DIRECTORY_NAME"].ToString(),
+                                    DireccionDirectorio = reader["DIRECTORY_PATH"].ToString(),
+                                };
+                                respuesta.Directorios.Add(directorio);
                             }
                         }
                     }
-
-                    res.resultado = true;
                 }
             }
             catch (Exception ex)
             {
-                res.errores.Add($"Error al listar roles: {ex.Message}");
-                res.resultado = false;
+                respuesta.Errores.Add($"Error al obtener directorios: {ex.Message}");
+            }
+
+            return respuesta;
+        }
+        public ResRecuperarRespaldo RecuperarRespaldo(ReqRecuperarRespaldo req)
+        {
+            ResRecuperarRespaldo res = new ResRecuperarRespaldo();
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+                    string directorio = null;
+                    string nombreSchema = null;
+                    string nombreTabla = null;
+
+                    // Definir la consulta SQL según el tipo de respaldo
+                    string sql = req.TipoBackup switch
+                    {
+                        "table" => "SELECT directorio, name_schema, name_table FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        "schema" => "SELECT directorio, name_schema FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        "full" => "SELECT directorio FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        _ => throw new ArgumentException("Tipo de respaldo no válido.")
+                    };
+
+                    // Ejecutar la consulta y obtener los valores necesarios
+                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    {
+                        cmd.Parameters.Add(new OracleParameter("nombreBackup", req.NombreBackup));
+                        cmd.Parameters.Add(new OracleParameter("tipoBackup", req.TipoBackup));
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                directorio = reader.GetString(0);
+                                if (req.TipoBackup != "full") nombreSchema = reader.GetString(1);
+                                if (req.TipoBackup == "table") nombreTabla = reader.GetString(2);
+                            }
+                            else
+                            {
+                                res.Errores.Add("No se encontró el respaldo especificado.");
+                                return res;
+                            }
+                        }
+                    }
+
+                    // Construir el comando IMPDP según el tipo de respaldo
+                    string impdpCommand = req.TipoBackup switch
+                    {
+                        "table" => $"IMPDP {nombreSchema}/{req.Contrasena}@XE TABLES={nombreSchema}.{nombreTabla} DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
+                        "schema" => $"IMPDP {nombreSchema}/{req.Contrasena}@XE SCHEMAS={nombreSchema} DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
+                        "full" => $"IMPDP SYSTEM/{req.Contrasena}@XE FULL=Y DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
+                        _ => throw new ArgumentException("Tipo de respaldo no válido.")
+                    };
+
+                    // Ejecutar el comando en el sistema
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = $"/C {impdpCommand}",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    };
+
+                    using (Process process = Process.Start(startInfo))
+                    {
+                        string output = process.StandardOutput.ReadToEnd();
+                        string error = process.StandardError.ReadToEnd();
+                        process.WaitForExit();
+
+                        if (process.ExitCode != 0)
+                        {
+                            res.Errores.Add($"Error al ejecutar la recuperación: {error}");
+                            res.Resultado = false;
+                        }
+                        else
+                        {
+                            res.Resultado = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Errores.Add($"Error al recuperar el respaldo: {ex.Message}");
+                res.Resultado = false;
             }
 
             return res;
         }
     }
 }
-

@@ -1,12 +1,17 @@
-﻿using Logica;
+﻿using backend.Services;
+using Logica;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Request;
 using Response;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace backend.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ApiTuning : ControllerBase
     {
+        
         private readonly Tuning _tuning;
 
         public ApiTuning(Tuning tuning)
@@ -16,7 +21,7 @@ namespace Api.Controllers
 
 
         [HttpPost]
-        [Route("api/tuning/analizarConsulta")]
+        [Route("analizarConsulta")]
         public IActionResult analizarConsulta([FromBody] ReqAnalisisConsulta req)
         {
             ResAnalisisConsulta res = _tuning.AnalizarConsulta(req);
@@ -31,7 +36,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/tuning/obtenerEstadisticasTabla/{schema}/{tabla}")]
+        [Route("obtenerEstadisticasTabla/{schema}/{tabla}")]
         public IActionResult obtenerEstadisticasTabla(string schema, string tabla)
         {
             ResAnalisisConsulta res = _tuning.ObtenerEstadisticasTabla(schema, tabla);
@@ -47,7 +52,7 @@ namespace Api.Controllers
 
 
         [HttpGet]
-        [Route("api/tuning/obtenerTablasPorSchema/{schema}")]
+        [Route("obtenerTablasPorSchema/{schema}")]
         public IActionResult obtenerTablasPorSchema(string schema)
         {
             var request = new ReqTablasPorSchema
