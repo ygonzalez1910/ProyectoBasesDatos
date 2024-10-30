@@ -40,6 +40,7 @@ export const SeguridadService = {
     axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES),
 };
 
+
 export const AuditoriaService = {
   obtenerAuditoria: async (data) => {
     try {

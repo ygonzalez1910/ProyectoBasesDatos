@@ -284,13 +284,13 @@ const Seguridad = () => {
                           <Input
                             type="checkbox"
                             className="form-check-input"
-                            id={`role-${rol.nombreRol}`}
+                            id={role-${rol.nombreRol}}
                             checked={createUserForm.roles.includes(rol.nombreRol)}
                             onChange={() => handleRoleChange(rol.nombreRol)}
                           />
                           <Label
                             className="form-check-label"
-                            for={`role-${rol.nombreRol}`}
+                            for={role-${rol.nombreRol}}
                           >
                             {rol.nombreRol}
                           </Label>
