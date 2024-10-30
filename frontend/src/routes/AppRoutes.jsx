@@ -15,7 +15,7 @@ import Tunning from '../pages/tunning/Tunning';
 
 import Performance from '../pages/performance/Performace';
 
-import Auditoria from '../pages/auditoria/Auditoria';
+import Auditoria from '../pages/auditoria/auditoria';
 
 import Seguridad from '../pages/Seguridad/Seguridad';
 // Importa más páginas según necesites

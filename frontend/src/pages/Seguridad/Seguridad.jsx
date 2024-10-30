@@ -26,6 +26,7 @@ const Seguridad = () => {
   const [changePasswordForm, setChangePasswordForm] = useState({
     nombreUsuario: '',
     nuevoPassword: '',
+    bloquear: false
   });
 
   const [changingPassword, setChangingPassword] = useState(false);
@@ -35,10 +36,9 @@ const Seguridad = () => {
   const [createRoleForm, setCreateRoleForm] = useState({
     nombreRol: '',
     esRolExterno: false,
-    password: '',
-    schema: '',
-    package: '',
-  });
+    privilegios: [], // Nuevo campo de privilegios
+});
+
 
   const [creatingRole, setCreatingRole] = useState(false);
   const [createRoleError, setCreateRoleError] = useState(null);
@@ -157,13 +157,17 @@ const Seguridad = () => {
     event.preventDefault();
     setChangingPassword(true);
     setChangePasswordError(null);
-
     try {
-      await SeguridadService.cambiarContraseña(changePasswordForm);
+      await SeguridadService.cambiarContraseña({
+        nombreUsuario: changePasswordForm.nombreUsuario,
+        nuevoPassword: changePasswordForm.nuevoPassword,
+        bloquear: true
+      });
       // Limpiar el formulario después de un envío exitoso
       setChangePasswordForm({
         nombreUsuario: '',
         nuevoPassword: '',
+        bloquear: true
       });
     } catch (error) {
       setChangePasswordError(error.message);
@@ -178,21 +182,35 @@ const Seguridad = () => {
     setCreateRoleError(null);
 
     try {
-      await SeguridadService.crearRol(createRoleForm);
-      // Limpiar el formulario después de un envío exitoso
-      setCreateRoleForm({
-        nombreRol: '',
-        esRolExterno: false,
-        password: '',
-        schema: '',
-        package: '',
-      });
+        await SeguridadService.crearRol({
+            nombreRol: createRoleForm.nombreRol,
+            privilegios: createRoleForm.privilegios,
+        });
+        // Limpiar el formulario después de un envío exitoso
+        setCreateRoleForm({
+            nombreRol: '',
+            esRolExterno: false,
+            privilegios: [],
+        });
     } catch (error) {
-      setCreateRoleError(error.message);
+        setCreateRoleError(error.message);
     } finally {
-      setCreatingRole(false);
+        setCreatingRole(false);
     }
-  };
+};
+
+
+  const [privilegioActual, setPrivilegioActual] = useState('');
+
+const handleAddPrivilegio = () => {
+    if (privilegioActual) {
+        setCreateRoleForm((prevForm) => ({
+            ...prevForm,
+            privilegios: [...prevForm.privilegios, privilegioActual],
+        }));
+        setPrivilegioActual(''); // Limpiar el campo
+    }
+};
 
   const scrollableContainerStyle = {
     maxHeight: '200px',
@@ -479,6 +497,24 @@ const Seguridad = () => {
                     onChange={(e) => handleInputChange(e, setCreateRoleForm)}
                   />
                 </FormGroup>
+                <FormGroup className="mb-3">
+                  <Label for="privilegios" className="form-label text-muted">Privilegios</Label>
+                  <Input
+                      type="text"
+                      id="privilegios"
+                      name="privilegios"
+                      placeholder="Añadir privilegio"
+                      value={privilegioActual}
+                      onChange={(e) => setPrivilegioActual(e.target.value)}
+                  />
+                  <Button onClick={handleAddPrivilegio}>Agregar Privilegio</Button>
+                  <ul>
+                      {createRoleForm.privilegios.map((privilegio, index) => (
+                          <li key={index}>{privilegio}</li>
+                      ))}
+                  </ul>
+              </FormGroup>
+
                 <FormGroup check className="mb-4">
                   <Label check className="text-muted">
                     <Input

@@ -31,7 +31,7 @@ export const SeguridadService = {
     return await axiosInstance.delete(API_ENDPOINTS.SEGURIDAD.ELIMINAR_USUARIO, { data });
   },
   cambiarContraseña: async (data) => {
-    return await axiosInstance.put(API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO, data);
+    return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO, data);
   },
   crearRol: async (data) => {
     return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.CREAR_ROL, data);

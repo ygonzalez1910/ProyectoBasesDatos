@@ -19,11 +19,11 @@ export const API_ENDPOINTS = {
         PROFILE: `${API_BASE_URL}/auth/profile`,
     },
     SEGURIDAD: {
-        CREAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/crearUsuario`,
-        ELIMINAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/eliminarUsuario`,
-        MODIFICAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/cambiarPassword`,
-        CREAR_ROL: `${API_BASE_URL}/ApiSeguridad/crearRol`,
-        LISTAR_ROLES: `${API_BASE_URL}/ApiSeguridad/listarRoles`
+        CREAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/crear-usuario`,
+        ELIMINAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/eliminar-usuario`,
+        MODIFICAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/modificar-usuario`,
+        CREAR_ROL: `${API_BASE_URL}/ApiSeguridad/crear-rol`,
+        LISTAR_ROLES: `${API_BASE_URL}/ApiSeguridad/listar-roles`
     },
     AUDITORIA: {
         OBTENER_AUDITORIA: `${API_BASE_URL}/ApiAuditoria/obtener`,

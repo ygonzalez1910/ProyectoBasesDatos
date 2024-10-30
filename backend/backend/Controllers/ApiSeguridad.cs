@@ -33,7 +33,7 @@ namespace backend.Controllers
             return Ok(result);
         }
 
-        [HttpPut("modificar-usuario")]
+        [HttpPost("modificar-usuario")]
         public ActionResult<ResModificarUsuario> ModificarUsuario([FromBody] ReqModificarUsuario request)
         {
             if (!ModelState.IsValid)
