@@ -45,51 +45,46 @@ namespace backend.Controllers
         [Route("crearRol")]
         public IActionResult CrearRol([FromBody] ReqCrearRol req)
         {
-            ResCrearRol res = _seguridad.CrearRol(req);
-            if (res.resultado)
+            if (req == null)
             {
-                return Ok(res);
+                return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
             }
-            else
-            {
-                return BadRequest(res);
-            }
+
+            var res = _seguridad.CrearRol(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("modificarUsuario")]
         public IActionResult ModificarUsuario([FromBody] ReqModificarUsuario req)
         {
-            ResModificarUsuario res = _seguridad.ModificarUsuario(req);
-            if (res.resultado)
+            if (req == null)
             {
-                return Ok(res);
+                return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
             }
-            else
-            {
-                return BadRequest(res);
-            }
+
+            var res = _seguridad.ModificarUsuario(req);
+            return res.resultado ? Ok(res) : BadRequest(res);
         }
 
         [HttpGet("listarPrivilegios")]
         public IActionResult ListarPrivilegios([FromQuery] ReqListarPrivilegios req)
         {
+            if (req == null || string.IsNullOrWhiteSpace(req.nombreUsuario))
+            {
+                return BadRequest("El nombre de usuario es obligatorio.");
+            }
+
             var res = _seguridad.ListarPrivilegios(req);
             return res.resultado ? Ok(res) : BadRequest(res);
         }
+
         [HttpGet]
         [Route("listarRoles")]
         public IActionResult ListarRoles()
         {
-            ResListarRoles res = _seguridad.ListarRoles();
-            if (res.resultado)
-            {
-                return Ok(res);
-            }
-            else
-            {
-                return BadRequest(res);
-            }
+            var res = _seguridad.ListarRoles();
+            return res.resultado ? Ok(res) : BadRequest(res);
         }
     }
 }
