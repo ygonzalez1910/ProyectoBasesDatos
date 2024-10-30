@@ -9,11 +9,6 @@ namespace Request
     public class ReqCrearRol
     {
         public string nombreRol { get; set; }
-        public string password { get; set; }
-        public string schema { get; set; }
-        public string package { get; set; }
-        public bool esRolExterno { get; set; }
+        public List<string> privilegios { get; set; }
     }
-
-
 }
