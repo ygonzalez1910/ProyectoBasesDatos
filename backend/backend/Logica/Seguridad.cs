@@ -228,26 +228,21 @@ namespace Logica
                 using (OracleConnection conexion = new OracleConnection(_connectionString))
                 {
                     conexion.Open();
+                    // Cambiar la consulta para obtener todos los privilegios del sistema
                     string sql = @"
-                        SELECT PRIVILEGE, ADMIN_OPTION 
-                        FROM DBA_SYS_PRIVS 
-                        WHERE GRANTEE = :usuario
-                        UNION ALL
-                        SELECT GRANTED_ROLE, ADMIN_OPTION 
-                        FROM DBA_ROLE_PRIVS 
-                        WHERE GRANTEE = :usuario";
+                SELECT PRIVILEGE, NAME 
+                FROM SYSTEM_PRIVILEGE_MAP";
 
                     using (OracleCommand cmd = new OracleCommand(sql, conexion))
                     {
-                        cmd.Parameters.Add(new OracleParameter("usuario", req.nombreUsuario.ToUpper()));
                         using (OracleDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 res.privilegios.Add(new PrivilegioInfo
                                 {
-                                    nombrePrivilegio = reader["PRIVILEGE"].ToString(),
-                                    conAdmin = Convert.ToString(reader["ADMIN_OPTION"]) == "YES"
+                                    nombrePrivilegio = reader["NAME"].ToString(),
+                                    conAdmin = false // No hay información de ADMIN_OPTION en SYSTEM_PRIVILEGE_MAP
                                 });
                             }
                         }
@@ -263,6 +258,7 @@ namespace Logica
 
             return res;
         }
+
         public ResListarRoles ListarRoles()
         {
             ResListarRoles res = new ResListarRoles();

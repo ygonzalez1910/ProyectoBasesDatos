@@ -8,7 +8,7 @@ namespace Request
 {
     public class ReqListarPrivilegios
     {
-        public string nombreUsuario { get; set; }
+
     }
 
 }

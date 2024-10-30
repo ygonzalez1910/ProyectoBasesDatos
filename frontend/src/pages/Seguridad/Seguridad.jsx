@@ -37,14 +37,13 @@ const Seguridad = () => {
     nombreRol: '',
     esRolExterno: false,
     privilegios: [], // Nuevo campo de privilegios
-});
-
+  });
 
   const [creatingRole, setCreatingRole] = useState(false);
   const [createRoleError, setCreateRoleError] = useState(null);
 
   const [roles, setRoles] = useState([]);
-
+  const [privilegios, setPrivilegios] = useState([]);
 
   const styles = {
     gradient: {
@@ -94,9 +93,26 @@ const Seguridad = () => {
     }
   }, []);
 
+  const cargarPrivilegios = useCallback(async () => {
+    try {
+      const response = await SeguridadService.listarPrivilegios();
+
+      if (response.data && response.data.resultado) {
+        const listaPrivilegios = response.data.privilegios || [];
+        setPrivilegios(listaPrivilegios);
+      } else {
+        setPrivilegios([]);
+      }
+    } catch (error) {
+      console.error('Error al cargar los privilegios:', error);
+      setPrivilegios([]);
+    }
+  }, []);
+
   useEffect(() => {
     cargarRoles();
-  }, [cargarRoles]);
+    cargarPrivilegios();
+  }, [cargarRoles, cargarPrivilegios]);
 
   const handleInputChange = (event, setter) => {
     const { name, value, checked } = event.target;
@@ -112,6 +128,15 @@ const Seguridad = () => {
       roles: prev.roles.includes(roleName)
         ? prev.roles.filter(role => role !== roleName)
         : [...prev.roles, roleName]
+    }));
+  };
+
+  const handlePrivilegioChange = (privilegioName) => {
+    setCreateRoleForm(prev => ({
+      ...prev,
+      privilegios: prev.privilegios.includes(privilegioName)
+        ? prev.privilegios.filter(privilegio => privilegio !== privilegioName)
+        : [...prev.privilegios, privilegioName]
     }));
   };
 
@@ -182,35 +207,22 @@ const Seguridad = () => {
     setCreateRoleError(null);
 
     try {
-        await SeguridadService.crearRol({
-            nombreRol: createRoleForm.nombreRol,
-            privilegios: createRoleForm.privilegios,
-        });
-        // Limpiar el formulario después de un envío exitoso
-        setCreateRoleForm({
-            nombreRol: '',
-            esRolExterno: false,
-            privilegios: [],
-        });
+      await SeguridadService.crearRol({
+        nombreRol: createRoleForm.nombreRol,
+        privilegios: createRoleForm.privilegios,
+      });
+      // Limpiar el formulario después de un envío exitoso
+      setCreateRoleForm({
+        nombreRol: '',
+        esRolExterno: false,
+        privilegios: [],
+      });
     } catch (error) {
-        setCreateRoleError(error.message);
+      setCreateRoleError(error.message);
     } finally {
-        setCreatingRole(false);
+      setCreatingRole(false);
     }
-};
-
-
-  const [privilegioActual, setPrivilegioActual] = useState('');
-
-const handleAddPrivilegio = () => {
-    if (privilegioActual) {
-        setCreateRoleForm((prevForm) => ({
-            ...prevForm,
-            privilegios: [...prevForm.privilegios, privilegioActual],
-        }));
-        setPrivilegioActual(''); // Limpiar el campo
-    }
-};
+  };
 
   const scrollableContainerStyle = {
     maxHeight: '200px',
@@ -499,21 +511,44 @@ const handleAddPrivilegio = () => {
                 </FormGroup>
                 <FormGroup className="mb-3">
                   <Label for="privilegios" className="form-label text-muted">Privilegios</Label>
-                  <Input
-                      type="text"
-                      id="privilegios"
-                      name="privilegios"
-                      placeholder="Añadir privilegio"
-                      value={privilegioActual}
-                      onChange={(e) => setPrivilegioActual(e.target.value)}
-                  />
-                  <Button onClick={handleAddPrivilegio}>Agregar Privilegio</Button>
-                  <ul>
-                      {createRoleForm.privilegios.map((privilegio, index) => (
-                          <li key={index}>{privilegio}</li>
-                      ))}
+                  <div style={scrollableContainerStyle}>
+                    {privilegios.length === 0 ? (
+                      <div className="text-muted">Cargando privilegios...</div>
+                    ) : (
+                      privilegios.map((privilegio, index) => (
+                        <div
+                          key={privilegio.nombrePrivilegio}
+                          style={index === privilegios.length - 1 ? lastItemStyle : itemStyle}
+                          className="form-check"
+                        >
+                          <Input
+                            type="checkbox"
+                            className="form-check-input"
+                            id={`privilegio-${privilegio.nombrePrivilegio}`}
+                            checked={createRoleForm.privilegios.includes(privilegio.nombrePrivilegio)}
+                            onChange={() => handlePrivilegioChange(privilegio.nombrePrivilegio)}
+                          />
+                          <Label
+                            className="form-check-label"
+                            for={`privilegio-${privilegio.nombrePrivilegio}`}
+                          >
+                            {privilegio.nombrePrivilegio}
+                          </Label>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  {createRoleForm.privilegios.length > 0 && (
+                    <small className="text-muted d-block mt-2">
+                      Privilegios seleccionados: {createRoleForm.privilegios.length}
+                    </small>
+                  )}
+                  <ul className="mt-2">
+                    {createRoleForm.privilegios.map((privilegio, index) => (
+                      <li key={index}>{privilegio}</li>
+                    ))}
                   </ul>
-              </FormGroup>
+                </FormGroup>
 
                 <FormGroup check className="mb-4">
                   <Label check className="text-muted">
