@@ -57,7 +57,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Route("api/seguridad/modificarUsuario")]
+        [Route("modificarUsuario")]
         public IActionResult ModificarUsuario([FromBody] ReqModificarUsuario req)
         {
             ResModificarUsuario res = _seguridad.ModificarUsuario(req);

@@ -13,5 +13,4 @@ namespace Request
         public List<string> roles { get; set; }
     }
 
-
 }
