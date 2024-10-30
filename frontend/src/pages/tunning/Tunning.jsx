@@ -4,11 +4,6 @@ import { SchemasService, tunningService } from "../../services/api.service";
 
 const Tunning = () => {
   const [schemas, setSchemas] = useState([]);
-  const [formData, setFormData] = useState({
-    tipoBackup: '',
-    nombreBackup: '',
-    contrasena: ''
-  });
   const [selectedSchema, setSelectedSchema] = useState('');
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState('');
@@ -30,53 +25,29 @@ const Tunning = () => {
     fetchSchemas();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
   const handleSchemaChange = async (e) => {
     const schema = e.target.value;
     setSelectedSchema(schema);
-    setSelectedTable(''); // Reset selected table
-    
-    if (schema) {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await tunningService.obtenerTablasPorSchema(schema);
-        
-        if (response && response.resultado) {
-          setTables(response.tablas || []);
-        } else {
-          setError(response.errores?.[0] || 'Error al obtener las tablas');
-          setTables([]);
-        }
-      } catch (error) {
-        console.error('Error al obtener las tablas:', error);
-        setError('Error al obtener las tablas del schema');
-        setTables([]);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      setTables([]);
-    }
-
-};
-
+    setSelectedTable(''); // Resetea la tabla seleccionada
+    await fetchTables(schema);
+  };
+  
   const fetchTables = async (schema) => {
+    console.log("Schema seleccionado:", schema);
     try {
       setLoading(true);
       setError(null);
-      const response = await tunningService.obtenerListaTablas(schema);
-      setTables(response.data.tablas || []);
+      const response = await tunningService.obtenerTablasPorSchema(schema);
+      if (response?.data?.resultado) {
+        setTables(response.data.tablas || []);
+      } else {
+        setError(response.data.errores?.[0] || 'Error al obtener las tablas');
+        setTables([]);
+      }
     } catch (error) {
-      console.error('Error al obtener la lista de tablas:', error);
-      setError("Error al obtener la lista de tablas.");
+      console.error('Error al obtener las tablas:', error);
+      setError('Error al obtener las tablas del schema');
+      setTables([]);
     } finally {
       setLoading(false);
     }

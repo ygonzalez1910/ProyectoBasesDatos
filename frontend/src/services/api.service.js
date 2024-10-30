@@ -116,17 +116,8 @@ export const tunningService = {
       throw error;
     }
   },
-  obtenerTablasPorSchema: async (schema) => {
-    try {
-      const response = await axiosInstance.get(
-        `${API_ENDPOINTS.TUNING.TABLAS_POR_SCHEMA}/${schema}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error al obtener tablas por schema:", error);
-      throw error;
-    }
-  }
+  obtenerTablasPorSchema: (schema) =>
+    axiosInstance.get(`http://localhost:5172/api/ApiTuning/obtenerTablasPorSchema/${schema}`),
 };
 
 export const SchemasService = {
