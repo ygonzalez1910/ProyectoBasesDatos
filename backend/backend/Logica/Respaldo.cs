@@ -276,19 +276,16 @@ namespace Logica
                 // Crear el directorio en Oracle si no existe
                 if (!DirectorioExiste(req.directorio))
                 {
-                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", req.directorio);
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe", req.directorio);
                     res.errores.Add($"No se encontro el directorio {req.directorio}.");
                 }
-                if (!OtorgarPermisos(req.directorio, "SYSTEM"))
-                {
-                    res.errores.Add($"No se pudieron otorgar permisos para el directorio {req.directorio}.");
-                    return res;
-                }
+                _logger.LogInformation("--1");
                 string nombreRespaldo = "XE_FULL_BACKUP";
 
                 // Preparar el comando para el respaldo usando Data Pump
                 string expdpCommand = $"expdp SYSTEM/{req.contrasena}@XE FULL=Y DIRECTORY={req.directorio} DUMPFILE={nombreRespaldo}.DMP LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
-
+                _logger.LogInformation("Comando expdp {comando}", expdpCommand);
+                _logger.LogInformation("--2");
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
@@ -298,13 +295,13 @@ namespace Logica
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 };
-
+                _logger.LogInformation("--3");
                 using (Process process = Process.Start(startInfo))
                 {
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
-
+                    _logger.LogInformation("--4");
                     if (process.ExitCode != 0)
                     {
                         res.errores.Add($"Error al ejecutar el respaldo: {error}");
@@ -312,6 +309,7 @@ namespace Logica
                     }
                     else
                     {
+                        _logger.LogInformation("--5");
                         // Guardar la información del respaldo en la base de datos
                         if (!SaveInfoDirectorio(nombreRespaldo, req.directorio, "full", "N/A", "N/A"))
                         {
@@ -320,6 +318,7 @@ namespace Logica
                         }
                         else
                         {
+                            _logger.LogInformation("Todo perfecto");
                             res.resultado = true;
                         }
                     }

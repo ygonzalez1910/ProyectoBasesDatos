@@ -43,6 +43,7 @@ const CompletoRespaldo = () => {
     setError(null);
 
     try {
+      console.log(formData);
       await RespaldoService.createRespaldoFULL(formData);
       // Limpiar el formulario después de un envío exitoso
       setFormData({
