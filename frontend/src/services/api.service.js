@@ -323,10 +323,11 @@ export const PerformanceService = {
       throw error;
     }
   },
-  listarIndices: async () => {
+  listarIndices: async (data) => {
     try {
-      const response = await axiosInstance.get(
+      const response = await axiosInstance.post(
         API_ENDPOINTS.PERFORMANCE.LISTAR_INDICES,
+        data
       );
       return response.data;
     } catch (error) {
@@ -346,5 +347,15 @@ export const PerformanceService = {
       throw error;
     }
   },
-
+  verTodosIndices: async () => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.PERFORMANCE.TODOS_INDICES
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener indices:", error);
+      throw error;
+    }
+  },
 };

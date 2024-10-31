@@ -79,7 +79,8 @@ builder.Services.AddScoped<Performance>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetConnectionString("OracleConnection");
-    return new Performance(connectionString);
+    var logger = provider.GetRequiredService<ILogger<Performance>>();
+    return new Performance(connectionString, logger);
 });
 
 // Configuraci�n de Swagger/OpenAPI

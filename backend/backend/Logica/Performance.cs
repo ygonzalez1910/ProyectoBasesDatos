@@ -10,23 +10,33 @@ namespace Logica
     public class Performance
     {
         private readonly string _connectionString;
+        private readonly ILogger<Performance> _logger;
 
-        public Performance(string connectionString)
+        public Performance(string connectionString, ILogger<Performance> logger)
         {
             _connectionString = connectionString;
+            _logger = logger;
         }
 
         // Crear índice
         public ResCrearIndice CrearIndice(ReqCrearIndice req)
         {
+            _logger.LogInformation("--Ejecutando el crear indice");
+            _logger.LogInformation($"Nombre del índice: {req.NombreIndice}");
+            _logger.LogInformation($"Nombre de la tabla: {req.NombreTabla}");
+            _logger.LogInformation($"Nombre del esquema: {req.NombreSchema}");
+            _logger.LogInformation($"Columnas: {string.Join(", ", req.Columnas)}");
+            _logger.LogInformation($"Es único: {req.EsUnico}");
+
             var res = new ResCrearIndice();
             try
             {
+                _logger.LogInformation("--1");
                 using (var conexion = new OracleConnection(_connectionString))
                 {
                     conexion.Open();
                     string columnas = string.Join(", ", req.Columnas);
-                    string sql = $"CREATE {(req.EsUnico ? "UNIQUE " : "")}INDEX {req.NombreIndice} ON {req.NombreSchema}{req.NombreTabla} ({columnas})";
+                    string sql = $"CREATE {(req.EsUnico ? "UNIQUE " : "")}INDEX {req.NombreIndice} ON {req.NombreSchema}.{req.NombreTabla} ({columnas})";
                     using (var cmd = new OracleCommand(sql, conexion))
                     {
                         cmd.ExecuteNonQuery();
@@ -35,6 +45,7 @@ namespace Logica
                         res.Resultado = true; // Indica que la creación fue exitosa
                     }
                 }
+                _logger.LogInformation("--");
             }
             catch (Exception ex)
             {
@@ -129,8 +140,7 @@ namespace Logica
                     i.NUM_ROWS,
                     i.TABLE_NAME
                 FROM ALL_INDEXES i 
-                WHERE i.INDEX_NAME = :nombreIndice 
-                AND i.TABLE_NAME = :nombreTabla";
+                WHERE i.INDEX_NAME = :nombreIndice";
 
                     using (var cmd = new OracleCommand(sql, conexion))
                     {
@@ -138,10 +148,6 @@ namespace Logica
                         cmd.Parameters.Add(new OracleParameter("nombreIndice", OracleDbType.Varchar2)
                         {
                             Value = req.NombreIndice.ToUpper()
-                        });
-                        cmd.Parameters.Add(new OracleParameter("nombreTabla", OracleDbType.Varchar2)
-                        {
-                            Value = req.NombreTabla.ToUpper()
                         });
 
                         using (var reader = cmd.ExecuteReader())
@@ -185,7 +191,7 @@ namespace Logica
                             {
                                 res.resultado = false;
                                 res.Exito = false;
-                                res.Mensaje = $"No se encontró el índice {req.NombreIndice} en la tabla {req.NombreTabla}";
+                                res.Mensaje = $"No se encontró el índice {req.NombreIndice}";
                             }
                         }
                     }
@@ -201,7 +207,40 @@ namespace Logica
             return res;
         }
 
+        // Método para obtener todos los índices de la base de datos
+        public ResVerTodosLosIndices VerTodosLosIndices()
+        {
+            var res = new ResVerTodosLosIndices();
+            try
+            {
+                using (var conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+                    // Consulta para obtener todos los nombres de los índices
+                    string sql = "SELECT index_name FROM all_indexes";
 
+                    using (var cmd = new OracleCommand(sql, conexion))
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            res.Indices.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                res.Exito = true;
+                res.Resultado = true;
+                res.Mensaje = "Índices obtenidos correctamente de la base de datos.";
+            }
+            catch (Exception ex)
+            {
+                res.Exito = false;
+                res.Resultado = false;
+                res.Mensaje = $"Error al obtener índices: {ex.Message}";
+                res.Errores.Add(ex.ToString());
+            }
+            return res;
+        }
     }
 
 }

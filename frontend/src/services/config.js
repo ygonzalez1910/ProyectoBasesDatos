@@ -57,6 +57,7 @@ export const API_ENDPOINTS = {
         ELIMINAR_INDICE: `${API_BASE_URL}/ApiPerformance/eliminar-indice`,
         LISTAR_INDICES: `${API_BASE_URL}/ApiPerformance/listar-indices`,
         OBTENER_ESTADISTICAS_INDICE: `${API_BASE_URL}/ApiPerformance/obtener-estadisticas-indice`,
+        TODOS_INDICES: `${API_BASE_URL}/ApiPerformance/ver-todos-los-indices`,
     },
     // ... más endpoints
 };

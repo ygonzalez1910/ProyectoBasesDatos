@@ -8,7 +8,6 @@ namespace Request
 {
     public class ReqEstadisticasIndice
     {
-        public string NombreTabla { get; set; } // Nombre de la tabla del índice
         public string NombreIndice { get; set; } // Nombre del índice para obtener estadísticas
     }
 

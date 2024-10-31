@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "reactstrap";
 import { Database, Table2, BarChart3, AlertTriangle } from "lucide-react";
 import {
   PerformanceService,
@@ -9,16 +20,10 @@ import {
 
 const Performance = () => {
   const [indices, setIndices] = useState([]);
-  const [tablas, setTablas] = useState([]);
+  const [filteredIndices, setFilteredIndices] = useState([]);
   const [selectedSchemaCrearIndice, setSelectedSchemaCrearIndice] = useState(""); // Esquema para crear índice
-  const [selectedSchemaIndices, setSelectedSchemaIndices] = useState(""); // Esquema para índices
-  const [selectedTable, setSelectedTable] = useState("");
-  const [estadisticas, setEstadisticas] = useState(null);
   const [mensaje, setMensaje] = useState({ text: "", type: "" });
   const [schemas, setSchemas] = useState([]);
-  const [error, setError] = useState(null);
-  const [tablasCrearIndice, setTablasCrearIndice] = useState([]);
-  const [tablasIndices, setTablasIndices] = useState([]);
   const [nuevoIndice, setNuevoIndice] = useState({
     nombreIndice: "",
     nombreTabla: "",
@@ -27,10 +32,16 @@ const Performance = () => {
     esUnico: false,
   });
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Estado para la modal de estadísticas
+  const [modalEstadisticas, setModalEstadisticas] = useState(false);
+  const [estadisticas, setEstadisticas] = useState(null);
 
   // Cargar esquemas al iniciar
   useEffect(() => {
     fetchSchemas();
+    fetchAllIndices();
   }, []);
 
   const fetchSchemas = async () => {
@@ -43,28 +54,20 @@ const Performance = () => {
     }
   };
 
-  const fetchTables = async (schema) => {
-    try {
-      const response = await tunningService.obtenerTablasPorSchema(schema);
-      console.log("Tablas:", response.data.tablas);
-      return response.data.tablas || [];
-    } catch (error) {
-      console.error('Error al obtener las tablas:', error);
-      return [];
-    }
-  };
-
-  const listarIndices = async (tabla, schema) => {
+  const fetchAllIndices = async () => {
     setLoading(true);
     try {
-      const response = await PerformanceService.listarIndices({
-        nombreTabla: tabla,
-        nombreSchema: schema,
-      });
-      setIndices(response.data || []);
+      const response = await PerformanceService.verTodosIndices();
+      if (response.exito) {
+        console.log("Índices:", response.indices);
+        setIndices(response.indices);
+        setFilteredIndices(response.indices); // Inicialmente, se muestra todos los índices
+      } else {
+        mostrarMensaje("Error al obtener índices: " + response.mensaje, "danger");
+      }
     } catch (error) {
       console.error("Error al listar índices:", error);
-      mostrarMensaje("Error al listar índices: " + error.message, "danger");
+      mostrarMensaje("Error al obtener índices: " + error.message, "danger");
     } finally {
       setLoading(false);
     }
@@ -75,22 +78,6 @@ const Performance = () => {
     setTimeout(() => setMensaje({ text: "", type: "" }), 3000);
   };
 
-  const obtenerEstadisticas = async (tabla, indice, schema) => {
-    try {
-      const response = await PerformanceService.obtenerEstadisticasIndice({
-        nombreTabla: tabla,
-        nombreIndice: indice,
-        nombreSchema: schema,
-      });
-      setEstadisticas(response.data);
-    } catch (error) {
-      mostrarMensaje(
-        "Error al obtener estadísticas: " + error.message,
-        "danger"
-      );
-    }
-  };
-
   const crearIndice = async (e) => {
     e.preventDefault();
     try {
@@ -99,7 +86,7 @@ const Performance = () => {
         columnas: nuevoIndice.columnas.split(",").map((col) => col.trim()),
       });
       mostrarMensaje("Índice creado exitosamente", "success");
-      listarIndices(nuevoIndice.nombreTabla, nuevoIndice.nombreSchema);
+      fetchAllIndices(); // Refresca la lista de índices después de crear uno nuevo
       setNuevoIndice({
         nombreIndice: "",
         nombreTabla: "",
@@ -112,50 +99,34 @@ const Performance = () => {
     }
   };
 
-  const eliminarIndice = async (tabla, indice, schema) => {
-    if (window.confirm(`¿Está seguro de eliminar el índice ${indice}?`)) {
-      try {
-        await PerformanceService.eliminarIndice({
-          nombreTabla: tabla,
-          nombreIndice: indice,
-          nombreSchema: schema,
-        });
-        mostrarMensaje("Índice eliminado exitosamente", "success");
-        listarIndices(tabla, schema);
-      } catch (error) {
-        mostrarMensaje("Error al eliminar índice: " + error.message, "danger");
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    // Filtrar índices según el término de búsqueda
+    const filtered = indices.filter((indice) =>
+      indice.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredIndices(filtered);
+  };
+
+  const handleShowStatistics = async (indice) => {
+    console.log(`Mostrar estadísticas para el índice: ${indice}`);
+    try {
+      const response = await PerformanceService.obtenerEstadisticasIndice({ nombreIndice: indice });
+      if (response.exito) {
+        setEstadisticas(response.estadisticas);
+        setModalEstadisticas(true);
+      } else {
+        mostrarMensaje("Error al obtener estadísticas: " + response.mensaje, "danger");
       }
+    } catch (error) {
+      mostrarMensaje("Error al obtener estadísticas: " + error.message, "danger");
     }
   };
 
-  const handleSchemaChangeCrearIndice = async (e) => {
-    const schema = e.target.value;
-    setSelectedSchemaCrearIndice(schema);
-    setNuevoIndice(prev => ({
-      ...prev,
-      nombreSchema: schema,
-      nombreTabla: '' // Resetea la tabla seleccionada al cambiar el schema
-    }));
-    const tablas = await fetchTables(schema);
-    setTablasCrearIndice(tablas);
-  };
-
-  const handleSchemaChangeIndices = async (e) => {
-    const schema = e.target.value;
-    setSelectedSchemaIndices(schema); // Actualiza el esquema seleccionado para índices
-    setSelectedTable(''); // Resetea la tabla seleccionada
-    const tablas = await fetchTables(schema);
-    setTablasIndices(tablas);
-  };
-  
-  const handleTableChange = (e) => {
-    const tabla = e.target.value;
-    setSelectedTable(tabla);
-    setNuevoIndice((prev) => ({
-      ...prev,
-      nombreTabla: tabla,
-    }));
-    listarIndices(tabla, selectedSchemaIndices); // Cambia `selectedSchema` por `selectedSchemaIndices`
+  const toggleModal = () => {
+    setModalEstadisticas(!modalEstadisticas);
   };
 
   return (
@@ -180,18 +151,11 @@ const Performance = () => {
         </div>
       )}
 
-      {error && (
-        <div className="mb-4 p-4 rounded-lg bg-red-100 text-red-700">
-          <AlertTriangle className="h-5 w-5 inline-block" />
-          {error}
-        </div>
-      )}
-
       <Row className="mb-4">
         {/* Card para Crear Nuevo Índice */}
         <Col md="6">
-          <Card className="shadow-lg h-100">
-            <CardBody className="p-6">
+          <Card className="shadow-lg h-100" style={{ height: '400px' }}>
+            <CardBody className="p-6 overflow-y-auto">
               <div className="flex items-center gap-4 mb-4">
                 <Table2 className="h-8 w-8 text-blue-600" />
                 <h2 className="text-2xl font-semibold text-gray-800">Crear Nuevo Índice</h2>
@@ -202,7 +166,7 @@ const Performance = () => {
                   <select
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={nuevoIndice.nombreSchema}
-                    onChange={handleSchemaChangeCrearIndice}
+                    onChange={(e) => setSelectedSchemaCrearIndice(e.target.value)}
                     required
                   >
                     <option value="">Seleccione un schema</option>
@@ -220,14 +184,9 @@ const Performance = () => {
                     value={nuevoIndice.nombreTabla}
                     onChange={(e) => setNuevoIndice({ ...nuevoIndice, nombreTabla: e.target.value })}
                     required
-                    disabled={!nuevoIndice.nombreSchema} // Deshabilitar si no hay schema seleccionado
                   >
                     <option value="">Seleccione una tabla</option>
-                    {tablasCrearIndice.map((tabla, idx) => (
-                      <option key={idx} value={tabla}>
-                        {tabla}
-                      </option>
-                    ))}
+                    {/* Aquí se deben agregar las tablas correspondientes */}
                   </select>
                 </div>
                 <div>
@@ -261,7 +220,7 @@ const Performance = () => {
                 </div>
                 <button
                   type="submit"
-                  className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+                  className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Crear Índice
                 </button>
@@ -270,77 +229,86 @@ const Performance = () => {
           </Card>
         </Col>
 
-        {/* Card para Índices de la Tabla */}
+        {/* Card para Ver Índices */}
         <Col md="6">
-          <Card className="shadow-lg h-100">
-            <CardBody className="p-6">
+          <Card className="shadow-lg h-100" style={{ height: '400px' }}>
+            <CardBody className="p-6 overflow-y-auto">
               <div className="flex items-center gap-4 mb-4">
                 <BarChart3 className="h-8 w-8 text-blue-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">Índices de la Tabla</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Índices</h2>
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Schema</label>
-                <select
+                <input
+                  type="text"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={selectedSchemaIndices}
-                  onChange={handleSchemaChangeIndices}
-                  required
-                >
-                  <option value="">Seleccione un schema</option>
-                  {schemas.map((schema, idx) => (
-                    <option key={idx} value={schema.schemaName}>
-                      {schema.schemaName}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Buscar..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Tabla</label>
-                <select
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  value={selectedTable}
-                  onChange={handleTableChange}
-                  required
-                  disabled={!selectedSchemaIndices} // Deshabilitar si no hay schema seleccionado
-                >
-                  <option value="">Seleccione una tabla</option>
-                  {tablasIndices.map((tabla, idx) => (
-                    <option key={idx} value={tabla}>
-                      {tabla}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* Mostrar índices solo si se ha seleccionado una tabla */}
-              {selectedTable && (
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Índices:</h3>
-                  <ul className="list-disc pl-5">
-                    {indices.map((indice) => (
-                      <li key={indice.nombreIndice} className="flex justify-between items-center">
-                        {indice.nombreIndice}
-                        <button
-                          onClick={() => eliminarIndice(selectedTable, indice.nombreIndice, selectedSchemaIndices)}
-                          className="ml-2 text-red-600"
-                        >
-                          Eliminar
-                        </button>
-                      </li>
+              {loading ? (
+                <p>Cargando índices...</p>
+              ) : (
+                <table className="min-w-full table-auto border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border border-gray-300 p-2">Índice</th>
+                      <th className="border border-gray-300 p-2">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredIndices.map((indice, idx) => (
+                      <tr key={idx} className="border-b hover:bg-gray-100">
+                        <td className="border border-gray-300 p-2">{indice}</td>
+                        <td className="border border-gray-300 p-2">
+                          <button
+                            onClick={() => handleShowStatistics(indice)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                          >
+                            Estadísticas
+                          </button>
+                        </td>
+                      </tr>
                     ))}
-                  </ul>
-                </div>
-              )}
-              {/* Mostrar estadísticas si hay índices */}
-              {estadisticas && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold">Estadísticas:</h3>
-                  <pre className="bg-gray-100 p-2 rounded">{JSON.stringify(estadisticas, null, 2)}</pre>
-                </div>
+                  </tbody>
+                </table>
               )}
             </CardBody>
           </Card>
         </Col>
       </Row>
+
+      {/* Modal para mostrar estadísticas */}
+      <Modal isOpen={modalEstadisticas} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Estadísticas del Índice</ModalHeader>
+        <ModalBody>
+          {estadisticas ? (
+            <table className="min-w-full table-auto border border-gray-300">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 p-2">Campo</th>
+                  <th className="border border-gray-300 p-2">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(estadisticas).map(([key, value]) => (
+                  <tr key={key} className="border-b hover:bg-gray-100">
+                    <td className="border border-gray-300 p-2">{key}</td>
+                    <td className="border border-gray-300 p-2">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No hay estadísticas disponibles.</p>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleModal}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Container>
   );
 };

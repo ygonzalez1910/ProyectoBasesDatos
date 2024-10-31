@@ -77,5 +77,18 @@ namespace backend.Controllers
             }
         }
 
+        [HttpGet("ver-todos-los-indices")]
+        public IActionResult VerTodosLosIndices()
+        {
+            ResVerTodosLosIndices res = _performance.VerTodosLosIndices();
+            if (res.Resultado)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res);
+            }
+        }
     }
 }

@@ -179,6 +179,7 @@ namespace Logica
                         }
                         else
                         {
+                            _logger.LogInformation("Todo salio bieeen");
                             res.resultado = true;
                         }
                     }
