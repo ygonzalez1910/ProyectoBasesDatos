@@ -1,39 +1,48 @@
 import React from 'react';
-import { Container, Row, Col, Card, CardBody } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, CardHeader, CardTitle } from 'reactstrap';
 import { BookOpen, Users, Database, School } from 'lucide-react';
+import { FaUserGraduate, FaCode } from 'react-icons/fa';
 
 const Dashboard = () => {
-  return (
-    <Container fluid className="p-4">
-      {/* Header Section */}
-      <Card className="mb-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <CardBody className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Sistema de Administración de Bases de Datos</h1>
-              <p className="text-lg opacity-90">Panel de Control Principal</p>
-            </div>
-            <Database className="h-16 w-16 opacity-80" />
-          </div>
-        </CardBody>
-      </Card>
+  const styles = {
+    gradient: {
+      background: "linear-gradient(45deg, #2c3e50 0%, #3498db 100%)",
+      color: "white",
+    },
+    divider: {
+      width: "25%",
+      margin: "0 auto",
+      borderTop: "2px solid #e3e6f0",
+    },
+  };
 
-      {/* University Info Section */}
+  return (
+    <Container className="py-5">
+      <Row className="mb-4">
+        <Col className="text-center">
+          <h2 className="display-4 mb-2">Sistema de Administración de Bases de Datos</h2>
+          <p className="text-muted lead">Panel de Control Principal</p>
+          <hr style={styles.divider} className="my-3" />
+        </Col>
+      </Row>
+
       <Row className="mb-4">
         <Col md="8">
-          <Card className="h-100 shadow-lg">
-            <CardBody className="p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <School className="h-8 w-8 text-blue-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">Información Institucional</h2>
+          <Card className="shadow-lg h-100">
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <School size={20} className="me-3" />
+                <CardTitle tag="h5" className="mb-0">Información Institucional</CardTitle>
               </div>
+            </CardHeader>
+            <CardBody className="p-5 overflow-y-auto">
               <div className="space-y-3">
                 <p className="text-lg font-semibold text-gray-700">Universidad Nacional</p>
-                <p className="text-gray-600">Facultad de Ciencias Exactas y Naturales</p>
-                <p className="text-gray-600">Escuela de Informática</p>
-                <p className="text-gray-600">Sede Interuniversitaria de Alajuela</p>
-                <div className="mt-4">
-                  <p className="text-gray-700"><strong>Curso:</strong> EIF-402 Administración de Bases de Datos</p>
+                <div className="grid grid-cols-2 gap-2 text-gray-600">
+                  <p><strong>Facultad:</strong> Ciencias Exactas y Naturales</p>
+                  <p><strong>Escuela:</strong> Informática</p>
+                  <p><strong>Sede:</strong> Interuniversitaria de Alajuela</p>
+                  <p><strong>Curso:</strong> EIF-402 Administración de Bases de Datos</p>
                 </div>
               </div>
             </CardBody>
@@ -41,40 +50,49 @@ const Dashboard = () => {
         </Col>
 
         <Col md="4">
-          <Card className="h-100 shadow-lg">
-            <CardBody className="p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <BookOpen className="h-8 w-8 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-800">Proyecto Final</h2>
+          <Card className="shadow-lg h-100">
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <BookOpen size={20} className="me-3" />
+                <CardTitle tag="h5" className="mb-0">Proyecto Final</CardTitle>
               </div>
-              <div className="space-y-3">
-                <p className="text-gray-600"><strong>Profesor:</strong></p>
-                <p className="text-gray-700">MAP. Rodolfo Sánchez Sánchez</p>
+            </CardHeader>
+            <CardBody className="p-5 text-center">
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-gray-600 font-semibold mb-2">Profesor</p>
+                <p className="text-gray-800 text-lg">MAP. Rodolfo Sánchez Sánchez</p>
               </div>
             </CardBody>
           </Card>
         </Col>
       </Row>
 
-      {/* Team Section */}
       <Card className="shadow-lg">
-        <CardBody className="p-6">
-          <div className="flex items-center gap-4 mb-4">
-            <Users className="h-8 w-8 text-purple-600" />
-            <h2 className="text-2xl font-semibold text-gray-800">Equipo de Desarrollo</h2>
+        <CardHeader className="py-3" style={styles.gradient}>
+          <div className="d-flex align-items-center">
+            <Users size={20} className="me-3" />
+            <CardTitle tag="h5" className="mb-0">Equipo de Desarrollo</CardTitle>
           </div>
-          <Row className="mt-4">
-            <Col md="6">
-              <Card className="border-0 bg-gray-50">
-                <CardBody className="p-4">
+        </CardHeader>
+        <CardBody className="p-5">
+          <Row className="mt-3">
+            <Col md="6" className="mb-4">
+              <Card className="border-0 bg-gray-50 shadow-sm">
+                <CardBody className="p-4 text-center">
+                  <div className="flex justify-center mb-3">
+                    <FaUserGraduate className="text-4xl text-blue-600" />
+                  </div>
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">Desarrollador</h3>
                   <p className="text-gray-600">Pablo Alvarado Umaña</p>
                 </CardBody>
               </Card>
             </Col>
-            <Col md="6">
-              <Card className="border-0 bg-gray-50">
-                <CardBody className="p-4">
+            <Col md="6" className="mb-4">
+              <Card className="border-0 bg-gray-50 shadow-sm">
+                <CardBody className="p-4 text-center">
+                  <div className="flex justify-center mb-3">
+                    <FaCode className="text-4xl text-purple-600" />
+                  </div>
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">Desarrolladora</h3>
                   <p className="text-gray-600">Yuliana Gonzalez Chaves</p>
                 </CardBody>
