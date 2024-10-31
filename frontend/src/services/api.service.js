@@ -25,23 +25,30 @@ axiosInstance.interceptors.response.use(
 
 export const SeguridadService = {
   crearUsuario: async (data) => {
-    return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.CREAR_USUARIO, data);
+    return await axiosInstance.post(
+      API_ENDPOINTS.SEGURIDAD.CREAR_USUARIO,
+      data
+    );
   },
   eliminarUsuario: async (data) => {
-    return await axiosInstance.delete(API_ENDPOINTS.SEGURIDAD.ELIMINAR_USUARIO, { data });
+    return await axiosInstance.delete(
+      API_ENDPOINTS.SEGURIDAD.ELIMINAR_USUARIO,
+      { data }
+    );
   },
   cambiarContraseña: async (data) => {
-    return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO, data);
+    return await axiosInstance.post(
+      API_ENDPOINTS.SEGURIDAD.MODIFICAR_USUARIO,
+      data
+    );
   },
   crearRol: async (data) => {
     return await axiosInstance.post(API_ENDPOINTS.SEGURIDAD.CREAR_ROL, data);
   },
-  listarRoles: () =>
-    axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES),
+  listarRoles: () => axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES),
   listarPrivilegios: () =>
     axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_PRIVILEGIOS),
 };
-
 
 export const AuditoriaService = {
   obtenerAuditoria: async (data) => {
@@ -79,13 +86,16 @@ export const AuditoriaService = {
       console.error("Error al obtener la lista de tablas:", error);
       throw error;
     }
-  }
+  },
 };
 
 export const tunningService = {
   analizarConsulta: async (data) => {
     console.log(data);
-    return await axiosInstance.post(API_ENDPOINTS.TUNING.ANALIZAR_CONSULTA, data);
+    return await axiosInstance.post(
+      API_ENDPOINTS.TUNING.ANALIZAR_CONSULTA,
+      data
+    );
   },
   obtenerEstadisticasTabla: async (schema, tabla) => {
     try {
@@ -100,7 +110,9 @@ export const tunningService = {
   },
   obtenerListaTablas: async (schema) => {
     try {
-      const response = await axiosInstance.get(`/api/tunning/obtenerListaTablas/${schema}`);
+      const response = await axiosInstance.get(
+        `/api/tunning/obtenerListaTablas/${schema}`
+      );
       return response.data.Tables;
     } catch (error) {
       console.error("Error al obtener lista de tablas:", error);
@@ -108,7 +120,9 @@ export const tunningService = {
     }
   },
   obtenerTablasPorSchema: (schema) =>
-    axiosInstance.get(`http://localhost:5172/api/ApiTuning/obtenerTablasPorSchema/${schema}`),
+    axiosInstance.get(
+      `http://localhost:5172/api/ApiTuning/obtenerTablasPorSchema/${schema}`
+    ),
 };
 
 export const SchemasService = {
@@ -146,7 +160,6 @@ export const SchemasService = {
       throw error;
     }
   },
-
 };
 
 // Servicio para Respaldos
@@ -296,7 +309,6 @@ export const TableSpaceService = {
       throw error;
     }
   },
-
 };
 export const PerformanceService = {
   crearIndice: async (data) => {
@@ -313,7 +325,7 @@ export const PerformanceService = {
   },
   eliminarIndice: async (data) => {
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.delete(
         API_ENDPOINTS.PERFORMANCE.ELIMINAR_INDICE,
         data
       );
@@ -355,6 +367,32 @@ export const PerformanceService = {
       return response.data;
     } catch (error) {
       console.error("Error al obtener indices:", error);
+      throw error;
+    }
+  },
+};
+
+export const DirectorioService = {
+  crearDirectorio: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.DIRECTORIO.CREAR_DIRECTORIO,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear tablespace:", error);
+      throw error;
+    }
+  },
+  eliminarDirectorio: async (nombreDirectorio) => {
+    try {
+      const response = await axiosInstance.delete(
+        API_ENDPOINTS.DIRECTORIO.ELIMINAR_DIRECTORIO(nombreDirectorio)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al eliminar directorio:", error);
       throw error;
     }
   },

@@ -12,12 +12,6 @@ export const API_ENDPOINTS = {
         UPDATE: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
         DELETE: (id) => `${API_BASE_URL}/ApiRespaldo/${id}`,
     },
-    // Agrega más endpoints según necesites
-    USUARIOS: {
-        LOGIN: `${API_BASE_URL}/auth/login`,
-        REGISTER: `${API_BASE_URL}/auth/register`,
-        PROFILE: `${API_BASE_URL}/auth/profile`,
-    },
     SEGURIDAD: {
         CREAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/crear-usuario`,
         ELIMINAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/eliminar-usuario`,
@@ -59,5 +53,10 @@ export const API_ENDPOINTS = {
         OBTENER_ESTADISTICAS_INDICE: `${API_BASE_URL}/ApiPerformance/obtener-estadisticas-indice`,
         TODOS_INDICES: `${API_BASE_URL}/ApiPerformance/ver-todos-los-indices`,
     },
+    DIRECTORIO: { 
+        CREAR_DIRECTORIO: `${API_BASE_URL}/ApiDirectorio/crear`,
+        ELIMINAR_DIRECTORIO: (nombre) => `${API_BASE_URL}/ApiDirectorio/${nombre}`,
+    },
+    
     // ... más endpoints
 };

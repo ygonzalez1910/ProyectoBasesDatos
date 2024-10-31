@@ -1,54 +1,258 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "reactstrap";
-import { RespaldoService } from "../../services/api.service";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Button,
+  Table,
+} from "reactstrap";
+import { FaFolderPlus, FaTrash, FaSearch } from "react-icons/fa";
+import { AlertTriangle } from "lucide-react";
+import Swal from "sweetalert2";
+import { DirectorioService, RespaldoService } from "../../services/api.service";
 
-const AdministrarRespaldo = () => {
-  const [respaldos, setRespaldos] = useState([]);
+const AdministrarDirectorio = () => {
+  const [directorios, setDirectorios] = useState([]);
+  const [nuevoDirectorio, setNuevoDirectorio] = useState({
+    nombreDirectorio: "",
+    directorio: "",
+  });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchRespaldos = async () => {
-      try {
-        const data = await RespaldoService.getAllRespaldos();
-        setRespaldos(data.directorios); // Ajusta aquí para acceder al array de directorios
-        console.log(data.directorios);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const [mensaje, setMensaje] = useState({ text: "", type: "" });
+  const [filtro, setFiltro] = useState(""); // Estado para el filtro
+  const styles = {
+    gradient: {
+      background: 'linear-gradient(45deg, #2c3e50 0%, #3498db 100%)',
+      color: 'white'
+    },
+    card: {
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-5px)',
+        boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important'
       }
-    };
-
-    fetchRespaldos();
+    },
+    button: {
+      padding: '0.5rem 1.5rem',
+      borderRadius: '4px',
+      fontWeight: '500',
+      textTransform: 'none',
+      fontSize: '0.9rem',
+      boxShadow: 'none',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        transform: 'translateY(-1px)',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }
+    },
+    divider: {
+      width: '25%',
+      margin: '0 auto',
+      borderTop: '2px solid #e3e6f0'
+    }
+  };
+  // Cargar directorios al iniciar
+  useEffect(() => {
+    fetchDirectorios();
   }, []);
 
+  const fetchDirectorios = async () => {
+    setLoading(true);
+    try {
+      const response = await RespaldoService.getAllRespaldos();
+      setDirectorios(response.directorios);
+    } catch (error) {
+      mostrarMensaje("Error al cargar directorios: " + error.message, "danger");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const crearDirectorio = async (e) => {
+    e.preventDefault();
+    try {
+      await DirectorioService.crearDirectorio(nuevoDirectorio);
+      mostrarMensaje("Directorio creado exitosamente", "success");
+      fetchDirectorios(); // Refresca la lista
+      setNuevoDirectorio({ nombreDirectorio: "", directorio: "" }); // Limpiar el formulario
+    } catch (error) {
+      mostrarMensaje("Error al crear directorio: " + error.message, "danger");
+    }
+  };
+
+  const eliminarDirectorio = async (nombreDirectorio) => {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: `¿Quieres eliminar el directorio "${nombreDirectorio}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminarlo",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        console.log("Eliminando directorio: ", nombreDirectorio);
+        await DirectorioService.eliminarDirectorio( nombreDirectorio);
+        mostrarMensaje("Directorio eliminado exitosamente", "success");
+        fetchDirectorios(); // Refresca la lista
+      } catch (error) {
+        mostrarMensaje("Error al eliminar directorio: " + error.message, "danger");
+      }
+    }
+  };
+
+  const mostrarMensaje = (text, type) => {
+    setMensaje({ text, type });
+    setTimeout(() => setMensaje({ text: "", type: "" }), 3000);
+  };
+
+  // Filtrar directorios basado en el valor del filtro
+  const directoriosFiltrados = directorios.filter((directorio) =>
+    directorio.nombreDirectorio.toLowerCase().includes(filtro.toLowerCase()) || // Filtra por nombre
+    directorio.direccionDirectorio.toLowerCase().includes(filtro.toLowerCase()) // Filtra por dirección
+  );
+
   return (
-    <Container fluid className="p-4">
-      <h1>Gestión de Admin Respaldos</h1>
-      <p>Sistema de gestión de respaldods</p>
-      {loading && <p>Cargando...</p>}
-      {error && <p>Error: {error}</p>}
-      {!loading && !error && (
-        <Table striped>
-          <thead>
-            <tr>
-              <th>Directorio</th>
-              <th>Dirección</th>
-            </tr>
-          </thead>
-          <tbody>
-            {respaldos.map((respaldo, index) => (
-              <tr key={index}>
-                <td>{respaldo.nombreDirectorio}</td>
-                <td>{respaldo.direccionDirectorio}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+    <Container className="py-5">
+    {/* Header mejorado */}
+    <Row className="mb-4">
+      <Col className="text-center">
+        <h2 className="display-4 mb-2">Gestión de Directorios</h2>
+        <p className="text-muted lead">
+        Sistema de gestión de directorios
+        </p>
+        <hr style={styles.divider} className="my-4" />
+      </Col>
+    </Row>
+      {mensaje.text && (
+        <div className={`mb-4 p-4 rounded-lg flex items-center gap-2 ${mensaje.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+          <AlertTriangle className="h-5 w-5" />
+          {mensaje.text}
+        </div>
       )}
+      
+      <Row>
+        <Col md="6">
+        <Card className="shadow-lg h-100" style={{ height: "400px" }}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaFolderPlus size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">
+                    Crear Nuevo Índice
+                  </CardTitle>
+                  <small>Complete los campos para crear un nuevo índice</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody>
+              <form onSubmit={crearDirectorio}>
+                <div className="mb-3">
+                  <label className="form-label">Nombre del Directorio</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={nuevoDirectorio.nombreDirectorio}
+                    onChange={(e) =>
+                      setNuevoDirectorio({
+                        ...nuevoDirectorio,
+                        nombreDirectorio: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Dirección del Directorio</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={nuevoDirectorio.directorio}
+                    onChange={(e) =>
+                      setNuevoDirectorio({
+                        ...nuevoDirectorio,
+                        directorio: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Crear Directorio
+                </button>
+              </form>
+            </CardBody>
+          </Card>
+        </Col>
+
+        <Col md="6">
+        <Card className="shadow-lg h-100" style={{ height: "400px" }}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaSearch size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">
+                    Directorios
+                  </CardTitle>
+                  <small>Visualizar directorios</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody>
+              {/* Campo de filtro sobre la tabla */}
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Buscar directorio..."
+                  value={filtro}
+                  onChange={(e) => setFiltro(e.target.value)} // Actualiza el estado del filtro
+                />
+              </div>
+              {loading ? (
+                <p>Cargando directorios...</p>
+              ) : (
+                <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+                <Table striped className="table-sm" responsive>
+                  <thead>
+                    <tr>
+                      <th>Nombre del Directorio</th>
+                      <th>Dirección</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {directoriosFiltrados.map((directorio, index) => (
+                      <tr key={index}>
+                        <td>{directorio.nombreDirectorio}</td>
+                        <td>{directorio.direccionDirectorio}</td>
+                        <td>
+                          <Button
+                            color="danger"
+                            onClick={() => eliminarDirectorio(directorio.nombreDirectorio)}
+                            className="me-2"
+                          >
+                            <FaTrash />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };
 
-export default AdministrarRespaldo;
+export default AdministrarDirectorio;

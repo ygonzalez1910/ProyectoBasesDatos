@@ -21,49 +21,42 @@ namespace backend.Controllers
         {
             if (req == null || string.IsNullOrEmpty(req.directorio) || string.IsNullOrEmpty(req.nombreDirectorio))
             {
-                return BadRequest("Datos inválidos.");
+                return BadRequest(new CrearDirectorioResponse
+                {
+                    Success = false,
+                    Message = "Datos inválidos."
+                });
             }
 
-            try
+            var response = _directorio.CrearDirectorio(req);
+            if (response.Success)
             {
-                if (_directorio.CrearDirectorio(req))
-                {
-                    return Ok("Directorio creado exitosamente.");
-                }
-                else
-                {
-                    return StatusCode(500, "Error al crear el directorio.");
-                }
+                return Ok(response);
             }
-            catch (Exception ex)
-            {   
-                return StatusCode(500, "Ocurrió un error al procesar la solicitud.");
+            else
+            {
+                return StatusCode(500, response);
             }
         }
-        [HttpDelete("eliminar")]
-        public IActionResult EliminarDirectorio([FromBody] ReqEliminarDirectorio req)
+
+        // Cambiando el método para aceptar el nombre del directorio en la ruta
+        [HttpDelete("{nombreDirectorio}")]
+        public IActionResult EliminarDirectorio(string nombreDirectorio)
         {
-            if (req == null || string.IsNullOrEmpty(req.nombreDirectorio))
+            if (string.IsNullOrEmpty(nombreDirectorio))
             {
                 return BadRequest("Datos inválidos.");
             }
 
             try
             {
-                if (_directorio.EliminarDirectorio(req.nombreDirectorio))
-                {
-                    return Ok("Directorio eliminado exitosamente.");
-                }
-                else
-                {
-                    return StatusCode(500, "Error al eliminar el directorio.");
-                }
+                var response = _directorio.EliminarDirectorio(nombreDirectorio);
+                return Ok(new { success = true, message = "Directorio eliminado exitosamente." });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Ocurrió un error al procesar la solicitud.");
             }
         }
-
     }
 }
