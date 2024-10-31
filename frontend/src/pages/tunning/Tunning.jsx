@@ -114,8 +114,17 @@ const Tunning = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await tunningService.analizarConsulta(sqlQuery, selectedSchema);
+      
+      // Crear el objeto con la estructura esperada por el backend
+      const payload = {
+        sqlQuery: sqlQuery,
+        schema: selectedSchema
+      };
+
+      // Enviar el payload al servicio
+      const response = await tunningService.analizarConsulta(payload);
       setAnalysisResult(response.data);
+      
     } catch (error) {
       setError('Error al analizar la consulta.');
       console.error('Error al analizar la consulta:', error);

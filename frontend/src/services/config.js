@@ -49,7 +49,8 @@ export const API_ENDPOINTS = {
         DELETE: (nombreTableSpace) => `${API_BASE_URL}/ApiTableSpace/${nombreTableSpace}`,
     },
     TUNING:{
-        TABLAS_POR_SCHEMA: `${API_BASE_URL}/ApiTuning/obtenerTablasPorSchema/`
+        TABLAS_POR_SCHEMA: `${API_BASE_URL}/ApiTuning/obtenerTablasPorSchema/`,
+        ANALIZAR_CONSULTA: `${API_BASE_URL}/ApiTuning/analizarConsulta`
     }
     // ... más endpoints
 };
