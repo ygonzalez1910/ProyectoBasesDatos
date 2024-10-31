@@ -24,43 +24,6 @@ namespace Logica
             _logger = logger;
         }
 
-        public ResCrearDirectorio CrearDirectorio(ReqCrearDirectorio req)
-        {
-            ResCrearDirectorio res = new ResCrearDirectorio();
-            res.errores = new List<string>();
-
-            try
-            {
-                using (OracleConnection conexion = new OracleConnection(_connectionString))
-                {
-                    conexion.Open();
-
-                    // Crear directorio
-                    string sqlCrearDirectorio = $"CREATE OR REPLACE DIRECTORY {req.nombreDirectorio} AS '{req.directorio}'";
-                    using (OracleCommand cmd = new OracleCommand(sqlCrearDirectorio, conexion))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Otorgar permisos
-                    string sqlOtorgarPermisos = $"GRANT READ, WRITE ON DIRECTORY {req.nombreDirectorio} TO {req.nombreSchema}";
-                    using (OracleCommand cmd = new OracleCommand(sqlOtorgarPermisos, conexion))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    res.resultado = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                res.errores.Add($"Error al crear directorio: {ex.Message}");
-                res.resultado = false;
-            }
-
-            return res;
-        }
-
         // Verificar si el directorio ya existe
         private bool DirectorioExiste(string nombreDirectorio)
         {
@@ -89,6 +52,17 @@ namespace Logica
             }
         }
 
+        private bool OtorgarPermisos(String nombreDirectorio, String nombreSchema){
+            // Otorgar permisos
+            using (OracleConnection conexion = new OracleConnection(_connectionString))
+            {
+                string sqlOtorgarPermisos = $"GRANT READ, WRITE ON DIRECTORY {nombreDirectorio} TO {nombreSchema}";
+                using (OracleCommand cmd = new OracleCommand(sqlOtorgarPermisos, conexion))
+                {
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
 
         public ResRespaldoSchema RespaldarSchema(ReqRespaldoSchema req)
         {
@@ -99,18 +73,9 @@ namespace Logica
             {
                 _logger.LogInformation("Iniciando respaldo para el esquema: {NombreEsquema}", req.nombreSchema);
 
-                // Verificar si el directorio base es uno de los permitidos
-                string nombreDirectorio = null;
-                if (req.directorio == @"C:\ORACLE_FILES\HD1")
-                    nombreDirectorio = "HD1";
-                else if (req.directorio == @"C:\ORACLE_FILES\HD2")
-                    nombreDirectorio = "HD2";
-                else if (req.directorio == @"C:\ORACLE_FILES\HD3")
-                    nombreDirectorio = "HD3";
-
-                if (nombreDirectorio == null)
+                if (string.IsNullOrWhiteSpace(req.directorio))
                 {
-                    res.errores.Add("Directorio no permitido. Solo se permiten HD1, HD2, o HD3.");
+                    res.errores.Add("Directorio no permitido.");
                     return res;
                 }
 
@@ -118,28 +83,21 @@ namespace Logica
                 string nombreRespaldo = $"{req.nombreSchema}_BACKUP";
 
                 // Verificar si el directorio ya existe
-                if (!DirectorioExiste(nombreDirectorio))
+                if (!DirectorioExiste(req.directorio))
                 {
-                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", nombreDirectorio);
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", req.directorio);
                     // Crear directorio
-                    var crearDirectorioRes = CrearDirectorio(new ReqCrearDirectorio
-                    {
-                        directorio = req.directorio, // Usar el directorio base proporcionado
-                        nombreDirectorio = nombreDirectorio,
-                        nombreSchema = req.nombreSchema
-                    });
-
-                    if (!crearDirectorioRes.resultado)
-                    {
-                        res.errores.AddRange(crearDirectorioRes.errores);
-                        return res;
-                    }
+                    res.errores.Add($"No se encontro el directorio {req.directorio}.");
                 }
-
+                if (!OtorgarPermisos(req.directorio, req.nombreSchema))
+                {
+                    res.errores.Add($"No se pudieron otorgar permisos para el directorio {req.directorio}.");
+                    return res;
+                }
                 // Ejecutar el respaldo con Data Pump
                 string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
                                       $"SCHEMAS={req.nombreSchema} " +
-                                      $"DIRECTORY={nombreDirectorio} " +
+                                      $"DIRECTORY={req.directorio} " +
                                       $"DUMPFILE={nombreRespaldo}.DMP " +
                                       $"LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
 
@@ -157,6 +115,12 @@ namespace Logica
 
                 using (Process process = Process.Start(startInfo))
                 {
+                    if (process == null)
+                    {
+                        res.errores.Add("No se pudo iniciar el proceso de respaldo.");
+                        return res;
+                    }
+
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
@@ -172,14 +136,14 @@ namespace Logica
                     else
                     {
                         // Guardar la información del respaldo en la base de datos
-                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "schema", req.nombreSchema, "N/A"))
+                        if (!SaveInfoDirectorio(nombreRespaldo, req.directorio, "schema", req.nombreSchema, "N/A"))
                         {
                             res.errores.Add("Error al guardar información del respaldo en la base de datos.");
                             res.resultado = false;
                         }
                         else
                         {
-                            _logger.LogInformation("Todo salio bieeen");
+                            _logger.LogInformation("Todo salió bien.");
                             res.resultado = true;
                         }
                     }
@@ -203,50 +167,34 @@ namespace Logica
 
             try
             {
-                _logger.LogInformation("Comprobando si 1...");
-
                 // Validar si el directorio base es uno de los permitidos
-                string nombreDirectorio = null;
-                if (req.directorio == @"C:\ORACLE_FILES\HD1")
-                    nombreDirectorio = "HD1";
-                else if (req.directorio == @"C:\ORACLE_FILES\HD2")
-                    nombreDirectorio = "HD2";
-                else if (req.directorio == @"C:\ORACLE_FILES\HD3")
-                    nombreDirectorio = "HD3";
-
-                if (nombreDirectorio == null)
+          
+                if (req.directorio == null)
                 {
-                    res.errores.Add("Directorio no permitido. Solo se permiten HD1, HD2, o HD3.");
+                    res.errores.Add("Directorio no permitido.");
                     return res;
                 }
 
                 // Generar el nombre de respaldo específico para la tabla
                 string nombreRespaldo = $"{req.nombreSchema}_{req.nombreTabla}_BACKUP";
-                _logger.LogInformation("Comprobando si 2...");
+
                 // Verificar si el directorio ya existe
-                if (!DirectorioExiste(nombreDirectorio))
+                if (!DirectorioExiste(req.directorio))
                 {
-                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", nombreDirectorio);
-
-                    // Crear el directorio si no existe
-                    var crearDirectorioRes = CrearDirectorio(new ReqCrearDirectorio
-                    {
-                        directorio = req.directorio, // Usar el directorio base proporcionado
-                        nombreDirectorio = nombreDirectorio,
-                        nombreSchema = req.nombreSchema
-                    });
-
-                    if (!crearDirectorioRes.resultado)
-                    {
-                        res.errores.AddRange(crearDirectorioRes.errores);
-                        return res;
-                    }
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", req.directorio);
+                    // Crear directorio
+                    res.errores.Add($"No se encontro el directorio {req.directorio}.");
                 }
-                _logger.LogInformation("Comprobando si 3...");
+                if (!OtorgarPermisos(req.directorio, req.nombreSchema))
+                {
+                    res.errores.Add($"No se pudieron otorgar permisos para el directorio {req.directorio}.");
+                    return res;
+                }
+
                 // Ejecutar el respaldo con Data Pump
                 string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
                                       $"TABLES={req.nombreSchema}.{req.nombreTabla} " +
-                                      $"DIRECTORY={nombreDirectorio} " +
+                                      $"DIRECTORY={req.directorio} " +
                                       $"DUMPFILE={nombreRespaldo}.DMP " +
                                       $"LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
 
@@ -259,13 +207,19 @@ namespace Logica
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
-                _logger.LogInformation("Comprobando si 4...");
+
                 using (var process = Process.Start(startInfo))
                 {
+                    if (process == null)
+                    {
+                        res.errores.Add("No se pudo iniciar el proceso de respaldo.");
+                        return res;
+                    }
+
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
-                    _logger.LogInformation("Comprobando si 5...");
+
                     if (process.ExitCode != 0)
                     {
                         res.errores.Add($"Error al realizar el respaldo: {error}");
@@ -274,12 +228,10 @@ namespace Logica
                     else
                     {
                         // Guardar la información del respaldo en la base de datos
-                        _logger.LogInformation("Comprobando si 6...");
-                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "table", req.nombreSchema, req.nombreTabla))
+                        if (!SaveInfoDirectorio(nombreRespaldo, req.directorio, "table", req.nombreSchema, req.nombreTabla))
                         {
                             res.errores.Add("Error al guardar información del respaldo en la base de datos.");
                             res.resultado = false;
-                            _logger.LogInformation("Comprobando si 7...");
                         }
                         else
                         {
@@ -291,13 +243,13 @@ namespace Logica
             catch (Exception ex)
             {
                 _logger.LogError("Error al guardar el respaldo en la base de datos: {Message}", ex.Message);
-
                 res.errores.Add($"Excepción: {ex.Message}");
                 res.resultado = false;
             }
 
             return res;
         }
+
 
         public ResRespaldoCompleto RespaldarBaseDeDatos(ReqRespaldoCompleto req)
         {
@@ -306,31 +258,27 @@ namespace Logica
 
             try
             {
-                // Validar si el directorio base es uno de los permitidos
-                string nombreDirectorio = null;
-                if (req.directorio == @"C:\ORACLE_FILES\HD1")
-                    nombreDirectorio = "HD1";
-                else if (req.directorio == @"C:\ORACLE_FILES\HD2")
-                    nombreDirectorio = "HD2";
-                else if (req.directorio == @"C:\ORACLE_FILES\HD3")
-                    nombreDirectorio = "HD3";
-
-                if (nombreDirectorio == null)
+                if (req.directorio == null)
                 {
-                    res.errores.Add("Directorio no permitido. Solo se permiten HD1, HD2, o HD3.");
+                    res.errores.Add("Directorio no permitido.");
                     return res;
                 }
 
                 // Crear el directorio en Oracle si no existe
-                if (!DirectorioExiste(nombreDirectorio))
+                if (!DirectorioExiste(req.directorio))
                 {
-                    string crearDirectorioCommand = $"CREATE OR REPLACE DIRECTORY {nombreDirectorio} AS '{req.directorio}'";
-                    EjecutarConsultaSQL(crearDirectorioCommand);
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", req.directorio);
+                    res.errores.Add($"No se encontro el directorio {req.directorio}.");
+                }
+                if (!OtorgarPermisos(req.directorio, "SYSTEM"))
+                {
+                    res.errores.Add($"No se pudieron otorgar permisos para el directorio {req.directorio}.");
+                    return res;
                 }
                 string nombreRespaldo = "XE_FULL_BACKUP";
 
                 // Preparar el comando para el respaldo usando Data Pump
-                string expdpCommand = $"expdp SYSTEM/{req.contrasena}@XE FULL=Y DIRECTORY={nombreDirectorio} DUMPFILE={nombreRespaldo}.DMP LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
+                string expdpCommand = $"expdp SYSTEM/{req.contrasena}@XE FULL=Y DIRECTORY={req.directorio} DUMPFILE={nombreRespaldo}.DMP LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
 
                 var startInfo = new ProcessStartInfo
                 {
@@ -356,7 +304,7 @@ namespace Logica
                     else
                     {
                         // Guardar la información del respaldo en la base de datos
-                        if (!SaveInfoDirectorio(nombreRespaldo, nombreDirectorio, "full", "N/A", "N/A"))
+                        if (!SaveInfoDirectorio(nombreRespaldo, req.directorio, "full", "N/A", "N/A"))
                         {
                             res.errores.Add("Error al guardar información del respaldo en la base de datos.");
                             res.resultado = false;
@@ -406,7 +354,7 @@ namespace Logica
                         {
                             while (reader.Read())
                             {
-                                var directorio = new Directorio
+                                var directorio = new ModelDirectorio
                                 {
                                     NombreDirectorio = reader["DIRECTORY_NAME"].ToString(),
                                     DireccionDirectorio = reader["DIRECTORY_PATH"].ToString(),

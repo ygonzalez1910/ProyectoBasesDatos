@@ -75,6 +75,14 @@ builder.Services.AddScoped<Auditoria>(provider =>
     return new Auditoria(connectionString);
 });
 
+builder.Services.AddScoped<Directorio>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    var logger = provider.GetRequiredService<ILogger<Directorio>>();
+    return new Directorio(connectionString, logger);
+});
+
 builder.Services.AddScoped<Performance>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();

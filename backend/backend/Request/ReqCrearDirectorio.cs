@@ -10,6 +10,5 @@ namespace Request
     {
         public string nombreDirectorio { get; set; }
         public string directorio { get; set; }
-        public string nombreSchema { get; set; }
     }
 }

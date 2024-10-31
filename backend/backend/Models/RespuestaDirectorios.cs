@@ -2,7 +2,7 @@
 {
     public class RespuestaDirectorios
     {
-        public List<Directorio> Directorios { get; set; } = new List<Directorio>();
+        public List<ModelDirectorio> Directorios { get; set; } = new List<ModelDirectorio>();
         public List<string> Errores { get; set; } = new List<string>();
     }
 }

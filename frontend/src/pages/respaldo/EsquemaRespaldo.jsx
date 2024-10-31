@@ -4,6 +4,7 @@ import { SchemasService, RespaldoService } from "../../services/api.service";
 
 const EsquemaRespaldo = () => {
   const [respaldos, setRespaldos] = useState([]);
+  const [directorios, setDirectorios] = useState([]); // Nuevo estado para directorios
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -12,12 +13,6 @@ const EsquemaRespaldo = () => {
     directorio: "",
   });
 
-  const directorios = [
-    "C:\\ORACLE_FILES\\HD1",
-    "C:\\ORACLE_FILES\\HD2",
-    "C:\\ORACLE_FILES\\HD3"
-  ];
-
   useEffect(() => {
     const fetchRespaldos = async () => {
       try {
@@ -25,12 +20,27 @@ const EsquemaRespaldo = () => {
         setRespaldos(schemas);
       } catch (err) {
         setError(err.message);
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchRespaldos();
+    const fetchDirectorios = async () => {
+      try {
+        const { directorios } = await RespaldoService.getAllRespaldos();
+        setDirectorios(directorios); // Guardar directorios en el estado
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    // Ejecutar ambas funciones de fetch
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchRespaldos();
+      await fetchDirectorios();
+      setLoading(false);
+    };
+
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -110,9 +120,9 @@ const EsquemaRespaldo = () => {
             required
           >
             <option value="" disabled>Select an option</option>
-            {directorios.map((directorio, index) => (
-              <option key={index} value={directorio}>
-                {directorio}
+            {directorios.map((dir, index) => (
+              <option key={index} value={dir.direccionDirectorio}>
+                {dir.nombreDirectorio} {/* Mostrar el nombre del directorio */}
               </option>
             ))}
           </Input>
