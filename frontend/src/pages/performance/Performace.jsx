@@ -10,12 +10,13 @@ import {
 const Performance = () => {
   const [indices, setIndices] = useState([]);
   const [tablas, setTablas] = useState([]);
-  const [selectedSchema, setSelectedSchema] = useState("");
+  const [selectedSchemaCrearIndice, setSelectedSchemaCrearIndice] = useState(""); // Esquema para crear índice
+  const [selectedSchemaIndices, setSelectedSchemaIndices] = useState(""); // Esquema para índices
   const [selectedTable, setSelectedTable] = useState("");
   const [estadisticas, setEstadisticas] = useState(null);
   const [mensaje, setMensaje] = useState({ text: "", type: "" });
-  const [schemas, setSchemas] = useState([]); // Inicializa como un array vacío
-  const [error, setError] = useState(null); // Para manejar errores
+  const [schemas, setSchemas] = useState([]);
+  const [error, setError] = useState(null);
   const [tablasCrearIndice, setTablasCrearIndice] = useState([]);
   const [tablasIndices, setTablasIndices] = useState([]);
   const [nuevoIndice, setNuevoIndice] = useState({
@@ -25,7 +26,7 @@ const Performance = () => {
     columnas: "",
     esUnico: false,
   });
-  const [loading, setLoading] = useState(false); // Para manejar el estado de carga
+  const [loading, setLoading] = useState(false);
 
   // Cargar esquemas al iniciar
   useEffect(() => {
@@ -34,7 +35,7 @@ const Performance = () => {
 
   const fetchSchemas = async () => {
     try {
-      const response = await SchemasService.getAllSchemas(); // Asegúrate de que este método esté definido en tu servicio
+      const response = await SchemasService.getAllSchemas();
       console.log("Schemas:", response.schemas);
       setSchemas(response.schemas);
     } catch (error) {
@@ -53,7 +54,6 @@ const Performance = () => {
     }
   };
 
-
   const listarIndices = async (tabla, schema) => {
     setLoading(true);
     try {
@@ -69,6 +69,7 @@ const Performance = () => {
       setLoading(false);
     }
   };
+
   const mostrarMensaje = (text, type) => {
     setMensaje({ text, type });
     setTimeout(() => setMensaje({ text: "", type: "" }), 3000);
@@ -129,19 +130,21 @@ const Performance = () => {
 
   const handleSchemaChangeCrearIndice = async (e) => {
     const schema = e.target.value;
+    setSelectedSchemaCrearIndice(schema);
     setNuevoIndice(prev => ({
       ...prev,
       nombreSchema: schema,
       nombreTabla: '' // Resetea la tabla seleccionada al cambiar el schema
     }));
-    const tablas = await fetchTables(schema); // Obtiene las tablas del schema seleccionado
+    const tablas = await fetchTables(schema);
     setTablasCrearIndice(tablas);
   };
 
   const handleSchemaChangeIndices = async (e) => {
     const schema = e.target.value;
+    setSelectedSchemaIndices(schema); // Actualiza el esquema seleccionado para índices
     setSelectedTable(''); // Resetea la tabla seleccionada
-    const tablas = await fetchTables(schema); // Obtiene las tablas del schema seleccionado
+    const tablas = await fetchTables(schema);
     setTablasIndices(tablas);
   };
   
@@ -152,7 +155,7 @@ const Performance = () => {
       ...prev,
       nombreTabla: tabla,
     }));
-    listarIndices(tabla, selectedSchema);
+    listarIndices(tabla, selectedSchemaIndices); // Cambia `selectedSchema` por `selectedSchemaIndices`
   };
 
   return (
@@ -252,12 +255,13 @@ const Performance = () => {
                     type="checkbox"
                     checked={nuevoIndice.esUnico}
                     onChange={(e) => setNuevoIndice({ ...nuevoIndice, esUnico: e.target.checked })}
+                    className="mr-2"
                   />
-                  <span className="ml-2 text-gray-700">¿Es único?</span>
+                  <label className="text-gray-700">Índice Único</label>
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2 mt-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
                 >
                   Crear Índice
                 </button>
@@ -274,11 +278,13 @@ const Performance = () => {
                 <BarChart3 className="h-8 w-8 text-blue-600" />
                 <h2 className="text-2xl font-semibold text-gray-800">Índices de la Tabla</h2>
               </div>
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">Seleccionar Schema</label>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-medium mb-2">Schema</label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={selectedSchemaIndices}
                   onChange={handleSchemaChangeIndices}
+                  required
                 >
                   <option value="">Seleccione un schema</option>
                   {schemas.map((schema, idx) => (
@@ -288,13 +294,14 @@ const Performance = () => {
                   ))}
                 </select>
               </div>
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">Seleccionar Tabla</label>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-medium mb-2">Tabla</label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={selectedTable}
                   onChange={handleTableChange}
-                  disabled={!selectedTable} // Deshabilitar si no hay tabla seleccionada
+                  required
+                  disabled={!selectedSchemaIndices} // Deshabilitar si no hay schema seleccionado
                 >
                   <option value="">Seleccione una tabla</option>
                   {tablasIndices.map((tabla, idx) => (
@@ -304,43 +311,30 @@ const Performance = () => {
                   ))}
                 </select>
               </div>
-              <div className="mt-4">
-                {loading ? (
-                  <p>Cargando índices...</p>
-                ) : (
-                  <ul className="space-y-2">
-                    {indices.length > 0 ? (
-                      indices.map((indice, idx) => (
-                        <li key={idx} className="flex justify-between items-center border-b pb-2">
-                          <span className="text-gray-700">{indice.nombre}</span>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => obtenerEstadisticas(selectedTable, indice.nombre)}
-                              className="text-blue-500 hover:underline"
-                            >
-                              Ver Estadísticas
-                            </button>
-                            <button
-                              onClick={() => eliminarIndice(selectedTable, indice.nombre)}
-                              className="text-red-500 hover:underline"
-                            >
-                              Eliminar
-                            </button>
-                          </div>
-                        </li>
-                      ))
-                    ) : (
-                      <p>No hay índices para mostrar.</p>
-                    )}
+              {/* Mostrar índices solo si se ha seleccionado una tabla */}
+              {selectedTable && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Índices:</h3>
+                  <ul className="list-disc pl-5">
+                    {indices.map((indice) => (
+                      <li key={indice.nombreIndice} className="flex justify-between items-center">
+                        {indice.nombreIndice}
+                        <button
+                          onClick={() => eliminarIndice(selectedTable, indice.nombreIndice, selectedSchemaIndices)}
+                          className="ml-2 text-red-600"
+                        >
+                          Eliminar
+                        </button>
+                      </li>
+                    ))}
                   </ul>
-                )}
-              </div>
+                </div>
+              )}
+              {/* Mostrar estadísticas si hay índices */}
               {estadisticas && (
                 <div className="mt-4">
-                  <h3 className="text-lg font-semibold">Estadísticas del Índice</h3>
-                  <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
-                    {JSON.stringify(estadisticas, null, 2)}
-                  </pre>
+                  <h3 className="text-lg font-semibold">Estadísticas:</h3>
+                  <pre className="bg-gray-100 p-2 rounded">{JSON.stringify(estadisticas, null, 2)}</pre>
                 </div>
               )}
             </CardBody>
