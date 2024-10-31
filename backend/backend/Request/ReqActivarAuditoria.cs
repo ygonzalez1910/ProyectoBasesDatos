@@ -9,9 +9,6 @@ namespace Request
     public class ReqActivarAuditoria
     {
         public string NombreTabla { get; set; }
-        public bool AuditarInsert { get; set; }
-        public bool AuditarUpdate { get; set; }
-        public bool AuditarDelete { get; set; }
-        public bool AuditarSelect { get; set; }
+        public string Esquema { get; set; }
     }
 }
