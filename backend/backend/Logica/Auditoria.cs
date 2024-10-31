@@ -17,7 +17,7 @@ namespace Logica
 
         public Auditoria(string connectionString)
         {
-            _connectionString = connectionString;
+            _connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));User Id=SYSTEM;Password=rootroot;";
         }
 
         public ResObtenerAuditoria ObtenerAuditoria(ReqObtenerAuditoria req)

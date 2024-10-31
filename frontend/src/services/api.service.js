@@ -83,19 +83,10 @@ export const AuditoriaService = {
 };
 
 export const tunningService = {
-  analizarConsulta: async (sqlQuery, schema) => {
-    try {
-      const response = await axiosInstance.post("/api/tunning/analizarConsulta", {
-        sqlQuery,
-        schema
-      });
-      return response;
-    } catch (error) {
-      console.error("Error al analizar consulta:", error);
-      throw error;
-    }
+  analizarConsulta: async (data) => {
+    console.log(data);
+    return await axiosInstance.post(API_ENDPOINTS.TUNING.ANALIZAR_CONSULTA, data);
   },
-
   obtenerEstadisticasTabla: async (schema, tabla) => {
     try {
       const response = await axiosInstance.get(
