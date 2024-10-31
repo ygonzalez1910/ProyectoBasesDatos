@@ -62,11 +62,11 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("obtener-estadisticas-indice/{nombreIndice}")]
-        public IActionResult ObtenerEstadisticasIndice(string nombreIndice)
+        [HttpPost]
+        [Route("obtener-estadisticas-indice")]
+        public IActionResult ObtenerEstadisticasIndice([FromBody] ReqEstadisticasIndice req)
         {
-            ResEstadisticasIndice res = _performance.ObtenerEstadisticasIndice(nombreIndice);
+            ResEstadisticasIndice res = _performance.ObtenerEstadisticasIndice(req);
             if (res.resultado)
             {
                 return Ok(res);
@@ -76,5 +76,6 @@ namespace backend.Controllers
                 return BadRequest(res);
             }
         }
+
     }
 }

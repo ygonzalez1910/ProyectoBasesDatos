@@ -119,43 +119,89 @@ namespace Logica
                 using (var conexion = new OracleConnection(_connectionString))
                 {
                     conexion.Open();
-                    string sql = $@"
-                        SELECT 
-                            INDEX_NAME, HEIGHT, BLOCKS, LEAF_BLOCKS, DISTINCT_KEYS,
-                            AVG_LEAF_BLOCKS_PER_KEY, AVG_DATA_BLOCKS_PER_KEY 
-                        FROM ALL_INDEXES 
-                        WHERE INDEX_NAME = '{req.NombreIndice.ToUpper()}'";
+                    string sql = @"
+                SELECT 
+                    i.INDEX_NAME,
+                    i.BLEVEL,
+                    i.LEAF_BLOCKS,
+                    i.DISTINCT_KEYS,
+                    i.CLUSTERING_FACTOR,
+                    i.NUM_ROWS,
+                    i.TABLE_NAME
+                FROM ALL_INDEXES i 
+                WHERE i.INDEX_NAME = :nombreIndice 
+                AND i.TABLE_NAME = :nombreTabla";
+
                     using (var cmd = new OracleCommand(sql, conexion))
-                    using (var reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        // Usar parámetros para prevenir SQL injection
+                        cmd.Parameters.Add(new OracleParameter("nombreIndice", OracleDbType.Varchar2)
                         {
-                            res.Estadisticas.NombreIndice = reader.GetString(0);
-                            res.Estadisticas.Altura = reader.GetInt32(1);
-                            res.Estadisticas.Bloques = reader.GetInt32(2);
-                            res.Estadisticas.BloquesHoja = reader.GetInt32(3);
-                            res.Estadisticas.ClavesDistintas = reader.GetInt32(4);
-                            res.Estadisticas.PromBloquesHojaPorClave = reader.GetDecimal(5);
-                            res.Estadisticas.PromBloquesDatosPorClave = reader.GetDecimal(6);
+                            Value = req.NombreIndice.ToUpper()
+                        });
+                        cmd.Parameters.Add(new OracleParameter("nombreTabla", OracleDbType.Varchar2)
+                        {
+                            Value = req.NombreTabla.ToUpper()
+                        });
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // El nombre del índice siempre estará presente
+                                res.Estadisticas.NombreIndice = reader.GetString(0);
+
+                                // BLEVEL es el número de niveles por encima de los bloques hoja
+                                // La altura real es BLEVEL + 1 (incluyendo el nivel hoja)
+                                res.Estadisticas.Altura = reader.IsDBNull(1) ? 0 : reader.GetInt32(1) + 1;
+
+                                // Obtener bloques hoja
+                                res.Estadisticas.BloquesHoja = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
+
+                                // Obtener claves distintas
+                                res.Estadisticas.ClavesDistintas = reader.IsDBNull(3) ? 0 : reader.GetInt32(3);
+
+                                // Calcular promedios solo si tenemos datos válidos
+                                if (!reader.IsDBNull(3) && !reader.IsDBNull(2) && reader.GetInt32(3) > 0)
+                                {
+                                    res.Estadisticas.PromBloquesHojaPorClave =
+                                        (double)res.Estadisticas.BloquesHoja / res.Estadisticas.ClavesDistintas;
+                                }
+
+                                // Calcular promedio de bloques de datos por clave
+                                int clusteringFactor = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);
+                                int numRows = reader.IsDBNull(5) ? 0 : reader.GetInt32(5);
+
+                                if (numRows > 0)
+                                {
+                                    res.Estadisticas.PromBloquesDatosPorClave = (double)clusteringFactor / numRows;
+                                }
+
+                                res.resultado = true;
+                                res.Exito = true;
+                                res.Mensaje = $"Estadísticas del índice {req.NombreIndice} obtenidas correctamente para la tabla {reader.GetString(6)}";
+                            }
+                            else
+                            {
+                                res.resultado = false;
+                                res.Exito = false;
+                                res.Mensaje = $"No se encontró el índice {req.NombreIndice} en la tabla {req.NombreTabla}";
+                            }
                         }
                     }
                 }
-                res.Exito = true;
-                res.Mensaje = $"Estadísticas del índice {req.NombreIndice} obtenidas correctamente.";
-                
             }
             catch (Exception ex)
             {
+                res.resultado = false;
                 res.Exito = false;
                 res.Mensaje = $"Error al obtener estadísticas del índice: {ex.Message}";
-                
+                res.Errores = new List<string> { ex.ToString() };
             }
             return res;
         }
 
-        internal ResEstadisticasIndice ObtenerEstadisticasIndice(string nombreIndice)
-        {
-            throw new NotImplementedException();
-        }
+
     }
+
 }
