@@ -5,20 +5,20 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración de Serilog para archivo de log y consola
+// Configuraciï¿½n de Serilog para archivo de log y consola
 var logger = new LoggerConfiguration()
     .WriteTo.Console()  // Salida a la consola
-    .WriteTo.File("logs/logfile.log", rollingInterval: RollingInterval.Day)  // Salida al archivo de logs con archivo por día
+    .WriteTo.File("logs/logfile.log", rollingInterval: RollingInterval.Day)  // Salida al archivo de logs con archivo por dï¿½a
     .CreateLogger();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
-// Configuración de servicios
+// Configuraciï¿½n de servicios
 builder.Services.AddControllers();
 builder.Services.AddScoped<OracleDbService>();
 
-// Configuración de CORS para aceptar todas las direcciones
+// Configuraciï¿½n de CORS para aceptar todas las direcciones
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", policy =>
@@ -82,20 +82,20 @@ builder.Services.AddScoped<Performance>(provider =>
     return new Performance(connectionString);
 });
 
-// Configuración de Swagger/OpenAPI
+// Configuraciï¿½n de Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configuración del pipeline de la aplicación
+// Configuraciï¿½n del pipeline de la aplicaciï¿½n
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Configuración de CORS antes de mapear los controladores
+// Configuraciï¿½n de CORS antes de mapear los controladores
 app.UseCors("AllowAllOrigins");
 
 // app.UseHttpsRedirection(); // Opcional: Puedes deshabilitar esto para desarrollo

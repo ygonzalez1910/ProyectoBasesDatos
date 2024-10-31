@@ -16,6 +16,8 @@ const Performance = () => {
   const [mensaje, setMensaje] = useState({ text: "", type: "" });
   const [schemas, setSchemas] = useState([]); // Inicializa como un array vacío
   const [error, setError] = useState(null); // Para manejar errores
+  const [tablasCrearIndice, setTablasCrearIndice] = useState([]);
+  const [tablasIndices, setTablasIndices] = useState([]);
   const [nuevoIndice, setNuevoIndice] = useState({
     nombreIndice: "",
     nombreTabla: "",
@@ -32,42 +34,28 @@ const Performance = () => {
 
   const fetchSchemas = async () => {
     try {
-      const response = await SchemasService.getAllSchemas();
-      console.log(response.schemas); // Verifica que esto esté dando la respuesta esperada
-      setSchemas(response.schemas); // Aquí se establecen los schemas
+      const response = await SchemasService.getAllSchemas(); // Asegúrate de que este método esté definido en tu servicio
+      console.log("Schemas:", response.schemas);
+      setSchemas(response.schemas);
     } catch (error) {
       console.error("Error al obtener la lista de schemas:", error);
-      setError("Error al obtener la lista de schemas");
     }
   };
-
-  // Cargar tablas cuando se selecciona un schema
-  useEffect(() => {
-    if (selectedSchema) {
-      fetchTables(selectedSchema);
-    }
-  }, [selectedSchema]);
 
   const fetchTables = async (schema) => {
     try {
-      setLoading(true);
       const response = await tunningService.obtenerTablasPorSchema(schema);
-      if (response.data && response.data.tablas) {
-        setTablas(response.data.tablas);
-      } else {
-        setError("No se encontraron tablas para este schema");
-        setTablas([]);
-      }
+      console.log("Tablas:", response.data.tablas);
+      return response.data.tablas || [];
     } catch (error) {
-      console.error("Error al obtener las tablas:", error);
-      setError("Error al obtener las tablas del schema");
-      setTablas([]);
-    } finally {
-      setLoading(false);
+      console.error('Error al obtener las tablas:', error);
+      return [];
     }
   };
 
+
   const listarIndices = async (tabla, schema) => {
+    setLoading(true);
     try {
       const response = await PerformanceService.listarIndices({
         nombreTabla: tabla,
@@ -77,9 +65,10 @@ const Performance = () => {
     } catch (error) {
       console.error("Error al listar índices:", error);
       mostrarMensaje("Error al listar índices: " + error.message, "danger");
+    } finally {
+      setLoading(false);
     }
   };
-
   const mostrarMensaje = (text, type) => {
     setMensaje({ text, type });
     setTimeout(() => setMensaje({ text: "", type: "" }), 3000);
@@ -138,19 +127,24 @@ const Performance = () => {
     }
   };
 
-  const handleSchemaChange = (e) => {
+  const handleSchemaChangeCrearIndice = async (e) => {
     const schema = e.target.value;
-    setSelectedSchema(schema);
-    setSelectedTable(''); // Resetea la tabla seleccionada al cambiar el schema
-    setTablas([]); // Resetea las tablas al cambiar el schema
     setNuevoIndice(prev => ({
       ...prev,
       nombreSchema: schema,
-      nombreTabla: ''
+      nombreTabla: '' // Resetea la tabla seleccionada al cambiar el schema
     }));
+    const tablas = await fetchTables(schema); // Obtiene las tablas del schema seleccionado
+    setTablasCrearIndice(tablas);
+  };
+
+  const handleSchemaChangeIndices = async (e) => {
+    const schema = e.target.value;
+    setSelectedTable(''); // Resetea la tabla seleccionada
+    const tablas = await fetchTables(schema); // Obtiene las tablas del schema seleccionado
+    setTablasIndices(tablas);
   };
   
-
   const handleTableChange = (e) => {
     const tabla = e.target.value;
     setSelectedTable(tabla);
@@ -168,12 +162,8 @@ const Performance = () => {
         <CardBody className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2">
-                Gestión de Performance
-              </h1>
-              <p className="text-lg opacity-90">
-                Administración de Índices de Base de Datos
-              </p>
+              <h1 className="text-3xl font-bold mb-2">Gestión de Performance</h1>
+              <p className="text-lg opacity-90">Administración de Índices de Base de Datos</p>
             </div>
             <Database className="h-16 w-16 opacity-80" />
           </div>
@@ -181,13 +171,7 @@ const Performance = () => {
       </Card>
 
       {mensaje.text && (
-        <div
-          className={`mb-4 p-4 rounded-lg flex items-center gap-2 ${
-            mensaje.type === "success"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
+        <div className={`mb-4 p-4 rounded-lg flex items-center gap-2 ${mensaje.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
           <AlertTriangle className="h-5 w-5" />
           {mensaje.text}
         </div>
@@ -201,83 +185,65 @@ const Performance = () => {
       )}
 
       <Row className="mb-4">
+        {/* Card para Crear Nuevo Índice */}
         <Col md="6">
           <Card className="shadow-lg h-100">
             <CardBody className="p-6">
               <div className="flex items-center gap-4 mb-4">
                 <Table2 className="h-8 w-8 text-blue-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Crear Nuevo Índice
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Crear Nuevo Índice</h2>
               </div>
               <form onSubmit={crearIndice} className="space-y-4">
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Schema
-                  </label>
+                  <label className="block text-gray-700 font-medium mb-2">Schema</label>
                   <select
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={nuevoIndice.nombreSchema}
-                    onChange={handleSchemaChange}
+                    onChange={handleSchemaChangeCrearIndice}
                     required
                   >
                     <option value="">Seleccione un schema</option>
                     {schemas.map((schema, idx) => (
-                      <option key={idx} value={schema.schemaName}> {/* Acceder al schemaName */}
-                        {schema.schemaName} {/* Mostrar el schemaName */}
+                      <option key={idx} value={schema.schemaName}>
+                        {schema.schemaName}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Tabla
-                  </label>
+                  <label className="block text-gray-700 font-medium mb-2">Tabla</label>
                   <select
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    value={nuevoIndice.nombreSchema} // Este debe ser el estado que se está usando
-                    onChange={handleSchemaChange}
+                    value={nuevoIndice.nombreTabla}
+                    onChange={(e) => setNuevoIndice({ ...nuevoIndice, nombreTabla: e.target.value })}
                     required
+                    disabled={!nuevoIndice.nombreSchema} // Deshabilitar si no hay schema seleccionado
                   >
-                    <option value="">Seleccione un schema</option>
-                    {schemas.map((schema, idx) => (
-                      <option key={idx} value={schema.schemaName}> {/* Cambiado aquí */}
-                        {schema.schemaName} {/* Cambiado aquí */}
+                    <option value="">Seleccione una tabla</option>
+                    {tablasCrearIndice.map((tabla, idx) => (
+                      <option key={idx} value={tabla}>
+                        {tabla}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Nombre del Índice
-                  </label>
+                  <label className="block text-gray-700 font-medium mb-2">Nombre del Índice</label>
                   <input
                     type="text"
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={nuevoIndice.nombreIndice}
-                    onChange={(e) =>
-                      setNuevoIndice({
-                        ...nuevoIndice,
-                        nombreIndice: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setNuevoIndice({ ...nuevoIndice, nombreIndice: e.target.value })}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
-                    Columnas (separadas por comas)
-                  </label>
+                  <label className="block text-gray-700 font-medium mb-2">Columnas (separadas por comas)</label>
                   <input
                     type="text"
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     value={nuevoIndice.columnas}
-                    onChange={(e) =>
-                      setNuevoIndice({
-                        ...nuevoIndice,
-                        columnas: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setNuevoIndice({ ...nuevoIndice, columnas: e.target.value })}
                     required
                   />
                 </div>
@@ -285,12 +251,7 @@ const Performance = () => {
                   <input
                     type="checkbox"
                     checked={nuevoIndice.esUnico}
-                    onChange={(e) =>
-                      setNuevoIndice({
-                        ...nuevoIndice,
-                        esUnico: e.target.checked,
-                      })
-                    }
+                    onChange={(e) => setNuevoIndice({ ...nuevoIndice, esUnico: e.target.checked })}
                   />
                   <span className="ml-2 text-gray-700">¿Es único?</span>
                 </div>
@@ -305,27 +266,38 @@ const Performance = () => {
           </Card>
         </Col>
 
-        {/* Section to show existing indices */}
+        {/* Card para Índices de la Tabla */}
         <Col md="6">
           <Card className="shadow-lg h-100">
             <CardBody className="p-6">
               <div className="flex items-center gap-4 mb-4">
                 <BarChart3 className="h-8 w-8 text-blue-600" />
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Índices de la Tabla
-                </h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Índices de la Tabla</h2>
               </div>
               <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Seleccione una tabla para ver índices
-                </label>
+                <label className="block text-gray-700 font-medium mb-2">Seleccionar Schema</label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  onChange={handleSchemaChangeIndices}
+                >
+                  <option value="">Seleccione un schema</option>
+                  {schemas.map((schema, idx) => (
+                    <option key={idx} value={schema.schemaName}>
+                      {schema.schemaName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 font-medium mb-2">Seleccionar Tabla</label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={selectedTable}
-                  onChange={(e) => handleTableChange(e)}
+                  onChange={handleTableChange}
+                  disabled={!selectedTable} // Deshabilitar si no hay tabla seleccionada
                 >
                   <option value="">Seleccione una tabla</option>
-                  {tablas.map((tabla, idx) => (
+                  {tablasIndices.map((tabla, idx) => (
                     <option key={idx} value={tabla}>
                       {tabla}
                     </option>
@@ -339,32 +311,17 @@ const Performance = () => {
                   <ul className="space-y-2">
                     {indices.length > 0 ? (
                       indices.map((indice, idx) => (
-                        <li
-                          key={idx}
-                          className="flex justify-between items-center border-b pb-2"
-                        >
+                        <li key={idx} className="flex justify-between items-center border-b pb-2">
                           <span className="text-gray-700">{indice.nombre}</span>
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() =>
-                                obtenerEstadisticas(
-                                  selectedTable,
-                                  indice.nombre,
-                                  selectedSchema
-                                )
-                              }
+                              onClick={() => obtenerEstadisticas(selectedTable, indice.nombre)}
                               className="text-blue-500 hover:underline"
                             >
                               Ver Estadísticas
                             </button>
                             <button
-                              onClick={() =>
-                                eliminarIndice(
-                                  selectedTable,
-                                  indice.nombre,
-                                  selectedSchema
-                                )
-                              }
+                              onClick={() => eliminarIndice(selectedTable, indice.nombre)}
                               className="text-red-500 hover:underline"
                             >
                               Eliminar
@@ -380,9 +337,7 @@ const Performance = () => {
               </div>
               {estadisticas && (
                 <div className="mt-4">
-                  <h3 className="text-lg font-semibold">
-                    Estadísticas del Índice
-                  </h3>
+                  <h3 className="text-lg font-semibold">Estadísticas del Índice</h3>
                   <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
                     {JSON.stringify(estadisticas, null, 2)}
                   </pre>
