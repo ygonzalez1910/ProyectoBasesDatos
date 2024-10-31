@@ -1,5 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, FormGroup, Label, Input, Button, Spinner, Card, CardBody, CardHeader, ListGroup, ListGroupItem } from 'reactstrap';
+import { 
+  Container, 
+  Row, 
+  Col, 
+  FormGroup, 
+  Label, 
+  Input, 
+  Button, 
+  Spinner, 
+  Card, 
+  CardBody, 
+  CardHeader,
+  CardTitle,
+  ListGroup, 
+  ListGroupItem,
+  Alert
+} from 'reactstrap';
+import { FaDatabase, FaSearch, FaChartLine } from 'react-icons/fa';
 import { SchemasService, tunningService } from "../../services/api.service";
 
 const Tunning = () => {
@@ -11,6 +28,38 @@ const Tunning = () => {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const styles = {
+    gradient: {
+      background: 'linear-gradient(45deg, #2c3e50 0%, #3498db 100%)',
+      color: 'white'
+    },
+    card: {
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-5px)',
+        boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important'
+      }
+    },
+    button: {
+      padding: '0.5rem 1.5rem',
+      borderRadius: '4px',
+      fontWeight: '500',
+      textTransform: 'none',
+      fontSize: '0.9rem',
+      boxShadow: 'none',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        transform: 'translateY(-1px)',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }
+    },
+    divider: {
+      width: '25%',
+      margin: '0 auto',
+      borderTop: '2px solid #e3e6f0'
+    }
+  };
 
   useEffect(() => {
     const fetchSchemas = async () => {
@@ -28,12 +77,11 @@ const Tunning = () => {
   const handleSchemaChange = async (e) => {
     const schema = e.target.value;
     setSelectedSchema(schema);
-    setSelectedTable(''); // Resetea la tabla seleccionada
+    setSelectedTable('');
     await fetchTables(schema);
   };
   
   const fetchTables = async (schema) => {
-    console.log("Schema seleccionado:", schema);
     try {
       setLoading(true);
       setError(null);
@@ -54,8 +102,7 @@ const Tunning = () => {
   };
 
   const handleTableChange = (e) => {
-    const selectedTable = e.target.value;
-    setSelectedTable(selectedTable);
+    setSelectedTable(e.target.value);
   };
 
   const handleQueryChange = (e) => {
@@ -77,18 +124,32 @@ const Tunning = () => {
   };
 
   return (
-    <Container className="my-5">
-      <h1 className="mb-4">Administrador de base de datos - Módulo de Tunning</h1>
+    <Container className="py-5">
+      {/* Header mejorado */}
+      <Row className="mb-5">
+        <Col className="text-center">
+          <h2 className="display-4 mb-2">Módulo de Tunning</h2>
+          <p className="text-muted lead">Análisis y optimización de consultas SQL</p>
+          <hr style={styles.divider} className="my-4" />
+        </Col>
+      </Row>
 
-      <Row>
-        <Col md="6">
-          <Card>
-            <CardHeader>
-              <h3>Seleccionar Schema y Tabla</h3>
+      <Row className="g-4">
+        {/* Selector de Schema y Tabla */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaDatabase size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Selección de Base de Datos</CardTitle>
+                  <small>Seleccione el schema y la tabla a analizar</small>
+                </div>
+              </div>
             </CardHeader>
-            <CardBody>
-            <FormGroup>
-                <Label for="schema-select">Seleccionar Schema</Label>
+            <CardBody className="p-4">
+              <FormGroup className="mb-3">
+                <Label for="schema-select" className="form-label text-muted">Schema:</Label>
                 <Input
                   type="select"
                   id="schema-select"
@@ -106,7 +167,7 @@ const Tunning = () => {
               </FormGroup>
 
               <FormGroup>
-                <Label for="table-select">Seleccionar Tabla</Label>
+                <Label for="table-select" className="form-label text-muted">Tabla:</Label>
                 <Input
                   type="select"
                   id="table-select"
@@ -126,50 +187,84 @@ const Tunning = () => {
           </Card>
         </Col>
 
-        <Col md="6">
-          <Card>
-            <CardHeader>
-              <h3>Analizador de Consultas SQL</h3>
+        {/* Analizador de Consultas */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaSearch size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Analizador de Consultas SQL</CardTitle>
+                  <small>Ingrese y analice su consulta SQL</small>
+                </div>
+              </div>
             </CardHeader>
-            <CardBody>
+            <CardBody className="p-4">
               <FormGroup>
-                <Label for="sql-query">Consulta SQL:</Label>
+                <Label for="sql-query" className="form-label text-muted">Consulta SQL:</Label>
                 <Input
                   type="textarea"
                   id="sql-query"
                   value={sqlQuery}
                   onChange={handleQueryChange}
-                  placeholder="Ingrese la consulta SQL"
+                  placeholder="Ingrese la consulta SQL a analizar"
+                  rows="5"
+                  className="mb-3"
                 />
               </FormGroup>
-              <Button color="primary" onClick={analyzeQuery} disabled={loading}>
-                {loading ? <Spinner size="sm" /> : 'Analizar consulta'}
-              </Button>
+              <div className="text-end">
+                <Button
+                  color="primary"
+                  onClick={analyzeQuery}
+                  disabled={loading || !selectedSchema || !sqlQuery}
+                  style={styles.button}
+                >
+                  {loading ? (
+                    <>
+                      <Spinner size="sm" className="me-2" /> 
+                      Analizando...
+                    </>
+                  ) : (
+                    'Analizar Consulta'
+                  )}
+                </Button>
+              </div>
             </CardBody>
           </Card>
         </Col>
       </Row>
 
+      {/* Resultados del Análisis */}
       {analysisResult && (
-        <Card className="mt-4">
-          <CardHeader>
-            <h3>Resultado del Análisis</h3>
+        <Card className="shadow-sm mt-4 border-0" style={styles.card}>
+          <CardHeader className="py-3" style={styles.gradient}>
+            <div className="d-flex align-items-center">
+              <FaChartLine size={20} className="me-3" />
+              <div>
+                <CardTitle tag="h5" className="mb-0">Resultados del Análisis</CardTitle>
+                <small>Plan de ejecución y recomendaciones</small>
+              </div>
+            </div>
           </CardHeader>
-          <CardBody>
-            <h4>Plan de Ejecución:</h4>
-            <pre>{analysisResult.planEjecucion}</pre>
-            <h4>Estadísticas:</h4>
-            <ListGroup flush>
+          <CardBody className="p-4">
+            <h5 className="mb-3">Plan de Ejecución:</h5>
+            <pre className="bg-light p-3 rounded">{analysisResult.planEjecucion}</pre>
+            
+            <h5 className="mt-4 mb-3">Estadísticas:</h5>
+            <ListGroup flush className="mb-4">
               {Object.entries(analysisResult.estadisticas).map(([key, value]) => (
-                <ListGroupItem key={key}>
-                  {key}: {value}
+                <ListGroupItem key={key} className="d-flex justify-content-between align-items-center">
+                  <strong>{key}:</strong>
+                  <span>{value}</span>
                 </ListGroupItem>
               ))}
             </ListGroup>
-            <h4>Recomendaciones de Optimización:</h4>
+            
+            <h5 className="mb-3">Recomendaciones de Optimización:</h5>
             <ListGroup flush>
               {analysisResult.recomendacionesOptimizacion.map((recommendation, index) => (
                 <ListGroupItem key={index}>
+                  <i className="fas fa-lightbulb text-warning me-2"></i>
                   {recommendation}
                 </ListGroupItem>
               ))}
@@ -178,7 +273,11 @@ const Tunning = () => {
         </Card>
       )}
 
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && (
+        <Alert color="danger" className="mt-4">
+          {error}
+        </Alert>
+      )}
     </Container>
   );
 };

@@ -1,4 +1,3 @@
-// components/Auditoria.js
 import React, { useState, useEffect } from 'react';
 import { 
   Container, 
@@ -12,10 +11,12 @@ import {
   Spinner, 
   Card, 
   CardBody, 
-  CardHeader, 
+  CardHeader,
+  CardTitle, 
   Table,
   Alert
 } from 'reactstrap';
+import { FaDatabase, FaSearch, FaHistory } from 'react-icons/fa';
 import { AuditoriaService } from "../../services/api.service";
 
 const Auditoria = () => {
@@ -25,13 +26,44 @@ const Auditoria = () => {
     startDate: '',
     endDate: ''
   });
-
   const [actionType, setActionType] = useState('');
   const [auditResults, setAuditResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+
+  const styles = {
+    gradient: {
+      background: 'linear-gradient(45deg, #2c3e50 0%, #3498db 100%)',
+      color: 'white'
+    },
+    card: {
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-5px)',
+        boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important'
+      }
+    },
+    button: {
+      padding: '0.5rem 1.5rem',
+      borderRadius: '4px',
+      fontWeight: '500',
+      textTransform: 'none',
+      fontSize: '0.9rem',
+      boxShadow: 'none',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        transform: 'translateY(-1px)',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }
+    },
+    divider: {
+      width: '25%',
+      margin: '0 auto',
+      borderTop: '2px solid #e3e6f0'
+    }
+  };
 
   useEffect(() => {
     fetchTables();
@@ -40,7 +72,6 @@ const Auditoria = () => {
   const fetchTables = async () => {
     try {
       const response = await AuditoriaService.obtenerListaTablas();
-      console.log("Response de listar tablas:", response);
       if (response.tablas && response.tablas.length > 0) {
         setTables(response.tablas);
       } else {
@@ -50,10 +81,6 @@ const Auditoria = () => {
       console.error('Error al obtener la lista de tablas:', error);
       setError('Error al cargar las tablas');
     }
-  };
-
-  const handleTableChange = (e) => {
-    setSelectedTable(e.target.value);
   };
 
   const handleDateChange = (e) => {
@@ -102,42 +129,6 @@ const Auditoria = () => {
     
     return true;
   };
-  const handleActionTypeChange = (e) => {
-    setActionType(e.target.value);
-  };
-
-  const consultarAuditoria = async () => {
-    if (!validateDates()) return;
-    
-    try {
-      setLoading(true);
-      setError(null);
-      setShowResults(false);
-
-      const formattedStartDate = new Date(dateRange.startDate).toISOString();
-      const formattedEndDate = new Date(dateRange.endDate).toISOString();
-
-      const response = await AuditoriaService.obtenerAuditoria({
-        nombreTabla: selectedTable,
-        fechaInicio: formattedStartDate,
-        fechaFin: formattedEndDate,
-        tipoAccion: actionType || null
-      });
-
-      if (response.resultado) {
-        setAuditResults(response.registros);
-        setShowResults(true);
-      } else {
-        setError(response.errores?.join(', ') || 'Error al obtener los resultados');
-      }
-    } catch (error) {
-      console.error('Error al consultar auditoría:', error);
-      setError('Error al consultar los registros de auditoría. Por favor intente nuevamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
-  
 
   const activarAuditoria = async () => {
     if (!selectedTable) {
@@ -172,19 +163,65 @@ const Auditoria = () => {
     }
   };
 
-  return (
-    <Container className="my-5">
-      <h1 className="mb-4">Administrador de base de datos - Módulo de Auditoría</h1>
+  const consultarAuditoria = async () => {
+    if (!validateDates()) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
+      setShowResults(false);
 
-      <Row>
-        <Col md="6">
-          <Card>
-            <CardHeader>
-              <h3>Configuración de Auditoría</h3>
+      const formattedStartDate = new Date(dateRange.startDate).toISOString();
+      const formattedEndDate = new Date(dateRange.endDate).toISOString();
+
+      const response = await AuditoriaService.obtenerAuditoria({
+        nombreTabla: selectedTable,
+        fechaInicio: formattedStartDate,
+        fechaFin: formattedEndDate,
+        tipoAccion: actionType || null
+      });
+
+      if (response.resultado) {
+        setAuditResults(response.registros);
+        setShowResults(true);
+      } else {
+        setError(response.errores?.join(', ') || 'Error al obtener los resultados');
+      }
+    } catch (error) {
+      console.error('Error al consultar auditoría:', error);
+      setError('Error al consultar los registros de auditoría. Por favor intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Container className="py-5">
+      {/* Header mejorado */}
+      <Row className="mb-5">
+        <Col className="text-center">
+          <h2 className="display-4 mb-2">Módulo de Auditoría</h2>
+          <p className="text-muted lead">Gestión y consulta de registros de auditoría del sistema</p>
+          <hr style={styles.divider} className="my-4" />
+        </Col>
+      </Row>
+
+      <Row className="g-4">
+        {/* Configuración de Auditoría */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaDatabase size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Configuración de Auditoría</CardTitle>
+                  <small>Activar auditoría para tablas del sistema</small>
+                </div>
+              </div>
             </CardHeader>
-            <CardBody>
+            <CardBody className="p-4">
               <FormGroup>
-                <Label for="table-select">Seleccionar tabla:</Label>
+                <Label for="table-select" className="form-label text-muted">Seleccionar tabla:</Label>
                 <Input
                   type="select"
                   id="table-select"
@@ -199,86 +236,113 @@ const Auditoria = () => {
                   ))}
                 </Input>
               </FormGroup>
-              <Button 
-                color="primary" 
-                onClick={activarAuditoria} 
-                disabled={loading || !selectedTable}
-                className="mt-3"
-              >
-                {loading ? <Spinner size="sm" /> : 'Activar Auditoría'}
-              </Button>
-              {error && <Alert color="danger" className="mt-2">{error}</Alert>}
-              {message && <Alert color="success" className="mt-2">{message}</Alert>}
+              <div className="text-end mt-4">
+                <Button
+                  color="primary"
+                  onClick={activarAuditoria}
+                  disabled={loading || !selectedTable}
+                  style={styles.button}
+                >
+                  {loading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Activando...
+                    </>
+                  ) : (
+                    'Activar Auditoría'
+                  )}
+                </Button>
+              </div>
+              {error && <Alert color="danger" className="mt-3">{error}</Alert>}
+              {message && <Alert color="success" className="mt-3">{message}</Alert>}
             </CardBody>
           </Card>
         </Col>
-        
-        <Col md="6">
-          <Card>
-            <CardHeader>
-              <h3>Consulta de Auditoría</h3>
+
+        {/* Consulta de Auditoría */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaSearch size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Consulta de Auditoría</CardTitle>
+                  <small>Búsqueda de registros de auditoría</small>
+                </div>
+              </div>
             </CardHeader>
-            <CardBody>
-            <FormGroup>
-              <Label htmlFor="start-date">Fecha inicio:</Label>
-              <Input
-                type="datetime-local"
-                id="start-date"
-                name="startDate"
-                value={dateRange.startDate}
-                onChange={handleDateChange}
-                className="w-full"
-              />
-            </FormGroup>
+            <CardBody className="p-4">
+              <FormGroup className="mb-3">
+                <Label htmlFor="start-date" className="form-label text-muted">Fecha inicio:</Label>
+                <Input
+                  type="datetime-local"
+                  id="start-date"
+                  name="startDate"
+                  value={dateRange.startDate}
+                  onChange={handleDateChange}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <Label htmlFor="end-date">Fecha fin:</Label>
-              <Input
-                type="datetime-local"
-                id="end-date"
-                name="endDate"
-                value={dateRange.endDate}
-                onChange={handleDateChange}
-                className="w-full"
-              />
-            </FormGroup>
+              <FormGroup className="mb-3">
+                <Label htmlFor="end-date" className="form-label text-muted">Fecha fin:</Label>
+                <Input
+                  type="datetime-local"
+                  id="end-date"
+                  name="endDate"
+                  value={dateRange.endDate}
+                  onChange={handleDateChange}
+                />
+              </FormGroup>
 
-            <FormGroup>
-              <Label htmlFor="action-type">Tipo de acción:</Label>
-              <Input
-                type="select"
-                id="action-type"
-                value={actionType}
-                onChange={(e) => setActionType(e.target.value)}
-                className="w-full"
-              >
-                <option value="">Todas las acciones</option>
-                <option value="INSERT">INSERT</option>
-                <option value="UPDATE">UPDATE</option>
-                <option value="DELETE">DELETE</option>
-                <option value="SELECT">SELECT</option>
-              </Input>
-            </FormGroup>
+              <FormGroup className="mb-4">
+                <Label htmlFor="action-type" className="form-label text-muted">Tipo de acción:</Label>
+                <Input
+                  type="select"
+                  id="action-type"
+                  value={actionType}
+                  onChange={(e) => setActionType(e.target.value)}
+                >
+                  <option value="">Todas las acciones</option>
+                  <option value="INSERT">INSERT</option>
+                  <option value="UPDATE">UPDATE</option>
+                  <option value="DELETE">DELETE</option>
+                  <option value="SELECT">SELECT</option>
+                </Input>
+              </FormGroup>
 
-              <Button 
-                color="primary" 
-                onClick={consultarAuditoria} 
-                disabled={loading || !selectedTable}
-              >
-                {loading ? <Spinner size="sm" /> : 'Consultar Auditoría'}
-              </Button>
+              <div className="text-end">
+                <Button
+                  color="primary"
+                  onClick={consultarAuditoria}
+                  disabled={loading || !selectedTable}
+                  style={styles.button}
+                >
+                  {loading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Consultando...
+                    </>
+                  ) : (
+                    'Consultar Auditoría'
+                  )}
+                </Button>
+              </div>
             </CardBody>
           </Card>
         </Col>
       </Row>
 
-      {error && <Alert color="danger" className="mt-4">{error}</Alert>}
-      {message && <Alert color="success" className="mt-4">{message}</Alert>}
-
+      {/* Resultados de Auditoría */}
       {showResults && auditResults && (
-        <Card className="mt-4">
-          <CardHeader className="text-white bg-primary">
-            <h3 className="m-0">Resultados de Auditoría - {selectedTable}</h3>
+        <Card className="shadow-sm mt-4 border-0">
+          <CardHeader className="py-3" style={styles.gradient}>
+            <div className="d-flex align-items-center">
+              <FaHistory size={20} className="me-3" />
+              <div>
+                <CardTitle tag="h5" className="mb-0">Resultados de Auditoría - {selectedTable}</CardTitle>
+                <small>Registros encontrados: {auditResults.length}</small>
+              </div>
+            </div>
           </CardHeader>
           <CardBody className="p-0">
             <div className="table-responsive">
