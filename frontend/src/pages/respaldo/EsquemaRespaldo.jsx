@@ -121,7 +121,7 @@ const EsquemaRespaldo = () => {
           >
             <option value="" disabled>Select an option</option>
             {directorios.map((dir, index) => (
-              <option key={index} value={dir.direccionDirectorio}>
+              <option key={index} value={dir.nombreDirectorio}> {/* Cambiado aquí */}
                 {dir.nombreDirectorio} {/* Mostrar el nombre del directorio */}
               </option>
             ))}
