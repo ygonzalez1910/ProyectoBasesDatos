@@ -307,3 +307,53 @@ export const TableSpaceService = {
   },
 
 };
+export const PerformanceService = {
+  crearIndice: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.PERFORMANCE.CREAR_INDICE,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear tablespace:", error);
+      throw error;
+    }
+  },
+  eliminarIndice: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.PERFORMANCE.ELIMINAR_INDICE,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al crear tablespace:", error);
+      throw error;
+    }
+  },
+  listarIndices: async () => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.PERFORMANCE.LISTAR_INDICES,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al listar indices:", error);
+      throw error;
+    }
+  },
+  obtenerEstadisticasIndice: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.PERFORMANCE.OBTENER_ESTADISTICAS_INDICE,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener estadisticas del indice:", error);
+      throw error;
+    }
+  },
+
+};

@@ -26,7 +26,7 @@ namespace Logica
                 {
                     conexion.Open();
                     string columnas = string.Join(", ", req.Columnas);
-                    string sql = $"CREATE {(req.EsUnico ? "UNIQUE " : "")}INDEX {req.NombreIndice} ON {req.NombreTabla} ({columnas})";
+                    string sql = $"CREATE {(req.EsUnico ? "UNIQUE " : "")}INDEX {req.NombreIndice} ON {req.NombreSchema}{req.NombreTabla} ({columnas})";
                     using (var cmd = new OracleCommand(sql, conexion))
                     {
                         cmd.ExecuteNonQuery();

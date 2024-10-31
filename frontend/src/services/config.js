@@ -50,6 +50,12 @@ export const API_ENDPOINTS = {
     },
     TUNING:{
         TABLAS_POR_SCHEMA: `${API_BASE_URL}/ApiTuning/obtenerTablasPorSchema/`
-    }
+    },
+    PERFORMANCE: {
+        CREAR_INDICE: `${API_BASE_URL}/ApiPerformance/crear-indice`,
+        ELIMINAR_INDICE: `${API_BASE_URL}/ApiPerformance/eliminar-indice`,
+        LISTAR_INDICES: `${API_BASE_URL}/ApiPerformance/listar-indices`,
+        OBTENER_ESTADISTICAS_INDICE: `${API_BASE_URL}/ApiPerformance/obtener-estadisticas-indice`,
+    },
     // ... más endpoints
 };
