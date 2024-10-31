@@ -10,6 +10,8 @@ import {
   FormGroup,
   Label,
   Input,
+  Row,
+  Col,
 } from "reactstrap";
 import { TableSpaceService } from "../../services/api.service";
 import Swal from "sweetalert2"; // Importar SweetAlert2
@@ -31,6 +33,39 @@ const AdministrarTableSpace = () => {
   const [newAutoExtendSize, setNewAutoExtendSize] = useState(0);
   const [newMaxSize, setNewMaxSize] = useState(0);
   const [userPassword, setUserPassword] = useState(""); // Nuevo estado para la contraseña
+
+  const styles = {
+    gradient: {
+      background: "linear-gradient(45deg, #2c3e50 0%, #3498db 100%)",
+      color: "white",
+    },
+    card: {
+      transition: "all 0.3s ease",
+      "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: "0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important",
+      },
+    },
+    button: {
+      padding: "0.5rem 1.5rem",
+      borderRadius: "4px",
+      fontWeight: "500",
+      textTransform: "none",
+      fontSize: "0.9rem",
+      boxShadow: "none",
+      transition: "all 0.2s ease",
+      "&:hover": {
+        transform: "translateY(-1px)",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+      },
+    },
+    divider: {
+      width: "25%",
+      margin: "0 auto",
+      borderTop: "2px solid #e3e6f0",
+    },
+  };
+
 
   useEffect(() => {
     fetchTables();
@@ -176,17 +211,24 @@ const AdministrarTableSpace = () => {
   };
 
   return (
-    <Container fluid className="p-4">
-      <h1>Gestión de Table Spaces</h1>
-      <p>Sistema de gestión de respaldos</p>
+      <Container className="py-5">
+      {/* Header mejorado */}
+      <Row className="mb-5">
+        <Col className="text-center">
+          <h2 className="display-4 mb-2">Gestión de Table Spaces</h2>
+          <p className="text-muted lead">
+              Sistema de gestión de Almacenaje de Schemas
+          </p>
+        </Col>
+      </Row>
       <Button color="success" onClick={toggleCreateModal} className="mb-3">
         Crear Tablespace
       </Button>
       {loading && <Spinner color="primary" />}
       {error && <p>Error: {error}</p>}
-      <Table striped>
+      <Table className="min-w-full table-auto border border-gray-300" striped>
         <thead>
-          <tr>
+          <tr style={styles.gradient}>
             <th>Nombre de Tablespace</th>
             <th>Nombre de Archivo</th>
             <th>Tamaño (MB)</th>
