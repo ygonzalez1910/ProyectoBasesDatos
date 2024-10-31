@@ -91,7 +91,7 @@ const Dashboard = () => {
               <Card className="border-0 bg-gray-50 shadow-sm">
                 <CardBody className="p-4 text-center">
                   <div className="flex justify-center mb-3">
-                    <FaCode className="text-4xl text-purple-600" />
+                    <FaUserGraduate className="text-4xl text-pink-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">Desarrolladora</h3>
                   <p className="text-gray-600">Yuliana Gonzalez Chaves</p>
