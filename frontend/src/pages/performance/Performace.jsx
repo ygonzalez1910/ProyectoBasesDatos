@@ -130,7 +130,7 @@ const Performance = () => {
   };
 
   return (
-    <Container fluid className="p-4">
+    <Container fluid className="p-4" style={{ height: 'calc(100vh - 2rem)', overflowY: 'auto' }}>
       {/* Header Section */}
       <Card className="mb-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <CardBody className="p-6">
@@ -249,6 +249,7 @@ const Performance = () => {
               {loading ? (
                 <p>Cargando índices...</p>
               ) : (
+                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 <table className="min-w-full table-auto border border-gray-300">
                   <thead>
                     <tr className="bg-gray-100">
@@ -272,6 +273,7 @@ const Performance = () => {
                     ))}
                   </tbody>
                 </table>
+                </div>
               )}
             </CardBody>
           </Card>
