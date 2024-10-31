@@ -64,18 +64,20 @@ namespace Logica
                     {
                         cmd.ExecuteNonQuery();
                         res.Exito = true;
+                        res.resultado = true; // Establecer resultado como true
                         res.Mensaje = $"Índice {req.NombreIndice} eliminado exitosamente.";
-                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 res.Exito = false;
+                res.resultado = false; // Establecer resultado como false en caso de error
                 res.Mensaje = $"Error al eliminar índice: {ex.Message}";
-                
             }
             return res;
         }
+
 
         // Listar índices de una tabla
         public ResListarIndices ListarIndices(ReqListarIndices req)
@@ -96,15 +98,14 @@ namespace Logica
                         }
                     }
                 }
+                res.resultado = true; // Agregar esta línea
                 res.Exito = true;
                 res.Mensaje = $"Índices listados correctamente para la tabla {req.NombreTabla}.";
-                
             }
             catch (Exception ex)
             {
                 res.Exito = false;
                 res.Mensaje = $"Error al listar índices: {ex.Message}";
-                
             }
             return res;
         }
