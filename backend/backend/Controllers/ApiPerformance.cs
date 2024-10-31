@@ -21,7 +21,7 @@ namespace backend.Controllers
         public IActionResult CrearIndice([FromBody] ReqCrearIndice req)
         {
             ResCrearIndice res = _performance.CrearIndice(req);
-            if (res.resultado)
+            if (res.Resultado) // Cambia resultado por Resultado
             {
                 return Ok(res);
             }
@@ -30,6 +30,7 @@ namespace backend.Controllers
                 return BadRequest(res);
             }
         }
+
 
         [HttpPost]
         [Route("eliminar-indice")]

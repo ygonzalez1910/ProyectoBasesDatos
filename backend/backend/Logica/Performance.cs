@@ -10,12 +10,10 @@ namespace Logica
     public class Performance
     {
         private readonly string _connectionString;
-        private readonly ILogger<Performance> _logger;
 
-        public Performance(string connectionString, ILogger<Performance> logger)
+        public Performance(string connectionString)
         {
             _connectionString = connectionString;
-            _logger = logger;
         }
 
         // Crear índice
@@ -34,18 +32,23 @@ namespace Logica
                         cmd.ExecuteNonQuery();
                         res.Exito = true;
                         res.Mensaje = $"Índice {req.NombreIndice} creado exitosamente en la tabla {req.NombreTabla}.";
-                        _logger.LogInformation("Índice {NombreIndice} creado en la tabla {NombreTabla}.", req.NombreIndice, req.NombreTabla);
+                        res.Resultado = true; // Indica que la creación fue exitosa
                     }
                 }
             }
             catch (Exception ex)
             {
                 res.Exito = false;
-                res.Mensaje = $"Error al crear índice: {ex.Message}";
-                _logger.LogError(ex, "Error al crear el índice {NombreIndice} en la tabla {NombreTabla}", req.NombreIndice, req.NombreTabla);
+                res.Mensaje = ex.Message.Contains("ORA-01408")
+                    ? "Error al crear índice: El índice ya existe para esta lista de columnas."
+                    : $"Error al crear índice: {ex.Message}";
+                res.Errores.Add(ex.Message);
+                res.Resultado = false; // Indica que la creación falló
             }
             return res;
         }
+
+
 
         // Eliminar índice
         public ResEliminarIndice EliminarIndice(ReqEliminarIndice req)
@@ -62,15 +65,14 @@ namespace Logica
                         cmd.ExecuteNonQuery();
                         res.Exito = true;
                         res.Mensaje = $"Índice {req.NombreIndice} eliminado exitosamente.";
-                        _logger.LogInformation("Índice {NombreIndice} eliminado.", req.NombreIndice);
-                    }
+                        }
                 }
             }
             catch (Exception ex)
             {
                 res.Exito = false;
                 res.Mensaje = $"Error al eliminar índice: {ex.Message}";
-                _logger.LogError(ex, "Error al eliminar el índice {NombreIndice}", req.NombreIndice);
+                
             }
             return res;
         }
@@ -96,13 +98,13 @@ namespace Logica
                 }
                 res.Exito = true;
                 res.Mensaje = $"Índices listados correctamente para la tabla {req.NombreTabla}.";
-                _logger.LogInformation("Índices listados correctamente para la tabla {NombreTabla}.", req.NombreTabla);
+                
             }
             catch (Exception ex)
             {
                 res.Exito = false;
                 res.Mensaje = $"Error al listar índices: {ex.Message}";
-                _logger.LogError(ex, "Error al listar índices para la tabla {NombreTabla}", req.NombreTabla);
+                
             }
             return res;
         }
@@ -139,13 +141,13 @@ namespace Logica
                 }
                 res.Exito = true;
                 res.Mensaje = $"Estadísticas del índice {req.NombreIndice} obtenidas correctamente.";
-                _logger.LogInformation("Estadísticas del índice {NombreIndice} obtenidas correctamente.", req.NombreIndice);
+                
             }
             catch (Exception ex)
             {
                 res.Exito = false;
                 res.Mensaje = $"Error al obtener estadísticas del índice: {ex.Message}";
-                _logger.LogError(ex, "Error al obtener estadísticas del índice {NombreIndice}", req.NombreIndice);
+                
             }
             return res;
         }

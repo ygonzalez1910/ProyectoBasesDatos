@@ -75,6 +75,13 @@ builder.Services.AddScoped<Auditoria>(provider =>
     return new Auditoria(connectionString);
 });
 
+builder.Services.AddScoped<Performance>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("OracleConnection");
+    return new Performance(connectionString);
+});
+
 // Configuración de Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
