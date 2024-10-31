@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Form, FormGroup, Label, Input, Button, Spinner } from 'reactstrap';
 import { RespaldoService } from "../../services/api.service";
 
@@ -7,14 +7,27 @@ const CompletoRespaldo = () => {
     contrasena: '',
     directorio: ''
   });
+  const [directorios, setDirectorios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const directorios = [
-    "C:\\ORACLE_FILES\\HD1",
-    "C:\\ORACLE_FILES\\HD2",
-    "C:\\ORACLE_FILES\\HD3"
-  ];
+  // Fetch directorios al montar el componente
+  useEffect(() => {
+    const fetchDirectorios = async () => {
+      setLoading(true);
+      try {
+        const response = await RespaldoService.getAllRespaldos();
+        const directoriosList = response.directorios.map((dir) => dir.nombreDirectorio);
+        setDirectorios(directoriosList);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDirectorios();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
