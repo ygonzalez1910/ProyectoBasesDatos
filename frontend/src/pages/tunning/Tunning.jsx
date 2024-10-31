@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Container, 
-  Row, 
-  Col, 
-  FormGroup, 
-  Label, 
-  Input, 
-  Button, 
-  Spinner, 
-  Card, 
-  CardBody, 
+import { FaLightbulb } from 'react-icons/fa';
+import {
+  Container,
+  Row,
+  Col,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Spinner,
+  Card,
+  CardBody,
   CardHeader,
   CardTitle,
-  ListGroup, 
+  ListGroup,
   ListGroupItem,
   Alert
 } from 'reactstrap';
@@ -80,7 +81,7 @@ const Tunning = () => {
     setSelectedTable('');
     await fetchTables(schema);
   };
-  
+
   const fetchTables = async (schema) => {
     try {
       setLoading(true);
@@ -133,7 +134,7 @@ const Tunning = () => {
           <hr style={styles.divider} className="my-4" />
         </Col>
       </Row>
-
+  
       <Row className="g-4">
         {/* Selector de Schema y Tabla */}
         <Col lg="6">
@@ -165,7 +166,7 @@ const Tunning = () => {
                   ))}
                 </Input>
               </FormGroup>
-
+  
               <FormGroup>
                 <Label for="table-select" className="form-label text-muted">Tabla:</Label>
                 <Input
@@ -186,7 +187,7 @@ const Tunning = () => {
             </CardBody>
           </Card>
         </Col>
-
+  
         {/* Analizador de Consultas */}
         <Col lg="6">
           <Card className="shadow-sm h-100 border-0" style={styles.card}>
@@ -221,7 +222,7 @@ const Tunning = () => {
                 >
                   {loading ? (
                     <>
-                      <Spinner size="sm" className="me-2" /> 
+                      <Spinner size="sm" className="me-2" />
                       Analizando...
                     </>
                   ) : (
@@ -233,46 +234,79 @@ const Tunning = () => {
           </Card>
         </Col>
       </Row>
-
+  
       {/* Resultados del Análisis */}
       {analysisResult && (
-        <Card className="shadow-sm mt-4 border-0" style={styles.card}>
-          <CardHeader className="py-3" style={styles.gradient}>
-            <div className="d-flex align-items-center">
-              <FaChartLine size={20} className="me-3" />
-              <div>
-                <CardTitle tag="h5" className="mb-0">Resultados del Análisis</CardTitle>
-                <small>Plan de ejecución y recomendaciones</small>
-              </div>
-            </div>
-          </CardHeader>
-          <CardBody className="p-4">
-            <h5 className="mb-3">Plan de Ejecución:</h5>
-            <pre className="bg-light p-3 rounded">{analysisResult.planEjecucion}</pre>
-            
-            <h5 className="mt-4 mb-3">Estadísticas:</h5>
-            <ListGroup flush className="mb-4">
-              {Object.entries(analysisResult.estadisticas).map(([key, value]) => (
-                <ListGroupItem key={key} className="d-flex justify-content-between align-items-center">
-                  <strong>{key}:</strong>
-                  <span>{value}</span>
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-            
-            <h5 className="mb-3">Recomendaciones de Optimización:</h5>
-            <ListGroup flush>
-              {analysisResult.recomendacionesOptimizacion.map((recommendation, index) => (
-                <ListGroupItem key={index}>
-                  <i className="fas fa-lightbulb text-warning me-2"></i>
-                  {recommendation}
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-          </CardBody>
-        </Card>
+        <Row className="mt-4">
+          <Col>
+            <Card className="shadow-sm border-0" style={styles.card}>
+              <CardHeader className="py-3" style={styles.gradient}>
+                <div className="d-flex align-items-center">
+                  <FaChartLine size={20} className="me-3" />
+                  <div>
+                    <CardTitle tag="h5" className="mb-0">Resultados del Análisis</CardTitle>
+                    <small>Plan de ejecución y recomendaciones</small>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardBody className="p-4">
+                {/* Plan de Ejecución */}
+                <Card className="mb-4" style={styles.statsCard}>
+                  <CardBody>
+                    <h6 className="text-primary mb-3">Plan de Ejecución</h6>
+                    <pre className="bg-light p-3 rounded mb-0">
+                      {analysisResult.planEjecucion}
+                    </pre>
+                  </CardBody>
+                </Card>
+  
+                {/* Estadísticas */}
+                <Card className="mb-4" style={styles.statsCard}>
+                  <CardBody>
+                    <h6 className="text-primary mb-3">Estadísticas de Ejecución</h6>
+                    <ListGroup flush>
+                      <ListGroupItem className="d-flex justify-content-between align-items-center">
+                        Tiempo de Ejecución
+                        <span className="text-muted">{analysisResult.estadisticas.TiempoEjecucion.toFixed(6)} seg</span>
+                      </ListGroupItem>
+                      <ListGroupItem className="d-flex justify-content-between align-items-center">
+                        Buffer Gets
+                        <span className="text-muted">{analysisResult.estadisticas.BufferGets}</span>
+                      </ListGroupItem>
+                      <ListGroupItem className="d-flex justify-content-between align-items-center">
+                        Lecturas de Disco
+                        <span className="text-muted">{analysisResult.estadisticas.LecturasDisco}</span>
+                      </ListGroupItem>
+                      <ListGroupItem className="d-flex justify-content-between align-items-center">
+                        Filas Procesadas
+                        <span className="text-muted">{analysisResult.estadisticas.FilasProcesadas}</span>
+                      </ListGroupItem>
+                    </ListGroup>
+                  </CardBody>
+                </Card>
+  
+                {/* Recomendaciones */}
+                {analysisResult.recomendacionesOptimizacion.length > 0 && (
+                  <Card style={styles.statsCard}>
+                    <CardBody>
+                      <h6 className="text-primary mb-3">Recomendaciones de Optimización</h6>
+                      <ListGroup flush>
+                        {analysisResult.recomendacionesOptimizacion.map((recomendacion, index) => (
+                          <ListGroupItem key={index}>
+                            <FaLightbulb className="text-warning me-2" />
+                            {recomendacion}
+                          </ListGroupItem>
+                        ))}
+                      </ListGroup>
+                    </CardBody>
+                  </Card>
+                )}
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       )}
-
+  
       {error && (
         <Alert color="danger" className="mt-4">
           {error}

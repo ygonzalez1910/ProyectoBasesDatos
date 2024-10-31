@@ -104,9 +104,9 @@ const Layout = () => {
   return (
     <div className="layout">
       <Container fluid className="h-100">
-        <Row className="h-100">
+        <Row className="h-100 g-0"> {/* g-0 elimina el gutters */}
           <Col
-            xs={3}
+            xs={2}
             className={`sidebar-col p-0 ${isSidebarOpen ? "open" : "closed"}`}
           >
             <Sidebar
@@ -116,7 +116,7 @@ const Layout = () => {
               onNavigate={handleNavigation}
             />
           </Col>
-          <Col xs={9} className="main-content-col p-0">
+          <Col xs={10} className="main-content-col px-5 px-lg-6"> {/* padding más grande en pantallas grandes */}
             <AppRoutes />
           </Col>
         </Row>
