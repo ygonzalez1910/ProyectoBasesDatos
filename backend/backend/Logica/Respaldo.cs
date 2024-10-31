@@ -64,7 +64,7 @@ namespace Logica
                 {
                     _logger.LogInformation("Permisos otrogados exitosamente?");
                     cmd.ExecuteNonQuery();
-                    _logger.LogInformation("Permisos otrogados exitosamente efectivamenete");
+                    _logger.LogInformation("Permisos otorgados exitosamente efectivamenete");
                     return true;
                 }
             }
@@ -188,7 +188,7 @@ namespace Logica
                 // Verificar si el directorio ya existe
                 if (!DirectorioExiste(req.directorio))
                 {
-                    _logger.LogInformation("El directorio {NombreDirectorio} no existe, creando.", req.directorio);
+                    _logger.LogInformation("El directorio {NombreDirectorio} no existe", req.directorio);
                     // Crear directorio
                     res.errores.Add($"No se encontro el directorio {req.directorio}.");
                 }
