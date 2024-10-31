@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Container,
-  Table,
   Form,
   FormGroup,
   Label,
@@ -18,14 +17,10 @@ const TablaRespaldo = () => {
     nombreSchema: "",
     contrasenaSchema: "",
     nombreTabla: "",
-    directorio: "",
+    nombreDirectorio: "", // Cambiado a nombreDirectorio
   });
   const [tables, setTables] = useState([]);
-  const directorios = [
-    "C:\\ORACLE_FILES\\HD1",
-    "C:\\ORACLE_FILES\\HD2",
-    "C:\\ORACLE_FILES\\HD3",
-  ];
+  const [directorios, setDirectorios] = useState([]); // Estado para los directorios
 
   useEffect(() => {
     const fetchTables = async () => {
@@ -40,9 +35,21 @@ const TablaRespaldo = () => {
       }
     };
 
-    fetchTables();
-  }, []);
+    const fetchDirectorios = async () => {
+      setLoading(true); // Opcional
+      try {
+        const { directorios } = await RespaldoService.getAllRespaldos();
+        setDirectorios(directorios); // Guardar directorios en el estado
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchTables();
+    fetchDirectorios(); // Llamar a la función para obtener directorios
+  }, []); // Dependencias vacías para que se ejecute solo una vez al montar
 
   const handleCreateRespaldo = async (e) => {
     e.preventDefault();
@@ -50,13 +57,23 @@ const TablaRespaldo = () => {
     setError(null);
 
     try {
-      await RespaldoService.createRespaldoTable(formData);
+      // Extraer solo el nombreDirectorio de formData
+      const { nombreDirectorio } = directorios.find(dir => dir.direccionDirectorio === formData.nombreDirectorio) || {};
+
+      // Enviar al API con la estructura correcta
+      await RespaldoService.createRespaldoTable({
+        nombreSchema: formData.nombreSchema,
+        contrasenaSchema: formData.contrasenaSchema,
+        nombreTabla: formData.nombreTabla,
+        directorio: nombreDirectorio || "", // Solo se envía nombreDirectorio
+      });
+      
       // Limpiar el formulario después de un envío exitoso
       setFormData({
         nombreSchema: "",
         contrasenaSchema: "",
         nombreTabla: "",
-        directorio: "",
+        nombreDirectorio: "", // Limpiar también nombreDirectorio
       });
     } catch (err) {
       setError(err.message);
@@ -125,19 +142,19 @@ const TablaRespaldo = () => {
         </FormGroup>
 
         <FormGroup>
-          <Label for="directorio">Selecciona el Directorio</Label>
+          <Label for="nombreDirectorio">Selecciona el Directorio</Label>
           <Input
             type="select"
-            name="directorio"
-            id="directorio"
-            value={formData.directorio}
+            name="nombreDirectorio"
+            id="nombreDirectorio"
+            value={formData.nombreDirectorio}
             onChange={handleChange}
             required
           >
             <option value="">Selecciona un directorio</option>
             {directorios.map((dir, index) => (
-              <option key={index} value={dir}>
-                {dir}
+              <option key={index} value={dir.direccionDirectorio}>
+                {dir.nombreDirectorio}
               </option>
             ))}
           </Input>

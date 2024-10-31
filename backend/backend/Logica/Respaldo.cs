@@ -52,17 +52,24 @@ namespace Logica
             }
         }
 
-        private bool OtorgarPermisos(String nombreDirectorio, String nombreSchema){
+        private bool OtorgarPermisos(String nombreDirectorio, String nombreSchema)
+        {
             // Otorgar permisos
+            _logger.LogInformation("Otorgando permisos");
             using (OracleConnection conexion = new OracleConnection(_connectionString))
             {
+                conexion.Open();  // Asegúrate de abrir la conexión
                 string sqlOtorgarPermisos = $"GRANT READ, WRITE ON DIRECTORY {nombreDirectorio} TO {nombreSchema}";
                 using (OracleCommand cmd = new OracleCommand(sqlOtorgarPermisos, conexion))
                 {
-                    return cmd.ExecuteNonQuery() > 0;
+                    _logger.LogInformation("Permisos otrogados exitosamente?");
+                    cmd.ExecuteNonQuery();
+                    _logger.LogInformation("Permisos otrogados exitosamente efectivamenete");
+                    return true;
                 }
             }
         }
+
 
         public ResRespaldoSchema RespaldarSchema(ReqRespaldoSchema req)
         {
@@ -163,7 +170,7 @@ namespace Logica
         {
             ResRespaldoTabla res = new ResRespaldoTabla();
             res.errores = new List<string>();
-            _logger.LogInformation("Inicio del respaldo para la tabla {NombreTabla} en el esquema {NombreEsquema}", req.nombreTabla, req.nombreSchema);
+            _logger.LogInformation("Inicio del respaldo para la tabla {NombreTabla} en el esquema {NombreEsquema} en el directorio {directoreio}", req.nombreTabla, req.nombreSchema, req.directorio);
 
             try
             {
@@ -177,7 +184,7 @@ namespace Logica
 
                 // Generar el nombre de respaldo específico para la tabla
                 string nombreRespaldo = $"{req.nombreSchema}_{req.nombreTabla}_BACKUP";
-
+                _logger.LogInformation("--1");
                 // Verificar si el directorio ya existe
                 if (!DirectorioExiste(req.directorio))
                 {
@@ -190,14 +197,14 @@ namespace Logica
                     res.errores.Add($"No se pudieron otorgar permisos para el directorio {req.directorio}.");
                     return res;
                 }
-
+                _logger.LogInformation("--2");
                 // Ejecutar el respaldo con Data Pump
                 string expdpCommand = $"expdp {req.nombreSchema}/{req.contrasenaSchema}@XE " +
                                       $"TABLES={req.nombreSchema}.{req.nombreTabla} " +
                                       $"DIRECTORY={req.directorio} " +
                                       $"DUMPFILE={nombreRespaldo}.DMP " +
                                       $"LOGFILE={nombreRespaldo}.LOG REUSE_DUMPFILES=Y";
-
+                _logger.LogInformation("El comando es {comando}", expdpCommand);
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
@@ -207,7 +214,7 @@ namespace Logica
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
-
+                _logger.LogInformation("--3");
                 using (var process = Process.Start(startInfo))
                 {
                     if (process == null)
@@ -215,7 +222,7 @@ namespace Logica
                         res.errores.Add("No se pudo iniciar el proceso de respaldo.");
                         return res;
                     }
-
+                    _logger.LogInformation("--4");
                     string output = process.StandardOutput.ReadToEnd();
                     string error = process.StandardError.ReadToEnd();
                     process.WaitForExit();
@@ -227,6 +234,7 @@ namespace Logica
                     }
                     else
                     {
+                        _logger.LogInformation("--5");
                         // Guardar la información del respaldo en la base de datos
                         if (!SaveInfoDirectorio(nombreRespaldo, req.directorio, "table", req.nombreSchema, req.nombreTabla))
                         {
@@ -236,6 +244,7 @@ namespace Logica
                         else
                         {
                             res.resultado = true;
+                            _logger.LogInformation("--6");
                         }
                     }
                 }
