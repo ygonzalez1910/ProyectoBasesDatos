@@ -12,7 +12,12 @@ import {
   Input,
   Row,
   Col,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
 } from "reactstrap";
+import { FaDatabase } from "react-icons/fa";
 import { TableSpaceService } from "../../services/api.service";
 import Swal from "sweetalert2"; // Importar SweetAlert2
 import { Spinner } from "reactstrap"; // Importar Spinner de reactstrap
@@ -22,6 +27,7 @@ const AdministrarTableSpace = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modal, setModal] = useState(false);
+  const [results, setResults] = useState([]);
   const [createModal, setCreateModal] = useState(false);
   const [selectedTable, setSelectedTable] = useState(null);
   const [newSize, setNewSize] = useState("");
@@ -66,7 +72,6 @@ const AdministrarTableSpace = () => {
     },
   };
 
-
   useEffect(() => {
     fetchTables();
   }, []);
@@ -88,10 +93,10 @@ const AdministrarTableSpace = () => {
   const handleDeleteClick = async (table) => {
     const confirmDelete = await Swal.fire({
       title: `¿Estás seguro de que deseas eliminar el tablespace ${table.tableSpaceName}?`,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
     });
 
     if (confirmDelete.isConfirmed) {
@@ -146,7 +151,9 @@ const AdministrarTableSpace = () => {
       Swal.fire({
         icon: "error",
         title: "¡Error!",
-        text: error.message || "Ocurrió un error al modificar el tamaño del tablespace.",
+        text:
+          error.message ||
+          "Ocurrió un error al modificar el tamaño del tablespace.",
       });
     }
   };
@@ -156,6 +163,7 @@ const AdministrarTableSpace = () => {
     try {
       const result = await TableSpaceService.getAllTableSpaces();
       setTables(result.tableSpaces);
+      setResults(result.tableSpaces)
     } catch (err) {
       setError(err.message);
     } finally {
@@ -165,7 +173,7 @@ const AdministrarTableSpace = () => {
 
   const handleCreateTableSpace = async () => {
     setLoading(true);
-  
+
     const data = {
       tableSpaceName: newTableSpaceName,
       dataFileName: newDataFileName,
@@ -174,21 +182,21 @@ const AdministrarTableSpace = () => {
       maxSizeMB: newMaxSize,
       userPassword: userPassword, // Agregar la contraseña al objeto de datos
     };
-  
+
     try {
       console.log("data: ", data);
       const result = await TableSpaceService.createTableSpace(data);
       console.log("Respuesta de la API:", result);
-      
+
       // Llama nuevamente a fetchTables para actualizar la lista
       await fetchTables();
-  
+
       Swal.fire({
         icon: "success",
         title: "¡Éxito!",
         text: "Tablespace creado correctamente.",
       });
-      
+
       toggleCreateModal();
       // Reinicia los valores del formulario
       setNewTableSpaceName("");
@@ -211,13 +219,13 @@ const AdministrarTableSpace = () => {
   };
 
   return (
-      <Container className="py-5">
+    <Container className="py-5">
       {/* Header mejorado */}
       <Row className="mb-5">
         <Col className="text-center">
           <h2 className="display-4 mb-2">Gestión de Table Spaces</h2>
           <p className="text-muted lead">
-              Sistema de gestión de Almacenaje de Schemas
+            Sistema de gestión de Almacenaje de Schemas
           </p>
         </Col>
       </Row>
@@ -226,46 +234,64 @@ const AdministrarTableSpace = () => {
       </Button>
       {loading && <Spinner color="primary" />}
       {error && <p>Error: {error}</p>}
-      <Table className="min-w-full table-auto border border-gray-300" striped>
-        <thead>
-          <tr style={styles.gradient}>
-            <th>Nombre de Tablespace</th>
-            <th>Nombre de Archivo</th>
-            <th>Tamaño (MB)</th>
-            <th>Autoextensible</th>
-            <th>Tamaño Máximo (MB)</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tables.map((table, index) => (
-            <tr key={index}>
-              <td>{table.tableSpaceName}</td>
-              <td>{table.fileName}</td>
-              <td>{table.sizeMB}</td>
-              <td>{table.autoExtensible ? "Sí" : "No"}</td>
-              <td>{table.maxSizeMB}</td>
-              <td className="d-flex justify-content-start">
-                <Button
-                  color="warning"
-                  className="me-1 btn-sm"
-                  onClick={() => handleEditClick(table)}
-                >
-                  Modificar Tamaño
-                </Button>
-                <Button
-                  color="danger"
-                  className="btn-sm"
-                  onClick={() => handleDeleteClick(table)}
-                >
-                  Eliminar
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-
+      <Card className="shadow-sm h-100 border-0" style={styles.card}>
+        <CardHeader className="py-3" style={styles.gradient}>
+          <div className="d-flex align-items-center">
+          <FaDatabase size={20} className="me-3" />
+          <div>
+            <CardTitle tag="h5" className="mb-0">
+              Tabla de Tablespaces
+            </CardTitle>
+            <small>Registros encontrados: {results.length}</small>
+          </div>
+          </div>
+        </CardHeader>
+        <CardBody className="p-0">
+          <div className="table-responsive">
+            <Table hover bordered striped className="mb-0">
+              <thead className="bg-light">
+                <tr>
+                  <th className="text-center">Nombre de Tablespace</th>
+                  <th className="text-center">Nombre de Archivo</th>
+                  <th className="text-center">Tamaño (MB)</th>
+                  <th className="text-center">Autoextensible</th>
+                  <th className="text-center">Tamaño Máximo (MB)</th>
+                  <th className="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tables.map((table, index) => (
+                  <tr key={index}>
+                    <td className="text-center">{table.tableSpaceName}</td>
+                    <td className="text-center">{table.fileName}</td>
+                    <td className="text-center">{table.sizeMB}</td>
+                    <td className="text-center">
+                      {table.autoExtensible ? "Sí" : "No"}
+                    </td>
+                    <td className="text-center">{table.maxSizeMB}</td>
+                    <td className="d-flex justify-content-center">
+                      <Button
+                        color="warning"
+                        className="me-1 btn-sm"
+                        onClick={() => handleEditClick(table)}
+                      >
+                        Modificar Tamaño
+                      </Button>
+                      <Button
+                        color="danger"
+                        className="btn-sm"
+                        onClick={() => handleDeleteClick(table)}
+                      >
+                        Eliminar
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </CardBody>
+      </Card>
       {/* Modal para modificar tamaño */}
       <Modal isOpen={modal} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>
@@ -309,7 +335,8 @@ const AdministrarTableSpace = () => {
             />
           </FormGroup>
           <FormGroup>
-            <Label for="userPassword">Contraseña</Label> {/* Nuevo campo de contraseña */}
+            <Label for="userPassword">Contraseña</Label>{" "}
+            {/* Nuevo campo de contraseña */}
             <Input
               type="password"
               id="userPassword"
