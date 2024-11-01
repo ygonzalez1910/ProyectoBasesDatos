@@ -280,7 +280,6 @@ const Seguridad = () => {
 
   return (
     <Container className="py-5">
-
       {/* Header con estilo mejorado */}
       <Row className="mb-5">
         <Col className="text-center">
@@ -289,11 +288,11 @@ const Seguridad = () => {
           <hr style={styles.divider} className="my-4" />
         </Col>
       </Row>
-
-      
-      <Row className="g-4">
+  
+      {/* Primera fila: Crear Usuario, Eliminar Usuario, Lista de Usuarios */}
+      <Row className="g-4 mb-4">
         {/* Crear Usuario */}
-        <Col lg="6">
+        <Col lg="4">
           <Card className="shadow-sm h-100 border-0" style={styles.card}>
             <CardHeader className="py-3" style={styles.gradient}>
               <div className="d-flex align-items-center">
@@ -393,10 +392,9 @@ const Seguridad = () => {
             </CardBody>
           </Card>
         </Col>
-
-
+  
         {/* Eliminar Usuario */}
-        <Col lg="6">
+        <Col lg="4">
           <Card className="shadow-sm h-100 border-0" style={styles.card}>
             <CardHeader className="py-3" style={styles.gradient}>
               <div className="d-flex align-items-center">
@@ -448,74 +446,19 @@ const Seguridad = () => {
             </CardBody>
           </Card>
         </Col>
-
-        {/* Modificar Usuario */}
-        <Col lg="6">
-          <Card className="shadow-sm h-100 border-0" style={styles.card}>
-            <CardHeader className="py-3" style={styles.gradient}>
-              <div className="d-flex align-items-center">
-                <FaKey size={20} className="me-3" />
-                <div>
-                  <CardTitle tag="h5" className="mb-0">Modificar Usuario</CardTitle>
-                  <small>Actualizar contraseña de usuario</small>
-                </div>
-              </div>
-            </CardHeader>
-            <CardBody className="p-4">
-              <Form onSubmit={handleChangePassword}>
-                <FormGroup className="mb-3">
-                  <Label for="changeUsername" className="form-label text-muted">
-                    Username
-                  </Label>
-                  <Input
-                    type="text"
-                    id="changeUsername"
-                    name="nombreUsuario"
-                    placeholder="Ingrese nombre de usuario"
-                    value={changePasswordForm.nombreUsuario}
-                    onChange={(e) => handleInputChange(e, setChangePasswordForm)}
-                  />
-                </FormGroup>
-                <FormGroup className="mb-4">
-                  <Label for="nuevoPassword" className="form-label text-muted">
-                    New Password
-                  </Label>
-                  <Input
-                    type="password"
-                    id="nuevoPassword"
-                    name="nuevoPassword"
-                    placeholder="Ingrese nueva contraseña"
-                    value={changePasswordForm.nuevoPassword}
-                    onChange={(e) => handleInputChange(e, setChangePasswordForm)}
-                  />
-                </FormGroup>
-                <div className="text-end">
-                  <Button
-                    type="submit"
-                    color="warning"
-                    style={styles.button}
-                    disabled={changingPassword}
-                  >
-                    {changingPassword ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2" />
-                        Actualizando...
-                      </>
-                    ) : (
-                      'Cambiar Contraseña'
-                    )}
-                  </Button>
-                </div>
-                {changePasswordError && (
-                  <Alert color="danger" className="mt-3 mb-0">
-                    {changePasswordError}
-                  </Alert>
-                )}
-              </Form>
-            </CardBody>
-          </Card>
+  
+        {/* Lista de usuarios */}
+        <Col lg="4">
+          <UserList 
+            users={users}
+            loading={loadingUsers}
+            error={usersError}
+          />
         </Col>
-
+      </Row>
+  
+      {/* Segunda fila: Crear Rol y Modificar Usuario */}
+      <Row className="g-4">
         {/* Crear Rol */}
         <Col lg="6">
           <Card className="shadow-sm h-100 border-0" style={styles.card}>
@@ -583,7 +526,7 @@ const Seguridad = () => {
                     ))}
                   </ul>
                 </FormGroup>
-
+  
                 <FormGroup check className="mb-4">
                   <Label check className="text-muted">
                     <Input
@@ -623,18 +566,75 @@ const Seguridad = () => {
             </CardBody>
           </Card>
         </Col>
+  
+        {/* Modificar Usuario */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaKey size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">Modificar Usuario</CardTitle>
+                  <small>Actualizar contraseña de usuario</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody className="p-4">
+              <Form onSubmit={handleChangePassword}>
+                <FormGroup className="mb-3">
+                  <Label for="changeUsername" className="form-label text-muted">
+                    Username
+                  </Label>
+                  <Input
+                    type="text"
+                    id="changeUsername"
+                    name="nombreUsuario"
+                    placeholder="Ingrese nombre de usuario"
+                    value={changePasswordForm.nombreUsuario}
+                    onChange={(e) => handleInputChange(e, setChangePasswordForm)}
+                  />
+                </FormGroup>
+                <FormGroup className="mb-4">
+                  <Label for="nuevoPassword" className="form-label text-muted">
+                    New Password
+                  </Label>
+                  <Input
+                    type="password"
+                    id="nuevoPassword"
+                    name="nuevoPassword"
+                    placeholder="Ingrese nueva contraseña"
+                    value={changePasswordForm.nuevoPassword}
+                    onChange={(e) => handleInputChange(e, setChangePasswordForm)}
+                  />
+                </FormGroup>
+                <div className="text-end">
+                  <Button
+                    type="submit"
+                    color="warning"
+                    style={styles.button}
+                    disabled={changingPassword}
+                  >
+                    {changingPassword ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Actualizando...
+                      </>
+                    ) : (
+                      'Cambiar Contraseña'
+                    )}
+                  </Button>
+                </div>
+                {changePasswordError && (
+                  <Alert color="danger" className="mt-3 mb-0">
+                    {changePasswordError}
+                  </Alert>
+                )}
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
       </Row>
-      
-      {/* Lista de usuarios - Columna fija a la izquierda */}
-      <Col md="3" className="mb-4 mb-md-0">
-        <UserList 
-          users={users}
-          loading={loadingUsers}
-          error={usersError}
-        />
-      </Col>
     </Container>
-    
   );
 
 };
