@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, FormGroup, Label, Input, Button, Spinner, Alert } from 'reactstrap';
 import { SchemasService, RespaldoService } from "../../services/api.service";
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 const RecuperarRespaldo = () => {
   // Estado del formulario
@@ -41,7 +42,7 @@ const RecuperarRespaldo = () => {
         setNombresBackup([]);
       }
     };
-  
+
     fetchNombresBackup();
   }, [formData.tipoBackup]);
 
@@ -59,20 +60,33 @@ const RecuperarRespaldo = () => {
         nombreBackup: '',
         contrasena: ''
       });
-      alert("Respaldo recuperado con éxito.");
+      
+      // Muestra un mensaje de éxito con SweetAlert2
+      await Swal.fire({
+        title: 'Éxito!',
+        text: 'Respaldo recuperado con éxito.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      });
+
     } catch (err) {
-      setError(`Error al recuperar respaldo: ${err.message}`);
+      // Muestra un mensaje de error con SweetAlert2
+      await Swal.fire({
+        title: 'Error!',
+        text: `Error al recuperar respaldo: ${err.message}`,
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+      });
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <Container fluid className="p-4">
       <h1>Gestión de Recuperar Respaldo</h1>
       <p>Sistema de gestión de respaldos</p>
-      
+
       <Form onSubmit={handleRecuperarRespaldo}>
         {/* Selección del tipo de respaldo */}
         <FormGroup>
