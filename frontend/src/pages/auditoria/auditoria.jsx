@@ -23,8 +23,8 @@ import {
 } from "../../services/api.service";
 
 const Auditoria = () => {
-  const [schemas, setSchemas] = useState([]); // Nuevo estado para los esquemas
-  const [selectedSchema, setSelectedSchema] = useState(""); // Estado para el esquema seleccionado
+  const [schemas, setSchemas] = useState([]);
+  const [selectedSchema, setSelectedSchema] = useState("");
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState("");
   const [dateRange, setDateRange] = useState({
@@ -71,18 +71,18 @@ const Auditoria = () => {
   };
 
   useEffect(() => {
-    fetchSchemas(); // Obtener esquemas al cargar el componente
+    fetchSchemas();
   }, []);
 
   useEffect(() => {
     if (selectedSchema) {
-      fetchTables(selectedSchema); // Obtener tablas al seleccionar un esquema
+      fetchTables(selectedSchema);
     }
   }, [selectedSchema]);
 
   const fetchSchemas = async () => {
     try {
-      const response = await SchemasService.getAllSchemas(); // Método para obtener esquemas
+      const response = await SchemasService.getAllSchemas();
       if (response.schemas && response.schemas.length > 0) {
         setSchemas(response.schemas);
       } else {
@@ -98,9 +98,7 @@ const Auditoria = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log("Inicio de la consuta para tablas: ", schema);
       const response = await tunningService.obtenerTablasPorSchema(schema);
-      console.log("Response from obtenerTablasPorSchema:", response); // Agrega esto
       if (response?.data?.resultado) {
         setTables(response.data.tablas || []);
       } else {
@@ -165,72 +163,37 @@ const Auditoria = () => {
     return true;
   };
 
-  const activarAuditoria = async () => {
-    if (!selectedTable) {
-      setError("Debe seleccionar una tabla");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-      setMessage(null);
-
-      const response = await AuditoriaService.activarAuditoria({
-        nombreTabla: selectedTable,
-        auditarInsert: true,
-        auditarUpdate: true,
-        auditarDelete: true,
-        auditarSelect: true,
-      });
-
-      if (response.resultado) {
-        setMessage("Auditoría activada exitosamente");
-      } else {
-        setError(response.errores.join(", "));
-      }
-    } catch (error) {
-      console.error("Error al activar auditoría:", error);
-      const errorMessage = error.response
-        ? error.response.data.errores.join(", ")
-        : "Error desconocido";
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const consultarAuditoria = async () => {
     if (!validateDates()) return;
-
+  
     try {
       setLoading(true);
       setError(null);
       setShowResults(false);
-
+  
       const formattedStartDate = new Date(dateRange.startDate).toISOString();
       const formattedEndDate = new Date(dateRange.endDate).toISOString();
 
       const response = await AuditoriaService.obtenerAuditoria({
         nombreTabla: selectedTable,
+        esquema: selectedSchema,
         fechaInicio: formattedStartDate,
         fechaFin: formattedEndDate,
         tipoAccion: actionType || null,
       });
-
+      console.log("response: ", response);
       if (response.resultado) {
         setAuditResults(response.registros);
         setShowResults(true);
+        if (response.registros.length === 0) {
+          setMessage("No se encontraron registros para los criterios seleccionados");
+        }
       } else {
-        setError(
-          response.errores?.join(", ") || "Error al obtener los resultados"
-        );
+        setError(response.errores?.join(", ") || "Error al obtener los resultados");
       }
     } catch (error) {
       console.error("Error al consultar auditoría:", error);
-      setError(
-        "Error al consultar los registros de auditoría. Por favor intente nuevamente."
-      );
+      setError("Error al consultar los registros de auditoría. Por favor intente nuevamente.");
     } finally {
       setLoading(false);
     }
@@ -238,7 +201,6 @@ const Auditoria = () => {
 
   return (
     <Container className="py-5">
-      {/* Header mejorado */}
       <Row className="mb-5">
         <Col className="text-center">
           <h2 className="display-4 mb-2">Módulo de Auditoría</h2>
@@ -250,86 +212,8 @@ const Auditoria = () => {
       </Row>
 
       <Row className="g-4">
-        {/* Configuración de Auditoría */}
-        <Col lg="6">
-          <Card className="shadow-sm h-100 border-0" style={styles.card}>
-            <CardHeader className="py-3" style={styles.gradient}>
-              <div className="d-flex align-items-center">
-                <FaDatabase size={20} className="me-3" />
-                <div>
-                  <CardTitle tag="h5" className="mb-0">
-                    Configuración de Auditoría
-                  </CardTitle>
-                  <small>Activar auditoría para tablas del sistema</small>
-                </div>
-              </div>
-            </CardHeader>
-            <CardBody className="p-4">
-              <FormGroup>
-                <Label for="schema-select" className="form-label text-muted">
-                  Seleccionar esquema:
-                </Label>
-                <Input
-                  type="select"
-                  id="schema-select"
-                  value={selectedSchema}
-                  onChange={(e) => setSelectedSchema(e.target.value)}
-                >
-                  <option value="">Seleccione un esquema</option>
-                  {schemas.map((schema) => (
-                    <option key={schema.schemaName} value={schema.schemaName}>
-                      {schema.schemaName}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <Label for="table-select" className="form-label text-muted">
-                  Seleccionar tabla:
-                </Label>
-                <Input
-                  type="select"
-                  id="table-select"
-                  value={selectedTable}
-                  onChange={(e) => setSelectedTable(e.target.value)} // Solo actualiza la tabla seleccionada
-                >
-                  <option value="">Seleccione una tabla</option>
-                  {tables.map((table) => (
-                    <option key={table} value={table}>
-                      {table}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-              <div className="text-end mt-4">
-                <Button
-                  color="primary"
-                  onClick={activarAuditoria}
-                  disabled={loading || !selectedTable}
-                  style={styles.button}
-                >
-                  {loading ? (
-                    <span className="spinner-border spinner-border-sm me-2" />
-                  ) : null}
-                  Activar Auditoría
-                </Button>
-              </div>
-              {error && (
-                <Alert color="danger" className="mt-3">
-                  {error}
-                </Alert>
-              )}
-              {message && (
-                <Alert color="success" className="mt-3">
-                  {message}
-                </Alert>
-              )}
-            </CardBody>
-          </Card>
-        </Col>
-
         {/* Consulta de Auditoría */}
-        <Col lg="6">
+        <Col lg="12">
           <Card className="shadow-sm h-100 border-0" style={styles.card}>
             <CardHeader className="py-3" style={styles.gradient}>
               <div className="d-flex align-items-center">
@@ -345,6 +229,30 @@ const Auditoria = () => {
             <CardBody className="p-4">
               <FormGroup>
                 <Label
+                  for="schema-select-audit"
+                  className="form-label text-muted"
+                >
+                  Seleccionar esquema:
+                </Label>
+                <Input
+                  type="select"
+                  id="schema-select-audit"
+                  value={selectedSchema}
+                  onChange={(e) => {
+                    setSelectedSchema(e.target.value);
+                    setSelectedTable("");
+                  }}
+                >
+                  <option value="">Seleccione un esquema</option>
+                  {schemas.map((schema) => (
+                    <option key={schema.schemaName} value={schema.schemaName}>
+                      {schema.schemaName}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label
                   for="table-select-audit"
                   className="form-label text-muted"
                 >
@@ -355,6 +263,7 @@ const Auditoria = () => {
                   id="table-select-audit"
                   value={selectedTable}
                   onChange={(e) => setSelectedTable(e.target.value)}
+                  disabled={!selectedSchema}
                 >
                   <option value="">Seleccione una tabla</option>
                   {tables.map((table) => (
@@ -398,18 +307,18 @@ const Auditoria = () => {
                   value={actionType}
                   onChange={(e) => setActionType(e.target.value)}
                 >
-                  <option value="">Seleccione un tipo de acción</option>
-                  <option value="INSERT">Insertar</option>
-                  <option value="UPDATE">Actualizar</option>
-                  <option value="DELETE">Eliminar</option>
-                  <option value="SELECT">Seleccionar</option>
+                  <option value="">TODAS</option>
+                  <option value="INSERT">INSERT</option>
+                  <option value="UPDATE">UPDATE</option>
+                  <option value="DELETE">DELETE</option>
+                  <option value="SELECT">SELECT</option>
                 </Input>
               </FormGroup>
               <div className="text-end mt-4">
                 <Button
                   color="primary"
                   onClick={consultarAuditoria}
-                  disabled={loading}
+                  disabled={loading || !selectedSchema || !selectedTable}
                   style={styles.button}
                 >
                   {loading ? (
@@ -426,28 +335,40 @@ const Auditoria = () => {
               {showResults && auditResults && (
                 <div className="mt-4">
                   <h5>Resultados de Auditoría</h5>
-                  <Table striped>
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Acción</th>
-                        <th>Fecha</th>
-                        <th>Usuario</th>
-                        <th>Detalles</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {auditResults.map((result) => (
-                        <tr key={result.id}>
-                          <td>{result.id}</td>
-                          <td>{result.accion}</td>
-                          <td>{formatDateTime(result.fecha)}</td>
-                          <td>{truncateText(result.usuario)}</td>
-                          <td>{truncateText(result.detalles)}</td>
+                  <div className="table-responsive">
+                    <Table striped hover className="table-sm">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Fecha y Hora</th>
+                          <th>Usuario</th>
+                          <th>Tipo Acción</th>
+                          <th>Tabla</th>
+                          <th>Esquema</th>
+                          <th>Sesión ID</th>
+                          <th>Usuario OS</th>
+                          <th>Host</th>
+                          <th>Terminal</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
+                      </thead>
+                      <tbody>
+                        {auditResults.map((result) => (
+                          <tr key={result.auditoriaId}>
+                            <td>{result.auditoriaId}</td>
+                            <td>{formatDateTime(result.fechaHora)}</td>
+                            <td>{result.usuario}</td>
+                            <td>{result.tipoAccion}</td>
+                            <td>{result.nombreTabla}</td>
+                            <td>{result.esquema}</td>
+                            <td>{result.sesionId}</td>
+                            <td>{result.usuarioOS}</td>
+                            <td>{result.hostUsuario}</td>
+                            <td>{result.terminal}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
                 </div>
               )}
             </CardBody>
