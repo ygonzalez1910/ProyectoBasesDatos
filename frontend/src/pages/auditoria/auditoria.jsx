@@ -15,6 +15,7 @@ import {
   Table,
   Alert,
 } from "reactstrap";
+import Swal from "sweetalert2";
 import { FaDatabase, FaSearch, FaHistory } from "react-icons/fa";
 import {
   AuditoriaService,
@@ -26,6 +27,7 @@ const Auditoria = () => {
   const [schemas, setSchemas] = useState([]);
   const [selectedSchema, setSelectedSchema] = useState("");
   const [tables, setTables] = useState([]);
+  const [tablesActive, setTablesActive] = useState([]);
   const [selectedTable, setSelectedTable] = useState("");
   const [dateRange, setDateRange] = useState({
     startDate: "",
@@ -37,6 +39,9 @@ const Auditoria = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+
+  const [selectedSchemaActive, setSelectedSchemaActive] = useState("")
+  const [selectedTableActive, setSelectedTableActive] = useState("");
 
   const styles = {
     gradient: {
@@ -80,6 +85,12 @@ const Auditoria = () => {
     }
   }, [selectedSchema]);
 
+  useEffect(() => {
+    if (selectedSchemaActive) {
+      fetchTablesActive(selectedSchemaActive);
+    }
+  }, [selectedSchemaActive]);
+
   const fetchSchemas = async () => {
     try {
       const response = await SchemasService.getAllSchemas();
@@ -91,6 +102,26 @@ const Auditoria = () => {
     } catch (error) {
       console.error("Error al obtener la lista de esquemas:", error);
       setError("Error al cargar los esquemas");
+    }
+  };
+
+  const fetchTablesActive = async (schema) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await tunningService.obtenerTablasPorSchema(schema);
+      if (response?.data?.resultado) {
+        setTablesActive(response.data.tablas || []);
+      } else {
+        setError(response.data.errores?.[0] || "Error al obtener las tablas");
+        setTablesActive([]);
+      }
+    } catch (error) {
+      console.error("Error al obtener las tablas:", error);
+      setError("Error al obtener las tablas del schema");
+      setTablesActive([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,13 +168,6 @@ const Auditoria = () => {
       console.error("Error al formatear fecha:", error);
       return dateString;
     }
-  };
-
-  const truncateText = (text, maxLength = 50) => {
-    if (!text) return "";
-    return text.length > maxLength
-      ? `${text.substring(0, maxLength)}...`
-      : text;
   };
 
   const validateDates = () => {
@@ -204,6 +228,57 @@ const Auditoria = () => {
       setLoading(false);
     }
   };
+  const activarAuditoria = async () => {
+    if (!selectedTableActive) {
+      setError("Debe seleccionar una tabla");
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      setError(null);
+      setMessage(null);
+
+      const response = await AuditoriaService.activarAuditoria({
+        nombreTabla: selectedTableActive,
+        esquema: selectedSchemaActive
+      });
+  
+      if (response.resultado) {
+        setMessage("Auditoría activada exitosamente");
+        Swal.fire({
+          icon: "success",
+          title: "¡Éxito!",
+          text: "La auditoría se activó correctamente.",
+          confirmButtonText: "Aceptar",
+        });
+      } else {
+        const errorMsg = response.errores.join(", ");
+        setError(errorMsg);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `No se pudo activar la auditoría: ${errorMsg}`,
+          confirmButtonText: "Aceptar",
+        });
+      }
+    } catch (error) {
+      console.error("Error al activar auditoría:", error);
+      const errorMessage = error.response
+        ? error.response.data.errores.join(", ")
+        : "Error desconocido";
+      setError(errorMessage);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `No se pudo activar la auditoría: ${errorMessage}`,
+        confirmButtonText: "Aceptar",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <Container className="py-5">
@@ -218,8 +293,90 @@ const Auditoria = () => {
       </Row>
 
       <Row className="g-4">
-        {/* Consulta de Auditoría */}
-        <Col lg="12">
+        {/* Configuración de Auditoría */}
+        <Col lg="6">
+          <Card className="shadow-sm h-100 border-0" style={styles.card}>
+            <CardHeader className="py-3" style={styles.gradient}>
+              <div className="d-flex align-items-center">
+                <FaDatabase size={20} className="me-3" />
+                <div>
+                  <CardTitle tag="h5" className="mb-0">
+                    Configuración de Auditoría
+                  </CardTitle>
+                  <small>Activar auditoría para tablas del sistema</small>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody className="p-4">
+              <FormGroup>
+                <Label
+                  for="schema-select-audit"
+                  className="form-label text-muted"
+                >
+                  Seleccionar esquema:
+                </Label>
+                <Input
+                  type="select"
+                  id="schema-select-audit"
+                  value={selectedSchemaActive}
+                  onChange={(e) => {
+                    setSelectedSchemaActive(e.target.value);
+                    setSelectedTableActive("");
+                  }}
+                >
+                  <option value="">Seleccione un esquema</option>
+                  {schemas.map((schema) => (
+                    <option key={schema.schemaName} value={schema.schemaName}>
+                      {schema.schemaName}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="table-select" className="form-label text-muted">
+                  Seleccionar tabla:
+                </Label>
+                <Input
+                  type="select"
+                  id="table-select"
+                  value={selectedTableActive}
+                  onChange={(e) => setSelectedTableActive(e.target.value)}
+                >
+                  <option value="">Seleccione una tabla</option>
+                  {tablesActive.map((table) => (
+                    <option key={table} value={table}>
+                      {table}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+              <div className="text-end mt-4">
+                <Button
+                  color="primary"
+                  onClick={activarAuditoria}
+                  disabled={loading || !selectedTableActive}
+                  style={styles.button}
+                >
+                  {loading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Activando...
+                    </>
+                  ) : (
+                    "Activar Auditoría"
+                  )}
+                </Button>
+              </div>
+              {error && (
+                <Alert color="danger" className="mt-3">
+                  {error}
+                </Alert>
+              )}
+            </CardBody>
+          </Card>
+        </Col>
+        <Col lg="6">
+          {/* Consulta de Auditoría */}
           <Card className="shadow-sm h-100 border-0" style={styles.card}>
             <CardHeader className="py-3" style={styles.gradient}>
               <div className="d-flex align-items-center">
@@ -338,84 +495,81 @@ const Auditoria = () => {
                   {error}
                 </Alert>
               )}
-              {/* Resultados de Auditoría */}
-              {showResults && auditResults && (
-                <Card className="shadow-sm mt-4 border-0">
-                  <CardHeader className="py-3" style={styles.gradient}>
-                    <div className="d-flex align-items-center">
-                      <FaHistory size={20} className="me-3" />
-                      <div>
-                        <CardTitle tag="h5" className="mb-0">
-                          Resultados de Auditoría - {selectedTable}
-                        </CardTitle>
-                        <small>
-                          Registros encontrados: {auditResults.length}
-                        </small>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardBody className="p-0">
-                    <div className="table-responsive">
-                      <Table hover bordered striped className="mb-0">
-                        <thead className="bg-light">
-                          <tr>
-                            <th className="text-center">ID</th>
-                            <th className="text-center">Fecha y Hora</th>
-                            <th className="text-center">Usuario</th>
-                            <th className="text-center">Tipo Acción</th>
-                            <th className="text-center">Tabla</th>
-                            <th className="text-center">Esquema</th>
-                            <th className="text-center">Sesión ID</th>
-                            <th className="text-center">Usuario OS</th>
-                            <th className="text-center">Host</th>
-                            <th className="text-center">Terminal</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {auditResults.map((audit) => (
-                            <tr key={audit.auditoriaId}>
-                              <td className="text-center">
-                                {audit.auditoriaId}
-                              </td>
-                              <td className="text-center">
-                                {formatDateTime(audit.fechaHora)}
-                              </td>
-                              <td className="text-center">{audit.usuario}</td>
-                              <td className="text-center">
-                                <span
-                                  className={`badge bg-${
-                                    audit.tipoAccion === "INSERT"
-                                      ? "success"
-                                      : audit.tipoAccion === "UPDATE"
-                                      ? "warning"
-                                      : audit.tipoAccion === "DELETE"
-                                      ? "danger"
-                                      : "info"
-                                  }`}
-                                >
-                                  {audit.tipoAccion}
-                                </span>
-                              </td>
-                              <td className="text-center">
-                                {audit.nombreTabla}
-                              </td>
-                              <td className="text-center">{audit.esquema}</td>
-                              <td className="text-center">{audit.sesionId}</td>
-                              <td className="text-center">{audit.usuarioOS}</td>
-                              <td className="text-center">
-                                {audit.hostUsuario}
-                              </td>
-                              <td className="text-center">{audit.terminal}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </div>
-                  </CardBody>
-                </Card>
-              )}
             </CardBody>
           </Card>
+        </Col>
+      </Row>
+
+      <Row className="g-4">
+        <Col lg="12">
+          {/* Resultados de Auditoría */}
+          {showResults && auditResults && (
+            <Card className="shadow-sm h-100 border-0" style={styles.card}>
+              <CardHeader className="py-3" style={styles.gradient}>
+                <div className="d-flex align-items-center">
+                  <FaHistory size={20} className="me-3" />
+                  <div>
+                    <CardTitle tag="h5" className="mb-0">
+                      Resultados de Auditoría - {selectedTable}
+                    </CardTitle>
+                    <small>Registros encontrados: {auditResults.length}</small>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardBody className="p-0">
+                <div className="table-responsive">
+                  <Table hover bordered striped className="mb-0">
+                    <thead className="bg-light">
+                      <tr>
+                        <th className="text-center">ID</th>
+                        <th className="text-center">Fecha y Hora</th>
+                        <th className="text-center">Usuario</th>
+                        <th className="text-center">Tipo Acción</th>
+                        <th className="text-center">Tabla</th>
+                        <th className="text-center">Esquema</th>
+                        <th className="text-center">Sesión ID</th>
+                        <th className="text-center">Usuario OS</th>
+                        <th className="text-center">Host</th>
+                        <th className="text-center">Terminal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {auditResults.map((audit) => (
+                        <tr key={audit.auditoriaId}>
+                          <td className="text-center">{audit.auditoriaId}</td>
+                          <td className="text-center">
+                            {formatDateTime(audit.fechaHora)}
+                          </td>
+                          <td className="text-center">{audit.usuario}</td>
+                          <td className="text-center">
+                            <span
+                              className={`badge bg-${
+                                audit.tipoAccion === "INSERT"
+                                  ? "success"
+                                  : audit.tipoAccion === "UPDATE"
+                                  ? "warning"
+                                  : audit.tipoAccion === "DELETE"
+                                  ? "danger"
+                                  : "info"
+                              }`}
+                            >
+                              {audit.tipoAccion}
+                            </span>
+                          </td>
+                          <td className="text-center">{audit.nombreTabla}</td>
+                          <td className="text-center">{audit.esquema}</td>
+                          <td className="text-center">{audit.sesionId}</td>
+                          <td className="text-center">{audit.usuarioOS}</td>
+                          <td className="text-center">{audit.hostUsuario}</td>
+                          <td className="text-center">{audit.terminal}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+              </CardBody>
+            </Card>
+          )}
         </Col>
       </Row>
     </Container>
@@ -423,5 +577,3 @@ const Auditoria = () => {
 };
 
 export default Auditoria;
-
-// ------------------------------------------------------------------------------------------------------------
