@@ -165,12 +165,12 @@ const Auditoria = () => {
 
   const consultarAuditoria = async () => {
     if (!validateDates()) return;
-  
+
     try {
       setLoading(true);
       setError(null);
       setShowResults(false);
-  
+
       const formattedStartDate = new Date(dateRange.startDate).toISOString();
       const formattedEndDate = new Date(dateRange.endDate).toISOString();
 
@@ -186,14 +186,20 @@ const Auditoria = () => {
         setAuditResults(response.registros);
         setShowResults(true);
         if (response.registros.length === 0) {
-          setMessage("No se encontraron registros para los criterios seleccionados");
+          setMessage(
+            "No se encontraron registros para los criterios seleccionados"
+          );
         }
       } else {
-        setError(response.errores?.join(", ") || "Error al obtener los resultados");
+        setError(
+          response.errores?.join(", ") || "Error al obtener los resultados"
+        );
       }
     } catch (error) {
       console.error("Error al consultar auditoría:", error);
-      setError("Error al consultar los registros de auditoría. Por favor intente nuevamente.");
+      setError(
+        "Error al consultar los registros de auditoría. Por favor intente nuevamente."
+      );
     } finally {
       setLoading(false);
     }
@@ -332,44 +338,81 @@ const Auditoria = () => {
                   {error}
                 </Alert>
               )}
+              {/* Resultados de Auditoría */}
               {showResults && auditResults && (
-                <div className="mt-4">
-                  <h5>Resultados de Auditoría</h5>
-                  <div className="table-responsive">
-                    <Table striped hover className="table-sm">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Fecha y Hora</th>
-                          <th>Usuario</th>
-                          <th>Tipo Acción</th>
-                          <th>Tabla</th>
-                          <th>Esquema</th>
-                          <th>Sesión ID</th>
-                          <th>Usuario OS</th>
-                          <th>Host</th>
-                          <th>Terminal</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {auditResults.map((result) => (
-                          <tr key={result.auditoriaId}>
-                            <td>{result.auditoriaId}</td>
-                            <td>{formatDateTime(result.fechaHora)}</td>
-                            <td>{result.usuario}</td>
-                            <td>{result.tipoAccion}</td>
-                            <td>{result.nombreTabla}</td>
-                            <td>{result.esquema}</td>
-                            <td>{result.sesionId}</td>
-                            <td>{result.usuarioOS}</td>
-                            <td>{result.hostUsuario}</td>
-                            <td>{result.terminal}</td>
+                <Card className="shadow-sm mt-4 border-0">
+                  <CardHeader className="py-3" style={styles.gradient}>
+                    <div className="d-flex align-items-center">
+                      <FaHistory size={20} className="me-3" />
+                      <div>
+                        <CardTitle tag="h5" className="mb-0">
+                          Resultados de Auditoría - {selectedTable}
+                        </CardTitle>
+                        <small>
+                          Registros encontrados: {auditResults.length}
+                        </small>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardBody className="p-0">
+                    <div className="table-responsive">
+                      <Table hover bordered striped className="mb-0">
+                        <thead className="bg-light">
+                          <tr>
+                            <th className="text-center">ID</th>
+                            <th className="text-center">Fecha y Hora</th>
+                            <th className="text-center">Usuario</th>
+                            <th className="text-center">Tipo Acción</th>
+                            <th className="text-center">Tabla</th>
+                            <th className="text-center">Esquema</th>
+                            <th className="text-center">Sesión ID</th>
+                            <th className="text-center">Usuario OS</th>
+                            <th className="text-center">Host</th>
+                            <th className="text-center">Terminal</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
-                </div>
+                        </thead>
+                        <tbody>
+                          {auditResults.map((audit) => (
+                            <tr key={audit.auditoriaId}>
+                              <td className="text-center">
+                                {audit.auditoriaId}
+                              </td>
+                              <td className="text-center">
+                                {formatDateTime(audit.fechaHora)}
+                              </td>
+                              <td className="text-center">{audit.usuario}</td>
+                              <td className="text-center">
+                                <span
+                                  className={`badge bg-${
+                                    audit.tipoAccion === "INSERT"
+                                      ? "success"
+                                      : audit.tipoAccion === "UPDATE"
+                                      ? "warning"
+                                      : audit.tipoAccion === "DELETE"
+                                      ? "danger"
+                                      : "info"
+                                  }`}
+                                >
+                                  {audit.tipoAccion}
+                                </span>
+                              </td>
+                              <td className="text-center">
+                                {audit.nombreTabla}
+                              </td>
+                              <td className="text-center">{audit.esquema}</td>
+                              <td className="text-center">{audit.sesionId}</td>
+                              <td className="text-center">{audit.usuarioOS}</td>
+                              <td className="text-center">
+                                {audit.hostUsuario}
+                              </td>
+                              <td className="text-center">{audit.terminal}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  </CardBody>
+                </Card>
               )}
             </CardBody>
           </Card>
@@ -380,3 +423,5 @@ const Auditoria = () => {
 };
 
 export default Auditoria;
+
+// ------------------------------------------------------------------------------------------------------------
