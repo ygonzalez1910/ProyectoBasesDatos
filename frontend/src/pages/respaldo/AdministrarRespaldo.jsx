@@ -26,34 +26,34 @@ const AdministrarDirectorio = () => {
   const [filtro, setFiltro] = useState(""); // Estado para el filtro
   const styles = {
     gradient: {
-      background: 'linear-gradient(45deg, #2c3e50 0%, #3498db 100%)',
-      color: 'white'
+      background: "linear-gradient(45deg, #2c3e50 0%, #3498db 100%)",
+      color: "white",
     },
     card: {
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important'
-      }
+      transition: "all 0.3s ease",
+      "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: "0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important",
+      },
     },
     button: {
-      padding: '0.5rem 1.5rem',
-      borderRadius: '4px',
-      fontWeight: '500',
-      textTransform: 'none',
-      fontSize: '0.9rem',
-      boxShadow: 'none',
-      transition: 'all 0.2s ease',
-      '&:hover': {
-        transform: 'translateY(-1px)',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }
+      padding: "0.5rem 1.5rem",
+      borderRadius: "4px",
+      fontWeight: "500",
+      textTransform: "none",
+      fontSize: "0.9rem",
+      boxShadow: "none",
+      transition: "all 0.2s ease",
+      "&:hover": {
+        transform: "translateY(-1px)",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+      },
     },
     divider: {
-      width: '25%',
-      margin: '0 auto',
-      borderTop: '2px solid #e3e6f0'
-    }
+      width: "25%",
+      margin: "0 auto",
+      borderTop: "2px solid #e3e6f0",
+    },
   };
   // Cargar directorios al iniciar
   useEffect(() => {
@@ -98,11 +98,14 @@ const AdministrarDirectorio = () => {
     if (result.isConfirmed) {
       try {
         console.log("Eliminando directorio: ", nombreDirectorio);
-        await DirectorioService.eliminarDirectorio( nombreDirectorio);
+        await DirectorioService.eliminarDirectorio(nombreDirectorio);
         mostrarMensaje("Directorio eliminado exitosamente", "success");
         fetchDirectorios(); // Refresca la lista
       } catch (error) {
-        mostrarMensaje("Error al eliminar directorio: " + error.message, "danger");
+        mostrarMensaje(
+          "Error al eliminar directorio: " + error.message,
+          "danger"
+        );
       }
     }
   };
@@ -113,33 +116,42 @@ const AdministrarDirectorio = () => {
   };
 
   // Filtrar directorios basado en el valor del filtro
-  const directoriosFiltrados = directorios.filter((directorio) =>
-    directorio.nombreDirectorio.toLowerCase().includes(filtro.toLowerCase()) || // Filtra por nombre
-    directorio.direccionDirectorio.toLowerCase().includes(filtro.toLowerCase()) // Filtra por dirección
+  const directoriosFiltrados = directorios.filter(
+    (directorio) =>
+      directorio.nombreDirectorio
+        .toLowerCase()
+        .includes(filtro.toLowerCase()) || // Filtra por nombre
+      directorio.direccionDirectorio
+        .toLowerCase()
+        .includes(filtro.toLowerCase()) // Filtra por dirección
   );
 
   return (
     <Container className="py-5">
-    {/* Header mejorado */}
-    <Row className="mb-4">
-      <Col className="text-center">
-        <h2 className="display-4 mb-2">Gestión de Directorios</h2>
-        <p className="text-muted lead">
-        Sistema de gestión de directorios
-        </p>
-        <hr style={styles.divider} className="my-4" />
-      </Col>
-    </Row>
+      {/* Header mejorado */}
+      <Row className="mb-4">
+        <Col className="text-center">
+          <h2 className="display-4 mb-2">Gestión de Directorios</h2>
+          <p className="text-muted lead">Sistema de gestión de directorios</p>
+          <hr style={styles.divider} className="my-4" />
+        </Col>
+      </Row>
       {mensaje.text && (
-        <div className={`mb-4 p-4 rounded-lg flex items-center gap-2 ${mensaje.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+        <div
+          className={`mb-4 p-4 rounded-lg flex items-center gap-2 ${
+            mensaje.type === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
           <AlertTriangle className="h-5 w-5" />
           {mensaje.text}
         </div>
       )}
-      
+
       <Row>
-        <Col md="6">
-        <Card className="shadow-lg h-100" style={{ height: "400px" }}>
+        <Col md="4">
+          <Card className="shadow-lg h-100" style={{ height: "400px" }}>
             <CardHeader className="py-3" style={styles.gradient}>
               <div className="d-flex align-items-center">
                 <FaFolderPlus size={20} className="me-3" />
@@ -191,8 +203,8 @@ const AdministrarDirectorio = () => {
           </Card>
         </Col>
 
-        <Col md="6">
-        <Card className="shadow-lg h-100" style={{ height: "400px" }}>
+        <Col md="8">
+          <Card className="shadow-lg h-100" style={{ height: "400px" }}>
             <CardHeader className="py-3" style={styles.gradient}>
               <div className="d-flex align-items-center">
                 <FaSearch size={20} className="me-3" />
@@ -219,32 +231,74 @@ const AdministrarDirectorio = () => {
                 <p>Cargando directorios...</p>
               ) : (
                 <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-                <Table striped className="table-sm" responsive>
-                  <thead>
-                    <tr>
-                      <th>Nombre del Directorio</th>
-                      <th>Dirección</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {directoriosFiltrados.map((directorio, index) => (
-                      <tr key={index}>
-                        <td>{directorio.nombreDirectorio}</td>
-                        <td>{directorio.direccionDirectorio}</td>
-                        <td>
-                          <Button
-                            color="danger"
-                            onClick={() => eliminarDirectorio(directorio.nombreDirectorio)}
-                            className="me-2"
-                          >
-                            <FaTrash />
-                          </Button>
-                        </td>
+                  <Table striped className="table-sm" responsive>
+                    <thead>
+                      <tr>
+                        <th>Nombre del Directorio</th>
+                        <th>Dirección</th>
+                        <th>Acciones</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+    {directoriosFiltrados.map((directorio, index) => (
+      <tr 
+        key={index}
+        className="hover:bg-gray-50 transition-colors"
+      >
+        <td 
+          className="px-3 py-2 text-center border-b border-gray-100"
+          style={{ 
+            
+            color: '#4B5563'
+          }}
+        >
+          {directorio.nombreDirectorio}
+        </td>
+        <td 
+          className="px-3 py-2 text-center border-b border-gray-100"
+          style={{ 
+            fontSize: '0.75rem',
+            color: '#4B5563'
+          }}
+        >
+          {directorio.direccionDirectorio}
+        </td>
+        <td className="px-3 py-2 text-center border-b border-gray-100">
+          <Button
+            color="danger"
+            onClick={() => eliminarDirectorio(directorio.nombreDirectorio)}
+            className="p-1 rounded-lg shadow-sm border-0 text-white position-relative overflow-hidden transition-all hover:brightness-110 active:scale-95"
+            style={{
+              backgroundColor: '#FF4757',
+              transition: 'all 0.2s ease',
+              width: '24px',
+              height: '24px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="12" 
+              height="12" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="M3 6h18"/>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            </svg>
+          </Button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+                  </Table>
                 </div>
               )}
             </CardBody>

@@ -6,6 +6,7 @@ import {
   Collapse,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { 
   faTachometerAlt, 
   faDatabase, 
@@ -15,7 +16,8 @@ import {
   faCog, 
   faShieldAlt, 
   faChartLine, 
-  faFire 
+  faFire,
+  faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = ({ items, onNavigate }) => {
@@ -132,14 +134,14 @@ const Sidebar = ({ items, onNavigate }) => {
             <span>{item.title}</span>
           </div>
           {hasSubItems && (
-            <FontAwesomeIcon
-              icon="chevron-right"
-              style={{
-                ...styles.chevron,
-                ...(isExpanded ? styles.chevronExpanded : {})
-              }}
-            />
-          )}
+  <FontAwesomeIcon
+    icon={faAngleRight} // Usando el nuevo ícono
+    style={{
+      ...styles.chevron,
+      ...(isExpanded ? styles.chevronExpanded : {})
+    }}
+  />
+)}
         </NavLink>
 
         {hasSubItems && (
