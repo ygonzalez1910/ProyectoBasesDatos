@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { SeguridadService } from "../../services/api.service";
 import { Container, Row, Col, Card, CardHeader, CardBody, CardTitle, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import { FaUserPlus, FaTrash, FaKey, FaShieldAlt } from 'react-icons/fa';
+import UserList from './UserList';  // Ajusta la ruta según tu estructura de archivos
 
 const Seguridad = () => {
   // Estado para la creación de usuario
@@ -13,6 +14,7 @@ const Seguridad = () => {
 
   const [creatingUser, setCreatingUser] = useState(false);
   const [createUserError, setCreateUserError] = useState(null);
+
 
   // Estado para la eliminación de usuario
   const [deleteUserForm, setDeleteUserForm] = useState({
@@ -135,7 +137,10 @@ const Seguridad = () => {
   useEffect(() => {
     cargarRoles();
     cargarPrivilegios();
-  }, [cargarRoles, cargarPrivilegios]);
+    cargarUsuarios();
+  }, [cargarRoles, cargarPrivilegios, cargarUsuarios]);
+
+  
 
   const handleInputChange = (event, setter) => {
     const { name, value, checked } = event.target;
@@ -163,6 +168,7 @@ const Seguridad = () => {
     }));
   };
 
+  // Update handleCreateUser to refresh users list
   const handleCreateUser = async (event) => {
     event.preventDefault();
     setCreatingUser(true);
@@ -170,12 +176,13 @@ const Seguridad = () => {
 
     try {
       await SeguridadService.crearUsuario(createUserForm);
-      // Limpiar el formulario después de un envío exitoso
       setCreateUserForm({
         nombreUsuario: '',
         password: '',
         roles: [],
       });
+      // Refresh users list after creation
+      await cargarUsuarios();
     } catch (error) {
       setCreateUserError(error.message);
     } finally {
@@ -183,6 +190,7 @@ const Seguridad = () => {
     }
   };
 
+  // Update handleDeleteUser to refresh users list
   const handleDeleteUser = async (event) => {
     event.preventDefault();
     setDeletingUser(true);
@@ -190,10 +198,11 @@ const Seguridad = () => {
 
     try {
       await SeguridadService.eliminarUsuario(deleteUserForm);
-      // Limpiar el formulario después de un envío exitoso
       setDeleteUserForm({
         nombreUsuario: '',
       });
+      // Refresh users list after deletion
+      await cargarUsuarios();
     } catch (error) {
       setDeleteUserError(error.message);
     } finally {
@@ -281,6 +290,7 @@ const Seguridad = () => {
         </Col>
       </Row>
 
+      
       <Row className="g-4">
         {/* Crear Usuario */}
         <Col lg="6">
@@ -383,6 +393,7 @@ const Seguridad = () => {
             </CardBody>
           </Card>
         </Col>
+
 
         {/* Eliminar Usuario */}
         <Col lg="6">
@@ -613,7 +624,17 @@ const Seguridad = () => {
           </Card>
         </Col>
       </Row>
+      
+      {/* Lista de usuarios - Columna fija a la izquierda */}
+      <Col md="3" className="mb-4 mb-md-0">
+        <UserList 
+          users={users}
+          loading={loadingUsers}
+          error={usersError}
+        />
+      </Col>
     </Container>
+    
   );
 
 };
