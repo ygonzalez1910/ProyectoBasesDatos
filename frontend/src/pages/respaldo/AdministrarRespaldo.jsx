@@ -157,9 +157,9 @@ const AdministrarDirectorio = () => {
                 <FaFolderPlus size={20} className="me-3" />
                 <div>
                   <CardTitle tag="h5" className="mb-0">
-                    Crear Nuevo Índice
+                    Crear Nuevo Directorio
                   </CardTitle>
-                  <small>Complete los campos para crear un nuevo índice</small>
+                  <small>Complete los campos para crear un nuevo Directorio</small>
                 </div>
               </div>
             </CardHeader>
