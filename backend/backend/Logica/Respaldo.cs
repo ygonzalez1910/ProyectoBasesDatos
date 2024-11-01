@@ -383,7 +383,7 @@ namespace Logica
         public ResRecuperarRespaldo RecuperarRespaldo(ReqRecuperarRespaldo req)
         {
             ResRecuperarRespaldo res = new ResRecuperarRespaldo();
-
+            _logger.LogInformation("--1");
             try
             {
                 using (OracleConnection conexion = new OracleConnection(_connectionString))
@@ -396,33 +396,38 @@ namespace Logica
                     // Definir la consulta SQL según el tipo de respaldo
                     string sql = req.TipoBackup switch
                     {
-                        "table" => "SELECT directorio, name_schema, name_table FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
-                        "schema" => "SELECT directorio, name_schema FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
-                        "full" => "SELECT directorio FROM backups WHERE nombre_backup = :nombreBackup AND tipo_backup = :tipoBackup",
+                        "table" => $"SELECT directorio, name_schema, name_table FROM ADMINDB.BACKUPS WHERE nombre_backup = '{req.NombreBackup}' AND tipo_backup = '{req.TipoBackup}' AND ROWNUM = 1",
+                        "schema" => $"SELECT directorio, name_schema FROM ADMINDB.BACKUPS WHERE nombre_backup = '{req.NombreBackup}' AND tipo_backup = '{req.TipoBackup}' AND ROWNUM = 1",
+                        "full" => $"SELECT directorio FROM ADMINDB.BACKUPS WHERE nombre_backup = '{req.NombreBackup}' AND tipo_backup = '{req.TipoBackup}' AND ROWNUM = 1",
                         _ => throw new ArgumentException("Tipo de respaldo no válido.")
                     };
-
+                    _logger.LogInformation("Consulta SQL {consulta}", sql);
+                    _logger.LogInformation("--2");
                     // Ejecutar la consulta y obtener los valores necesarios
                     using (OracleCommand cmd = new OracleCommand(sql, conexion))
                     {
-                        cmd.Parameters.Add(new OracleParameter("nombreBackup", req.NombreBackup));
-                        cmd.Parameters.Add(new OracleParameter("tipoBackup", req.TipoBackup));
+                        _logger.LogInformation("--2.5");
+                        _logger.LogInformation("EL nombre del backup es {backup} y el nombde del tipo es {tipo}", req.NombreBackup, req.TipoBackup);
+                        _logger.LogInformation("--2.7");
                         using (OracleDataReader reader = cmd.ExecuteReader())
                         {
+                            _logger.LogInformation("--3");
                             if (reader.Read())
                             {
                                 directorio = reader.GetString(0);
                                 if (req.TipoBackup != "full") nombreSchema = reader.GetString(1);
                                 if (req.TipoBackup == "table") nombreTabla = reader.GetString(2);
+                                _logger.LogInformation("--4");
                             }
                             else
                             {
+                                _logger.LogInformation("No se encontró el respaldo especificado.");
                                 res.Errores.Add("No se encontró el respaldo especificado.");
                                 return res;
                             }
                         }
                     }
-
+                    _logger.LogInformation("--5");
                     // Construir el comando IMPDP según el tipo de respaldo
                     string impdpCommand = req.TipoBackup switch
                     {
@@ -431,7 +436,7 @@ namespace Logica
                         "full" => $"IMPDP SYSTEM/{req.Contrasena}@XE FULL=Y DIRECTORY={directorio} DUMPFILE={req.NombreBackup}.DMP LOGFILE={req.NombreBackup}.LOG",
                         _ => throw new ArgumentException("Tipo de respaldo no válido.")
                     };
-
+                    _logger.LogInformation("--Comando IMPDP {comando}", impdpCommand);
                     // Ejecutar el comando en el sistema
                     var startInfo = new ProcessStartInfo
                     {
@@ -442,20 +447,23 @@ namespace Logica
                         UseShellExecute = false,
                         CreateNoWindow = true,
                     };
+                    _logger.LogInformation("--6");
 
                     using (Process process = Process.Start(startInfo))
                     {
                         string output = process.StandardOutput.ReadToEnd();
                         string error = process.StandardError.ReadToEnd();
                         process.WaitForExit();
-
+                        _logger.LogInformation("--7");
                         if (process.ExitCode != 0)
                         {
+                            _logger.LogInformation("--Error al ejecutar la recuperación : {error}", error);
                             res.Errores.Add($"Error al ejecutar la recuperación: {error}");
                             res.Resultado = false;
                         }
                         else
                         {
+                            _logger.LogInformation("--Todo super bien");
                             res.Resultado = true;
                         }
                     }
