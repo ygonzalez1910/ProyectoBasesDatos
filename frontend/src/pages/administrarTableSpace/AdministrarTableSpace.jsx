@@ -272,76 +272,88 @@ const AdministrarTableSpace = () => {
         <CardBody className="p-0">
           <div className="table-responsive">
             <Table hover bordered striped className="mb-0">
-            <thead className="bg-gray-50 border-b">
-    <tr>
-      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
-          style={{
-            backgroundColor: '#F8F9FA',
-            fontSize: '0.8rem',
-            letterSpacing: '0.03em',
-            lineHeight: '1.2',
-            maxWidth: '120px',
-            wordWrap: 'break-word'
-          }}>
-        Nombre de Tablespace
-      </th>
-      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
-          style={{
-            backgroundColor: '#F8F9FA',
-            fontSize: '0.8rem',
-            letterSpacing: '0.03em',
-            lineHeight: '1.2',
-            maxWidth: '120px',
-            wordWrap: 'break-word'
-          }}>
-        Nombre de Archivo
-      </th>
-      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
-          style={{
-            backgroundColor: '#F8F9FA',
-            fontSize: '0.8rem',
-            letterSpacing: '0.03em',
-            lineHeight: '1.2',
-            minWidth: '80px',
-            wordWrap: 'break-word'
-          }}>
-        Tamaño (MB)
-      </th>
-      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
-          style={{
-            backgroundColor: '#F8F9FA',
-            fontSize: '0.8rem',
-            letterSpacing: '0.03em',
-            lineHeight: '1.2',
-            maxWidth: '100px',
-            wordWrap: 'break-word'
-          }}>
-        Auto extensible
-      </th>
-      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
-          style={{
-            backgroundColor: '#F8F9FA',
-            fontSize: '0.8rem',
-            letterSpacing: '0.03em',
-            lineHeight: '1.2',
-            maxWidth: '100px',
-            wordWrap: 'break-word'
-          }}>
-        Tamaño Máximo (MB)
-      </th>
-      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
-          style={{
-            backgroundColor: '#F8F9FA',
-            fontSize: '0.8rem',
-            letterSpacing: '0.03em',
-            lineHeight: '1.2',
-            minWidth: '100px',
-            wordWrap: 'break-word'
-          }}>
-        Acciones
-      </th>
-    </tr>
-  </thead>
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th
+                    className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.03em",
+                      lineHeight: "1.2",
+                      maxWidth: "120px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Nombre de Tablespace
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.03em",
+                      lineHeight: "1.2",
+                      maxWidth: "120px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Nombre de Archivo
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.03em",
+                      lineHeight: "1.2",
+                      minWidth: "80px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Tamaño (MB)
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.03em",
+                      lineHeight: "1.2",
+                      maxWidth: "100px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Auto extensible
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.03em",
+                      lineHeight: "1.2",
+                      maxWidth: "100px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Tamaño Máximo (MB)
+                  </th>
+                  <th
+                    className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+                    style={{
+                      backgroundColor: "#F8F9FA",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.03em",
+                      lineHeight: "1.2",
+                      minWidth: "100px",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                 {tables.map((table, index) => (
                   <tr key={index}>
@@ -361,6 +373,7 @@ const AdministrarTableSpace = () => {
                           transition: "all 0.2s ease",
                           fontSize: "0.75rem",
                         }}
+                        onClick={() => handleEditClick(table)} // Añade esta línea
                       >
                         <div className="d-flex align-items-center gap-1">
                           <svg
