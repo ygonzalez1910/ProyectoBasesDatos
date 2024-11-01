@@ -48,6 +48,8 @@ export const SeguridadService = {
   listarRoles: () => axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_ROLES),
   listarPrivilegios: () =>
     axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_PRIVILEGIOS),
+  listarUsuarios: () => 
+    axiosInstance.get(API_ENDPOINTS.SEGURIDAD.LISTAR_USUARIOS)
 };
 
 export const AuditoriaService = {

@@ -18,7 +18,8 @@ export const API_ENDPOINTS = {
         MODIFICAR_USUARIO: `${API_BASE_URL}/ApiSeguridad/modificar-usuario`,
         CREAR_ROL: `${API_BASE_URL}/ApiSeguridad/crear-rol`,
         LISTAR_ROLES: `${API_BASE_URL}/ApiSeguridad/listar-roles`,
-        LISTAR_PRIVILEGIOS: `${API_BASE_URL}/ApiSeguridad/listar-privilegios`
+        LISTAR_PRIVILEGIOS: `${API_BASE_URL}/ApiSeguridad/listar-privilegios`,
+        LISTAR_USUARIOS: `${API_BASE_URL}/ApiSeguridad/listar-usuarios`
     },
     AUDITORIA: {
         OBTENER_AUDITORIA: `${API_BASE_URL}/ApiAuditoria/obtener`,

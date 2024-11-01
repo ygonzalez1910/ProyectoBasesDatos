@@ -45,6 +45,29 @@ const Seguridad = () => {
   const [roles, setRoles] = useState([]);
   const [privilegios, setPrivilegios] = useState([]);
 
+  const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [usersError, setUsersError] = useState(null);
+
+  const cargarUsuarios = useCallback(async () => {
+    setLoadingUsers(true);
+    setUsersError(null);
+    try {
+      const response = await SeguridadService.listarUsuarios();
+      if (response.data && response.data.resultado) {
+        setUsers(response.data.usuarios || []);
+      } else {
+        setUsers([]);
+      }
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
+      setUsersError('Error al cargar la lista de usuarios');
+      setUsers([]);
+    } finally {
+      setLoadingUsers(false);
+    }
+  }, []);
+
   const styles = {
     gradient: {
       background: 'linear-gradient(45deg, #2c3e50 0%, #3498db 100%)',
