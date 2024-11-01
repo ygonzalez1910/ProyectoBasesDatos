@@ -8,6 +8,7 @@ using System.Linq;
 using Models;
 using Request;
 using Response;
+using System.Text;
 
 namespace Logica
 {
@@ -65,101 +66,58 @@ namespace Logica
                         }
                     }
 
-                    // Consulta de debug mejorada para ver registros recientes
-                    string sqlDebug = @"
+                    // Construir la consulta SQL base
+                    var sqlBuilder = new StringBuilder(@"
                 SELECT 
-                    COUNT(*) as total,
-                    COUNT(CASE WHEN UPPER(OBJ_NAME) = :nombreTabla AND UPPER(OWNER) = :esquema THEN 1 END) as tabla_especifica,
-                    COUNT(CASE WHEN UPPER(SQL_TEXT) LIKE '%' || :nombreTabla || '%' THEN 1 END) as sql_relacionado
+                    NVL(TO_CHAR(TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'), '') as FechaHora,
+                    NVL(USERNAME, '') as Usuario,
+                    NVL(ACTION_NAME, '') as TipoAccion,
+                    NVL(OBJ_NAME, '') as NombreTabla,
+                    NVL(OWNER, '') as Esquema,
+                    NVL(SQL_TEXT, '') as ConsultaSQL,
+                    NVL(ENTRYID, 0) as AuditoriaId,
+                    NVL(SESSIONID, '') as SesionId,
+                    NVL(OS_USERNAME, '') as UsuarioOS,
+                    NVL(USERHOST, '') as HostUsuario,
+                    NVL(TERMINAL, '') as Terminal
                 FROM sys.dba_audit_trail 
-                WHERE TIMESTAMP > SYSDATE - 1";
+                WHERE 1=1");
 
-                    using (OracleCommand cmdDebug = new OracleCommand(sqlDebug, conexion))
+                    using (OracleCommand cmd = new OracleCommand())
                     {
-                        cmdDebug.Parameters.Add(new OracleParameter("nombreTabla", OracleDbType.Varchar2) { Value = req.NombreTabla.ToUpper() });
-                        cmdDebug.Parameters.Add(new OracleParameter("esquema", OracleDbType.Varchar2) { Value = req.Esquema.ToUpper() });
+                        cmd.Connection = conexion;
 
-                        using (OracleDataReader reader = cmdDebug.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                res.Errores.Add($"Debug: Total registros últimas 24h: {reader["total"]}");
-                                res.Errores.Add($"Debug: Registros específicos para la tabla: {reader["tabla_especifica"]}");
-                                res.Errores.Add($"Debug: Registros con SQL relacionado: {reader["sql_relacionado"]}");
-                            }
-                        }
-                    }
+                        // Agregar condiciones y parámetros de manera dinámica
+                        sqlBuilder.Append(" AND ((UPPER(OBJ_NAME) = UPPER(:nombreTabla) AND UPPER(OWNER) = UPPER(:esquema))");
+                        sqlBuilder.Append(" OR (UPPER(SQL_TEXT) LIKE '%' || UPPER(:nombreTabla) || '%' AND UPPER(OWNER) = UPPER(:esquema)))");
 
-                    // Consulta principal modificada con búsqueda más amplia
-                    string sql = @"
-SELECT 
-    NVL(TO_CHAR(TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'), '') as FechaHora,
-    NVL(USERNAME, '') as Usuario,
-    NVL(ACTION_NAME, '') as TipoAccion,
-    NVL(OBJ_NAME, '') as NombreTabla,
-    NVL(OWNER, '') as Esquema,
-    NVL(SQL_TEXT, '') as ConsultaSQL,
-    NVL(ENTRYID, 0) as AuditoriaId,
-    NVL(SESSIONID, '') as SesionId,
-    NVL(OS_USERNAME, '') as UsuarioOS,
-    NVL(USERHOST, '') as HostUsuario,
-    NVL(TERMINAL, '') as Terminal
-FROM sys.dba_audit_trail 
-WHERE (UPPER(OBJ_NAME) = UPPER(:nombreTabla) AND UPPER(OWNER) = UPPER(:esquema))
-   OR (UPPER(SQL_TEXT) LIKE '%' || UPPER(:nombreTabla) || '%' AND UPPER(OWNER) = UPPER(:esquema))";
-
-                    if (req.FechaInicio.HasValue)
-                        sql += " AND TIMESTAMP >= :fechaInicio";
-                    if (req.FechaFin.HasValue)
-                        sql += " AND TIMESTAMP <= :fechaFin";
-                    if (!string.IsNullOrEmpty(req.TipoAccion))
-                        sql += " AND UPPER(ACTION_NAME) LIKE '%' || UPPER(:tipoAccion) || '%'";
-
-                    sql += " ORDER BY TIMESTAMP DESC";
-
-                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
-                    {
-                        // Debug de parámetros de búsqueda
-                        res.Errores.Add($"Debug: Tabla buscada: {req.NombreTabla.ToUpper()}");
-                        res.Errores.Add($"Debug: Esquema buscado: {req.Esquema.ToUpper()}");
-                        res.Errores.Add($"Debug: SQL generado: {sql}");
-
-                        cmd.Parameters.Add(new OracleParameter("nombreTabla", OracleDbType.Varchar2)
-                        {
-                            Value = req.NombreTabla.ToUpper()
-                        });
-
-                        cmd.Parameters.Add(new OracleParameter("esquema", OracleDbType.Varchar2)
-                        {
-                            Value = req.Esquema.ToUpper()
-                        });
+                        cmd.Parameters.Add(new OracleParameter("nombreTabla", OracleDbType.Varchar2) { Value = req.NombreTabla.ToUpper() });
+                        cmd.Parameters.Add(new OracleParameter("esquema", OracleDbType.Varchar2) { Value = req.Esquema.ToUpper() });
 
                         if (req.FechaInicio.HasValue)
                         {
-                            cmd.Parameters.Add(new OracleParameter("fechaInicio", OracleDbType.Date)
-                            {
-                                Value = req.FechaInicio.Value
-                            });
-                            res.Errores.Add($"Debug: Fecha inicio: {req.FechaInicio.Value}");
+                            sqlBuilder.Append(" AND TIMESTAMP >= :fechaInicio");
+                            cmd.Parameters.Add(new OracleParameter("fechaInicio", OracleDbType.Date) { Value = req.FechaInicio.Value });
                         }
 
                         if (req.FechaFin.HasValue)
                         {
-                            cmd.Parameters.Add(new OracleParameter("fechaFin", OracleDbType.Date)
-                            {
-                                Value = req.FechaFin.Value
-                            });
-                            res.Errores.Add($"Debug: Fecha fin: {req.FechaFin.Value}");
+                            sqlBuilder.Append(" AND TIMESTAMP <= :fechaFin");
+                            cmd.Parameters.Add(new OracleParameter("fechaFin", OracleDbType.Date) { Value = req.FechaFin.Value });
                         }
 
                         if (!string.IsNullOrEmpty(req.TipoAccion))
                         {
-                            cmd.Parameters.Add(new OracleParameter("tipoAccion", OracleDbType.Varchar2)
-                            {
-                                Value = req.TipoAccion.ToUpper()
-                            });
-                            res.Errores.Add($"Debug: Tipo acción: {req.TipoAccion.ToUpper()}");
+                            sqlBuilder.Append(" AND UPPER(ACTION_NAME) LIKE '%' || UPPER(:tipoAccion) || '%'");
+                            cmd.Parameters.Add(new OracleParameter("tipoAccion", OracleDbType.Varchar2) { Value = req.TipoAccion.ToUpper() });
                         }
+
+                        sqlBuilder.Append(" ORDER BY TIMESTAMP DESC");
+                        cmd.CommandText = sqlBuilder.ToString();
+
+                        // Debug información
+                        res.Errores.Add($"Debug: SQL generado: {cmd.CommandText}");
+                        res.Errores.Add($"Debug: Parámetros: {string.Join(", ", cmd.Parameters.Cast<OracleParameter>().Select(p => $"{p.ParameterName}={p.Value}"))}");
 
                         using (OracleDataReader reader = cmd.ExecuteReader())
                         {
@@ -181,9 +139,7 @@ WHERE (UPPER(OBJ_NAME) = UPPER(:nombreTabla) AND UPPER(OWNER) = UPPER(:esquema))
                         }
                     }
 
-                    // Información de debug sobre resultados
                     res.Errores.Add($"Debug: Total registros encontrados: {res.Registros.Count}");
-
                     res.Resultado = true;
                 }
             }
