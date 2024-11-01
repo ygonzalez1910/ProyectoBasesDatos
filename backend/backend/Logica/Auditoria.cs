@@ -16,14 +16,18 @@ namespace Logica
     public class Auditoria
     {
         private readonly string _connectionString;
-        public Auditoria(string connectionString)
+        private readonly ILogger<Auditoria> _logger;
+        public Auditoria(string connectionString, ILogger<Auditoria> logger)
         {
-            _connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=XEPDB1)));User Id=SYSTEM;Password=rootroot;DBA Privilege=SYSDBA;";
+            _connectionString = connectionString;
+            _logger = logger;
         }
 
         public ResObtenerAuditoria ObtenerAuditoria(ReqObtenerAuditoria req)
         {
-            ResObtenerAuditoria res = new ResObtenerAuditoria
+            _logger.LogInformation("Iniciando consulta de auditoría");
+
+            var res = new ResObtenerAuditoria
             {
                 Errores = new List<string>(),
                 Registros = new List<AuditoriaInfo>()
@@ -31,144 +35,90 @@ namespace Logica
 
             try
             {
-                if (string.IsNullOrEmpty(req.NombreTabla) || string.IsNullOrEmpty(req.Esquema))
+                using var conexion = new OracleConnection(_connectionString);
+                conexion.Open();
+
+                var sql = @"
+            SELECT 
+                SESSIONID as AuditoriaId,
+                TO_CHAR(TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') as FechaHora,
+                USERNAME as Usuario,
+                ACTION_NAME as TipoAccion,
+                OBJ_NAME as NombreTabla,
+                OWNER as Esquema,
+                SQL_TEXT as ConsultaSQL,
+                SESSIONID as SesionId,
+                OS_USERNAME as UsuarioOS,
+                USERHOST as HostUsuario,
+                TERMINAL as Terminal
+            FROM DBA_AUDIT_TRAIL 
+            WHERE obj_name = :nombreTabla 
+            AND owner = :esquema";
+
+                if (req.FechaInicio.HasValue)
                 {
-                    res.Errores.Add("El nombre de la tabla y el esquema son requeridos");
-                    res.Resultado = false;
-                    return res;
+                    sql += " AND TRUNC(TIMESTAMP) >= TRUNC(:fechaInicio)";
+                }
+                if (req.FechaFin.HasValue)
+                {
+                    sql += " AND TRUNC(TIMESTAMP) <= TRUNC(:fechaFin)";
+                }
+                if (!string.IsNullOrEmpty(req.TipoAccion))
+                {
+                    sql += " AND UPPER(ACTION_NAME) = UPPER(:tipoAccion)";
                 }
 
-                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                sql += " ORDER BY TIMESTAMP DESC";
+
+                using var cmd = new OracleCommand(sql, conexion);
+                cmd.Parameters.Add("nombreTabla", OracleDbType.Varchar2).Value = req.NombreTabla.ToUpper();
+                cmd.Parameters.Add("esquema", OracleDbType.Varchar2).Value = req.Esquema.ToUpper();
+
+                if (req.FechaInicio.HasValue)
                 {
-                    // Establecer el modo SYSDBA
-                    conexion.ConnectionString += ";DBA Privilege=SYSDBA;";
-                    conexion.Open();
-                    // Verificar si hay registros primero
-                    string sqlVerificacion = @"
-                SELECT COUNT(*) 
-                FROM DBA_AUDIT_TRAIL 
-                WHERE obj_name = :nombreTabla 
-                AND owner = :esquema";
-
-                    using (OracleCommand cmdVerificacion = conexion.CreateCommand())
-                    {
-                        cmdVerificacion.CommandText = sqlVerificacion;
-                        cmdVerificacion.Parameters.Add("nombreTabla", OracleDbType.Varchar2).Value = req.NombreTabla.ToUpper();
-                        cmdVerificacion.Parameters.Add("esquema", OracleDbType.Varchar2).Value = req.Esquema.ToUpper();
-
-                        int totalRegistros = Convert.ToInt32(cmdVerificacion.ExecuteScalar());
-                        res.Errores.Add($"Registros encontrados sin filtros: {totalRegistros}");
-                    }
-
-                    // Consulta principal
-                    var sqlBuilder = new StringBuilder();
-                    sqlBuilder.Append(@"
-                SELECT 
-                    TO_CHAR(TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS') as FechaHora,
-                    USERNAME as Usuario,
-                    ACTION_NAME as TipoAccion,
-                    OBJ_NAME as NombreTabla,
-                    OWNER as Esquema,
-                    SQL_TEXT as ConsultaSQL,
-                    USERHOST as HostUsuario,
-                    TERMINAL as Terminal,
-                    SESSION_ID as SesionId,
-                    OS_USERNAME as UsuarioOS,
-                    EXTENDED_TIMESTAMP as FechaExtendida
-                FROM DBA_AUDIT_TRAIL 
-                WHERE obj_name = :nombreTabla 
-                AND owner = :esquema");
-
-                    if (req.FechaInicio.HasValue)
-                    {
-                        sqlBuilder.Append(" AND TRUNC(TIMESTAMP) >= TRUNC(:fechaInicio)");
-                    }
-
-                    if (req.FechaFin.HasValue)
-                    {
-                        sqlBuilder.Append(" AND TRUNC(TIMESTAMP) <= TRUNC(:fechaFin)");
-                    }
-
-                    if (!string.IsNullOrEmpty(req.TipoAccion))
-                    {
-                        sqlBuilder.Append(" AND UPPER(ACTION_NAME) = UPPER(:tipoAccion)");
-                    }
-
-                    sqlBuilder.Append(" ORDER BY TIMESTAMP DESC");
-
-                    using (OracleCommand cmd = conexion.CreateCommand())
-                    {
-                        cmd.CommandText = sqlBuilder.ToString();
-
-                        // Parámetros
-                        cmd.Parameters.Add("nombreTabla", OracleDbType.Varchar2).Value = req.NombreTabla.ToUpper();
-                        cmd.Parameters.Add("esquema", OracleDbType.Varchar2).Value = req.Esquema.ToUpper();
-
-                        if (req.FechaInicio.HasValue)
-                        {
-                            cmd.Parameters.Add("fechaInicio", OracleDbType.Date).Value = req.FechaInicio.Value;
-                        }
-
-                        if (req.FechaFin.HasValue)
-                        {
-                            cmd.Parameters.Add("fechaFin", OracleDbType.Date).Value = req.FechaFin.Value;
-                        }
-
-                        if (!string.IsNullOrEmpty(req.TipoAccion))
-                        {
-                            cmd.Parameters.Add("tipoAccion", OracleDbType.Varchar2).Value = req.TipoAccion.ToUpper();
-                        }
-
-                        try
-                        {
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    var registro = new AuditoriaInfo
-                                    {
-                                        FechaHora = DateTime.Parse(reader["FechaHora"].ToString()),
-                                        Usuario = reader["Usuario"].ToString(),
-                                        TipoAccion = reader["TipoAccion"].ToString(),
-                                        NombreTabla = reader["NombreTabla"].ToString(),
-                                        Esquema = reader["Esquema"].ToString(),
-                                        ConsultaSQL = reader["ConsultaSQL"].ToString(),
-                                        SesionId = reader["SesionId"].ToString(),
-                                        UsuarioOS = reader["UsuarioOS"].ToString(),
-                                        HostUsuario = reader["HostUsuario"].ToString(),
-                                        Terminal = reader["Terminal"].ToString()
-                                    };
-                                    res.Registros.Add(registro);
-                                }
-                            }
-
-                            res.Resultado = true;
-                            res.Errores.Add($"Registros recuperados: {res.Registros.Count}");
-                        }
-                        catch (Exception ex)
-                        {
-                            res.Errores.Add($"Error al leer los registros: {ex.Message}");
-                            if (ex.InnerException != null)
-                            {
-                                res.Errores.Add($"Error interno: {ex.InnerException.Message}");
-                            }
-                            res.Resultado = false;
-                        }
-                    }
+                    cmd.Parameters.Add("fechaInicio", OracleDbType.Date).Value = req.FechaInicio.Value;
                 }
+                if (req.FechaFin.HasValue)
+                {
+                    cmd.Parameters.Add("fechaFin", OracleDbType.Date).Value = req.FechaFin.Value;
+                }
+                if (!string.IsNullOrEmpty(req.TipoAccion))
+                {
+                    cmd.Parameters.Add("tipoAccion", OracleDbType.Varchar2).Value = req.TipoAccion.ToUpper();
+                }
+
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    res.Registros.Add(new AuditoriaInfo
+                    {
+                        AuditoriaId = Convert.ToInt64(reader["AuditoriaId"]),
+                        FechaHora = DateTime.Parse(reader["FechaHora"].ToString()),
+                        Usuario = reader["Usuario"]?.ToString(),
+                        TipoAccion = reader["TipoAccion"]?.ToString(),
+                        NombreTabla = reader["NombreTabla"]?.ToString(),
+                        Esquema = reader["Esquema"]?.ToString(),
+                        ConsultaSQL = reader["ConsultaSQL"]?.ToString(),
+                        SesionId = reader["SesionId"]?.ToString(),
+                        UsuarioOS = reader["UsuarioOS"]?.ToString(),
+                        HostUsuario = reader["HostUsuario"]?.ToString(),
+                        Terminal = reader["Terminal"]?.ToString()
+                    });
+                }
+
+                res.Resultado = true;
+                _logger.LogInformation($"Se encontraron {res.Registros.Count} registros");
             }
             catch (Exception ex)
             {
-                res.Errores.Add($"Error general: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    res.Errores.Add($"Error interno: {ex.InnerException.Message}");
-                }
+                _logger.LogError($"Error: {ex.Message}");
+                res.Errores.Add(ex.Message);
                 res.Resultado = false;
             }
 
             return res;
         }
+
         public ResActivarAuditoria ActivarAuditoria(ReqActivarAuditoria req)
         {
             ResActivarAuditoria res = new ResActivarAuditoria();
