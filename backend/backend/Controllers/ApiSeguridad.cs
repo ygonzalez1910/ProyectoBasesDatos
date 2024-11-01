@@ -123,5 +123,20 @@ namespace backend.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("listar-usuarios")]
+        public ActionResult<ResListarUsuarios> ListarUsuarios([FromQuery] ReqListarUsuarios request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _seguridadService.ListarUsuarios(request);
+            if (result.errores.Count > 0)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

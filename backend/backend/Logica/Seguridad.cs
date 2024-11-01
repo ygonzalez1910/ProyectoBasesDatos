@@ -307,6 +307,57 @@ namespace Logica
 
             return res;
         }
+        public ResListarUsuarios ListarUsuarios(ReqListarUsuarios req)
+        {
+            ResListarUsuarios res = new ResListarUsuarios();
+            res.errores = new List<string>();
+            res.usuarios = new List<UsuarioInfo>();
+
+            try
+            {
+                using (OracleConnection conexion = new OracleConnection(_connectionString))
+                {
+                    conexion.Open();
+                    string sql = @"
+                SELECT 
+                    USERNAME,
+                    ACCOUNT_STATUS,
+                    TO_CHAR(CREATED, 'YYYY-MM-DD HH24:MI:SS') as CREATED_DATE,
+                    DEFAULT_TABLESPACE,
+                    AUTHENTICATION_TYPE,
+                    COMMON
+                FROM DBA_USERS
+                ORDER BY USERNAME";
+
+                    using (OracleCommand cmd = new OracleCommand(sql, conexion))
+                    {
+                        using (OracleDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                res.usuarios.Add(new UsuarioInfo
+                                {
+                                    nombreUsuario = reader["USERNAME"].ToString(),
+                                    estado = reader["ACCOUNT_STATUS"].ToString(),
+                                    fechaCreacion = reader["CREATED_DATE"].ToString(),
+                                    perfilPorDefecto = reader["DEFAULT_TABLESPACE"].ToString(),
+                                    autenticacion = reader["AUTHENTICATION_TYPE"].ToString(),
+                                    comun = reader["COMMON"].ToString()
+                                });
+                            }
+                        }
+                    }
+                    res.resultado = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.errores.Add($"Error al listar usuarios: {ex.Message}");
+                res.resultado = false;
+            }
+
+            return res;
+        }
     }
 }
 
