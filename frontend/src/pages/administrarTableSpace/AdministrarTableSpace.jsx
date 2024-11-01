@@ -163,7 +163,7 @@ const AdministrarTableSpace = () => {
     try {
       const result = await TableSpaceService.getAllTableSpaces();
       setTables(result.tableSpaces);
-      setResults(result.tableSpaces)
+      setResults(result.tableSpaces);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -229,36 +229,119 @@ const AdministrarTableSpace = () => {
           </p>
         </Col>
       </Row>
-      <Button color="success" onClick={toggleCreateModal} className="mb-3">
-        Crear Tablespace
+      <Button
+        color="success"
+        onClick={toggleCreateModal}
+        className="mb-3 px-3 py-2 rounded-2 shadow-sm border-0 text-white position-relative overflow-hidden transition-all hover:brightness-110 active:scale-95"
+        style={{
+          backgroundColor: "#28C76F",
+          transition: "all 0.2s ease",
+          fontSize: "0.875rem",
+        }}
+      >
+        <div className="d-flex align-items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="me-1"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Crear Tablespace
+        </div>
       </Button>
       {loading && <Spinner color="primary" />}
       {error && <p>Error: {error}</p>}
       <Card className="shadow-sm h-100 border-0" style={styles.card}>
         <CardHeader className="py-3" style={styles.gradient}>
           <div className="d-flex align-items-center">
-          <FaDatabase size={20} className="me-3" />
-          <div>
-            <CardTitle tag="h5" className="mb-0">
-              Tabla de Tablespaces
-            </CardTitle>
-            <small>Registros encontrados: {results.length}</small>
-          </div>
+            <FaDatabase size={20} className="me-3" />
+            <div>
+              <CardTitle tag="h5" className="mb-0">
+                Tabla de Tablespaces
+              </CardTitle>
+              <small>Registros encontrados: {results.length}</small>
+            </div>
           </div>
         </CardHeader>
         <CardBody className="p-0">
           <div className="table-responsive">
             <Table hover bordered striped className="mb-0">
-              <thead className="bg-light">
-                <tr>
-                  <th className="text-center">Nombre de Tablespace</th>
-                  <th className="text-center">Nombre de Archivo</th>
-                  <th className="text-center">Tamaño (MB)</th>
-                  <th className="text-center">Autoextensible</th>
-                  <th className="text-center">Tamaño Máximo (MB)</th>
-                  <th className="text-center">Acciones</th>
-                </tr>
-              </thead>
+            <thead className="bg-gray-50 border-b">
+    <tr>
+      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+          style={{
+            backgroundColor: '#F8F9FA',
+            fontSize: '0.8rem',
+            letterSpacing: '0.03em',
+            lineHeight: '1.2',
+            maxWidth: '120px',
+            wordWrap: 'break-word'
+          }}>
+        Nombre de Tablespace
+      </th>
+      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+          style={{
+            backgroundColor: '#F8F9FA',
+            fontSize: '0.8rem',
+            letterSpacing: '0.03em',
+            lineHeight: '1.2',
+            maxWidth: '120px',
+            wordWrap: 'break-word'
+          }}>
+        Nombre de Archivo
+      </th>
+      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+          style={{
+            backgroundColor: '#F8F9FA',
+            fontSize: '0.8rem',
+            letterSpacing: '0.03em',
+            lineHeight: '1.2',
+            minWidth: '80px',
+            wordWrap: 'break-word'
+          }}>
+        Tamaño (MB)
+      </th>
+      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+          style={{
+            backgroundColor: '#F8F9FA',
+            fontSize: '0.8rem',
+            letterSpacing: '0.03em',
+            lineHeight: '1.2',
+            maxWidth: '100px',
+            wordWrap: 'break-word'
+          }}>
+        Auto extensible
+      </th>
+      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+          style={{
+            backgroundColor: '#F8F9FA',
+            fontSize: '0.8rem',
+            letterSpacing: '0.03em',
+            lineHeight: '1.2',
+            maxWidth: '100px',
+            wordWrap: 'break-word'
+          }}>
+        Tamaño Máximo (MB)
+      </th>
+      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-x border-gray-100"
+          style={{
+            backgroundColor: '#F8F9FA',
+            fontSize: '0.8rem',
+            letterSpacing: '0.03em',
+            lineHeight: '1.2',
+            minWidth: '100px',
+            wordWrap: 'break-word'
+          }}>
+        Acciones
+      </th>
+    </tr>
+  </thead>
               <tbody>
                 {tables.map((table, index) => (
                   <tr key={index}>
@@ -269,20 +352,61 @@ const AdministrarTableSpace = () => {
                       {table.autoExtensible ? "Sí" : "No"}
                     </td>
                     <td className="text-center">{table.maxSizeMB}</td>
-                    <td className="d-flex justify-content-center">
+                    <td className="d-flex justify-content-center gap-1">
                       <Button
                         color="warning"
-                        className="me-1 btn-sm"
-                        onClick={() => handleEditClick(table)}
+                        className="btn-sm px-2 py-1 rounded-2 shadow-sm border-0 text-white position-relative overflow-hidden transition-all hover:brightness-110 active:scale-95"
+                        style={{
+                          backgroundColor: "#FF9F43",
+                          transition: "all 0.2s ease",
+                          fontSize: "0.75rem",
+                        }}
                       >
-                        Modificar Tamaño
+                        <div className="d-flex align-items-center gap-1">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="me-1"
+                          >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                          </svg>
+                          Modificar
+                        </div>
                       </Button>
+
                       <Button
                         color="danger"
-                        className="btn-sm"
-                        onClick={() => handleDeleteClick(table)}
+                        className="btn-sm px-2 py-1 rounded-2 shadow-sm border-0 text-white position-relative overflow-hidden transition-all hover:brightness-110 active:scale-95"
+                        style={{
+                          backgroundColor: "#FF4757",
+                          transition: "all 0.2s ease",
+                          fontSize: "0.75rem",
+                        }}
                       >
-                        Eliminar
+                        <div className="d-flex align-items-center gap-1">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="me-1"
+                          >
+                            <path d="M3 6h18" />
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                          </svg>
+                          Eliminar
+                        </div>
                       </Button>
                     </td>
                   </tr>
