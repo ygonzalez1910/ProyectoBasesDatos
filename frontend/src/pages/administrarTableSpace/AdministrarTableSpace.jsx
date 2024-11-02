@@ -397,6 +397,7 @@ const AdministrarTableSpace = () => {
                       <Button
                         color="danger"
                         className="btn-sm px-2 py-1 rounded-2 shadow-sm border-0 text-white position-relative overflow-hidden transition-all hover:brightness-110 active:scale-95"
+                        onClick={() => handleDeleteClick(table)}
                         style={{
                           backgroundColor: "#FF4757",
                           transition: "all 0.2s ease",

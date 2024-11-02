@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from "./config";
 // Configuración global de axios
 const axiosInstance = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL, // Asegúrate de definir esta URL en config.js
-  timeout: 1200000, // 20 minutos
+  timeout: 2400000, // 40 minutos
   headers: {
     "Content-Type": "application/json",
   },
